@@ -7,11 +7,11 @@ if __name__ == "__main__":
     agent = MaxEntAgent(
         state_dim=2,
         action_dim=4,
-        hidden_dim=200,
-        temperature=0.01,
+        hidden_dim=100,
+        temperature=0.1,
         gamma=0.99
     )
-    rewards, losses, entropies = agent.train(env, num_episodes=2000, max_steps=100)
+    rewards, losses, entropies = agent.train(env, num_episodes=500, max_steps=100)
     plot_metrics(rewards, losses, entropies)
     visualize_policy(env, agent)
     plot_trajectories(env, agent, num_trajectories=10, max_steps=100)
