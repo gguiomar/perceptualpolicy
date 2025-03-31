@@ -151,12 +151,3 @@ To add your own agent:
 To add a new policy network:
 1. Add your network class to `policy_networks.py`
 2. Update the `create_policy_network()` factory function
-
-## License
-
-[Include license information here]
-
-## Citation
-
-If you use this code in your research, please cite:
-[Include citation information here]
