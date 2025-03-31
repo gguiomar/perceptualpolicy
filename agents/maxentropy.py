@@ -120,6 +120,7 @@ class MaxEntAgent:
 class FisherMaxEntAgent:
     def __init__(self, state_dim, action_dim, hidden_dim=64, lr=0.01, temperature=0.1, gamma=0.99,
                  use_natural_gradient=False, cg_iters=10, cg_damping=1e-2):
+
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.policy_net = PolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
         self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)
@@ -285,3 +286,119 @@ class FisherMaxEntAgent:
                 print(f"Episode {episode+1}/{num_episodes}, Reward: {avg_reward:.2f}, Loss: {avg_loss:.4f}, Entropy: {avg_entropy:.4f}")
         
         return rewards_history, losses_history, entropies_history
+
+
+class PPOAgent:
+    def __init__(self, state_dim, action_dim, hidden_dim=64, lr=1e-2, epsilon=0.1, gamma=0.99):
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.policy_net = PolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
+        self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)
+        self.epsilon = epsilon  # clipping parameter: how far new policy can deviate
+        self.gamma = gamma
+        
+    def select_action(self, state):
+        """
+        Given a state (as a numpy array), return:
+         - chosen action (as an integer)
+         - log probability of that action
+         - entropy (for diagnostic purposes)
+        """
+        state_tensor = torch.FloatTensor(state).unsqueeze(0).to(self.device)
+        with torch.no_grad():
+            action, log_prob, entropy = self.policy_net.get_action(state_tensor)
+        return action.item(), log_prob.item(), entropy.item()
+    
+    def update(self, states, actions, advantages, log_probs_old):
+        """
+        Perform a PPO update.
+          states: list or np.array of states encountered during rollout.
+          actions: list of actions (as integers) taken.
+          advantages: computed advantage estimates for each timestep.
+          log_probs_old: log probabilities of the actions under the old policy.
+          
+        This function implements the PPO clipped surrogate objective:
+        
+           L_CLIP = E[min(r(θ)*A, clip(r(θ),1-ε,1+ε)*A)]
+           
+        where r(θ) = exp(logπ(θ)(a|s) - logπ_old(a|s)).
+        """
+        # Convert to torch tensors and move to device.
+        states = torch.FloatTensor(np.array(states)).to(self.device)
+        actions = torch.LongTensor(actions).to(self.device)
+        advantages = torch.FloatTensor(advantages).to(self.device)
+        log_probs_old = torch.FloatTensor(log_probs_old).to(self.device)
+        
+        # Recompute the current log probabilities for the rollout states.
+        logits = self.policy_net(states)
+        dist = torch.distributions.Categorical(logits=logits)
+        log_probs = dist.log_prob(actions)
+        
+        # Compute the probability ratio r(θ) = exp(logπ - logπ_old)
+        r_theta = torch.exp(log_probs - log_probs_old)
+        # Clip the ratio within [1-ε, 1+ε]
+        clipped_ratio = torch.clamp(r_theta, 1 - self.epsilon, 1 + self.epsilon)
+        # PPO objective: take the elementwise minimum between the unclipped and clipped objective.
+        surrogate_loss = torch.min(r_theta * advantages, clipped_ratio * advantages)
+        loss = -torch.mean(surrogate_loss)
+        
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+        
+        # Approximate KL divergence for diagnostics.
+        approx_kl = torch.mean(log_probs_old - log_probs).item()
+        return {'loss': loss.item(), 'approx_kl': approx_kl}
+    
+    def train(self, env, num_episodes=500, max_steps=100):
+        """
+        A simple training loop. In each episode, the agent collects a trajectory and
+        then performs a PPO update. In practice, one might use mini-batch updates over
+        a buffer of trajectories.
+        """
+        rewards_history = []
+        losses_history = []
+        kl_history = []
+        
+        for episode in range(num_episodes):
+            state = env.reset()
+            states, actions, rewards, log_probs_old = [], [], [], []
+            episode_reward = 0
+            
+            for step in range(max_steps):
+                action, log_prob, _ = self.select_action(state)
+                next_state, reward, done, _ = env.step(action)
+                
+                states.append(state)
+                actions.append(action)
+                rewards.append(reward)
+                log_probs_old.append(log_prob)
+                
+                episode_reward += reward
+                state = next_state
+                if done:
+                    break
+            
+            # Compute returns (discounted sum of rewards)
+            returns = []
+            G = 0
+            for r in reversed(rewards):
+                G = r + self.gamma * G
+                returns.insert(0, G)
+            returns = np.array(returns)
+            # Normalize advantages (here we use returns as a simple proxy; one might subtract a value function)
+            advantages = (returns - returns.mean()) / (returns.std() + 1e-8)
+            
+            # Perform PPO update. In many implementations, one performs multiple epochs over the collected batch.
+            update_info = self.update(states, actions, advantages, log_probs_old)
+            
+            rewards_history.append(episode_reward)
+            losses_history.append(update_info['loss'])
+            kl_history.append(update_info['approx_kl'])
+            
+            if (episode + 1) % 20 == 0:
+                avg_reward = np.mean(rewards_history[-20:])
+                avg_loss = np.mean(losses_history[-20:])
+                avg_kl = np.mean(kl_history[-20:])
+                print(f"Episode {episode+1}/{num_episodes}, Reward: {avg_reward:.2f}, Loss: {avg_loss:.4f}, Approx KL: {avg_kl:.6f}")
+        
+        return rewards_history, losses_history, kl_history

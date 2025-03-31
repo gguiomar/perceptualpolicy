@@ -9,7 +9,7 @@ import random
 
 
 def plot_metrics(rewards, losses, entropies):
-    fig, axs = plt.subplots(2, 1, figsize=(10, 12))
+    fig, axs = plt.subplots(3, 1, figsize=(10, 12))
     
     axs[0].plot(losses)
     axs[0].set_title("Policy Loss")
@@ -22,9 +22,45 @@ def plot_metrics(rewards, losses, entropies):
     axs[1].set_xlabel("Episode")
     axs[1].set_ylabel("Entropy")
     axs[1].grid(True, linestyle='--', alpha=0.7)
+
+    axs[2].plot(rewards)
+    axs[2].set_title("Rewards")
+    axs[2].set_xlabel("Episode")
+    axs[2].set_ylabel("Reward")
+    axs[2].grid(True, linestyle='--', alpha=0.7)
     
     plt.tight_layout()
     plt.show()
+    plt.savefig('plots/metrics.png')
+
+
+def plot_mean_metrics(rewards, losses, entropies, window=100):
+    def moving_average(data, window):
+        return [np.mean(data[i:i+window]) for i in range(len(data) - window)]
+    
+    fig, axs = plt.subplots(3, 1, figsize=(10, 12))
+    
+    axs[0].plot(moving_average(losses, window))
+    axs[0].set_title("Policy Loss (Moving Average)")
+    axs[0].set_xlabel("Episode")
+    axs[0].set_ylabel("Loss")
+    axs[0].grid(True, linestyle='--', alpha=0.7)
+    
+    axs[1].plot(moving_average(entropies, window))
+    axs[1].set_title("Policy Entropy (Moving Average)")
+    axs[1].set_xlabel("Episode")
+    axs[1].set_ylabel("Entropy")
+    axs[1].grid(True, linestyle='--', alpha=0.7)
+
+    axs[2].plot(moving_average(rewards, window))
+    axs[2].set_title("Rewards (Moving Average)")
+    axs[2].set_xlabel("Episode")
+    axs[2].set_ylabel("Reward")
+    axs[2].grid(True, linestyle='--', alpha=0.7)
+    
+    plt.tight_layout()
+    plt.show()
+    plt.savefig('plots/mean_metrics.png')
 
 def visualize_policy(env, agent):
     action_maps = {
@@ -58,6 +94,7 @@ def visualize_policy(env, agent):
     
     plt.tight_layout()
     plt.show()
+    plt.savefig('plots/policy_visualization.png')
 
 def plot_trajectories(env, agent, num_trajectories=10, max_steps=100):
     plt.figure(figsize=(8, 8))
@@ -107,6 +144,7 @@ def plot_trajectories(env, agent, num_trajectories=10, max_steps=100):
     plt.gca().set_aspect('equal')
     plt.tight_layout()
     plt.show()
+    plt.savefig('plots/trajectories.png')
 
 def plot_state_visitation_heatmap(env, agent, num_episodes=100, max_steps=100):
     """
@@ -173,3 +211,4 @@ def plot_state_visitation_heatmap(env, agent, num_episodes=100, max_steps=100):
     plt.legend(loc='upper right')
     plt.tight_layout()
     plt.show()
+    plt.savefig('plots/visitation_heatmap.png')
