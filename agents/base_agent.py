@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import torch.optim as optim
-from policy_networks import create_policy_network
+from agents.policy_networks import create_policy_network
 
 class BaseAgent:
     """
@@ -23,10 +23,16 @@ class BaseAgent:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
         # Initialize the policy network
+        # Corrected code for base_agent.py
         self.policy_net = create_policy_network(
-            policy_type, state_dim, action_dim, hidden_dim, **kwargs
-        ).to(self.device)
+            policy_type, 
+            state_dim, 
+            action_dim,
+            hidden_dim=hidden_dim  # Now passed as a keyword argument
+            )
         
+        # Move the policy network to the correct device (add this line)
+        self.policy_net = self.policy_net.to(self.device)
         self.policy_type = policy_type
         self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)
         self.gamma = gamma

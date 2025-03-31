@@ -1,6 +1,7 @@
 import torch
 import numpy as np
-from base_agent import BaseAgent
+from agents.base_agent import BaseAgent
+from agents.policy_networks import create_policy_network
 
 class PPOAgent(BaseAgent):
     """

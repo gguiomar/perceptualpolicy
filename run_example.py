@@ -6,7 +6,7 @@ from utils.visualization import plot_metrics, plot_mean_metrics, visualize_polic
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-env = GridWorld(grid_size=100, stochastic=False, noise=0)
+env = GridWorld(grid_size=10, stochastic=False, noise=0)
 
 agent = PPOAgent(
     state_dim=2,
