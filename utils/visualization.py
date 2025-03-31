@@ -6,6 +6,8 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from collections import deque
 import random
+import os
+os.makedirs('plots', exist_ok=True)
 
 
 def plot_metrics(rewards, losses, entropies):
@@ -215,14 +217,8 @@ def plot_state_visitation_heatmap(env, agent, num_episodes=100, max_steps=100):
 
 
 
-    import numpy as np
-import matplotlib.pyplot as plt
-import torch
-import torch.nn.functional as F
-import os
 
-# Create plots directory if it doesn't exist
-os.makedirs('plots', exist_ok=True)
+
 
 
 def compare_training_curves(agent_metrics, window=50, save_path=None):
