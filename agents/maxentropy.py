@@ -7,55 +7,7 @@ import matplotlib.pyplot as plt
 from collections import deque
 import random
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
-
-# Policy network for discrete action spaces
-
-class PolicyNetwork(nn.Module):
-    def __init__(self, state_dim, action_dim, hidden_dim=64):
-        super(PolicyNetwork, self).__init__()
-        self.fc1 = nn.Linear(state_dim, hidden_dim)
-        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
-        self.fc3 = nn.Linear(hidden_dim, action_dim)
-        
-    def forward(self, x):
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        return self.fc3(x)
-    
-    def get_action(self, state):
-        logits = self(state)
-        dist = torch.distributions.Categorical(logits=logits)
-        action = dist.sample()
-        log_prob = dist.log_prob(action)
-        entropy = dist.entropy()
-        return action, log_prob, entropy
-
-class RNNPolicyNetwork(nn.Module):
-    def __init__(self, state_dim, action_dim, hidden_dim=128):
-        super(RNNPolicyNetwork, self).__init__()
-        self.rnn = nn.GRU(state_dim, hidden_dim, batch_first=True)
-        self.fc = nn.Linear(hidden_dim, action_dim)
-
-    def forward(self, x, hidden_state=None):
-        out, h = self.rnn(x, hidden_state)
-        logits = self.fc(out[:, -1, :])  # use last timestep
-        return logits, h
-
-class TransformerPolicyNetwork(nn.Module):
-    def __init__(self, state_dim, action_dim, hidden_dim=128, num_layers=2, nhead=4):
-        super().__init__()
-        self.embedding = nn.Linear(state_dim, hidden_dim)
-        encoder_layer = TransformerEncoderLayer(d_model=hidden_dim, nhead=nhead)
-        self.transformer = TransformerEncoder(encoder_layer, num_layers=num_layers)
-        self.head = nn.Linear(hidden_dim, action_dim)
-
-    def forward(self, x):  # x: (batch, seq_len, state_dim)
-        x = self.embedding(x)
-        x = self.transformer(x)
-        return self.head(x[:, -1])  # final token
-
-
-# Agent definitions
+from agents.policy_networks import PolicyNetwork
 
 class MaxEntAgent:
     def __init__(self, state_dim, action_dim, hidden_dim=64, lr=0.01, temperature=0.1, gamma=0.99):
