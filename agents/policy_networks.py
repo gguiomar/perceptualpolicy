@@ -4,12 +4,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
 
-class PolicyNetwork(nn.Module):
+class MLPPolicyNetwork(nn.Module):
     """
     Flexible MLP Policy Network for discrete action spaces with configurable hidden layers
     """
     def __init__(self, state_dim, action_dim, hidden_dims=[64, 64]):
-        super(PolicyNetwork, self).__init__()
+        super(MLPPolicyNetwork, self).__init__()
         
         # Create a list to hold all layers
         layers = []
@@ -44,12 +44,12 @@ class PolicyNetwork(nn.Module):
         entropy = dist.entropy()
         return action, log_prob, entropy
 
-class RNNPolicyNetwork(nn.Module):
+class RNNMLPPolicyNetwork(nn.Module):
     """
     RNN-based Policy Network with configurable hidden layers and size
     """
     def __init__(self, state_dim, action_dim, hidden_dim=128, num_layers=1, rnn_type='gru'):
-        super(RNNPolicyNetwork, self).__init__()
+        super(RNNMLPPolicyNetwork, self).__init__()
         
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
@@ -128,7 +128,7 @@ class RNNPolicyNetwork(nn.Module):
         else:
             return torch.zeros(self.num_layers, batch_size, self.hidden_dim).to(self.device)
 
-class TransformerPolicyNetwork(nn.Module):
+class TransformerMLPPolicyNetwork(nn.Module):
     """
     Transformer-based Policy Network with configurable parameters
     """
@@ -210,13 +210,13 @@ def create_policy_network(policy_type, state_dim, action_dim, **kwargs):
     """
     if policy_type == "mlp":
         hidden_dims = kwargs.get('hidden_dims', [64, 64])
-        return PolicyNetwork(state_dim, action_dim, hidden_dims)
+        return MLPPolicyNetwork(state_dim, action_dim, hidden_dims)
         
     elif policy_type == "rnn":
         hidden_dim = kwargs.get('hidden_dim', 128)
         num_layers = kwargs.get('num_layers', 1)
         rnn_type = kwargs.get('rnn_type', 'gru')
-        return RNNPolicyNetwork(state_dim, action_dim, hidden_dim, num_layers, rnn_type)
+        return RNNMLPPolicyNetwork(state_dim, action_dim, hidden_dim, num_layers, rnn_type)
         
     elif policy_type == "transformer":
         hidden_dim = kwargs.get('hidden_dim', 128)
@@ -224,7 +224,7 @@ def create_policy_network(policy_type, state_dim, action_dim, **kwargs):
         nhead = kwargs.get('nhead', 4)
         dim_feedforward = kwargs.get('dim_feedforward', 512)
         dropout = kwargs.get('dropout', 0.1)
-        return TransformerPolicyNetwork(
+        return TransformerMLPPolicyNetwork(
             state_dim, action_dim, hidden_dim, num_layers, nhead, dim_feedforward, dropout
         )
         

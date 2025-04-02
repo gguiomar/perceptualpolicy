@@ -45,9 +45,9 @@ class GridWorld:
         return state, reward, done, {}
 
 
-class PolicyNetwork(nn.Module):
+class MLPPolicyNetwork(nn.Module):
     def __init__(self, input_dim=2, hidden_dim=32, output_dim=4):
-        super(PolicyNetwork, self).__init__()
+        super(MLPPolicyNetwork, self).__init__()
         self.fc1 = nn.Linear(input_dim, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, output_dim)
 
@@ -98,7 +98,7 @@ def compute_returns(rewards, gamma=0.99):
 
 def train_policy(num_episodes=500, alpha=0.01, gamma=0.99, lrate=0.01):
     env = GridWorld(grid_size=10, start=(0, 0), goal=(9, 9), max_steps=100)
-    policy_net = PolicyNetwork()
+    policy_net = MLPPolicyNetwork()
     optimizer = optim.Adam(policy_net.parameters(), lr=lrate)
 
     losses = []

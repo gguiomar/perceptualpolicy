@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 from collections import deque
 import random
 from torch.nn import TransformerEncoder, TransformerEncoderLayer
-from agents.policy_networks import PolicyNetwork
+from agents.policy_networks import MLPPolicyNetwork
 
 class MaxEntAgent:
     def __init__(self, state_dim, action_dim, hidden_dim=64, lr=0.01, temperature=0.1, gamma=0.99):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.policy_net = PolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
+        self.policy_net = MLPPolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
         self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)
         self.temperature = temperature
         self.gamma = gamma
@@ -104,7 +104,7 @@ class FisherMaxEntAgent:
                  use_natural_gradient=False, cg_iters=10, cg_damping=1e-2):
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.policy_net = PolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
+        self.policy_net = MLPPolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
         self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)
         self.temperature = temperature
         self.gamma = gamma
@@ -273,7 +273,7 @@ class FisherMaxEntAgent:
 class PPOAgent:
     def __init__(self, state_dim, action_dim, hidden_dim=64, lr=1e-2, epsilon=0.1, gamma=0.99):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.policy_net = PolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
+        self.policy_net = MLPPolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
         self.optimizer = optim.Adam(self.policy_net.parameters(), lr=lr)
         self.epsilon = epsilon  # clipping parameter: how far new policy can deviate
         self.gamma = gamma
@@ -390,7 +390,7 @@ class TRPOAgent:
     def __init__(self, state_dim, action_dim, hidden_dim=64, discount=0.99, kl_delta=0.01, 
                  cg_iters=10, cg_damping=1e-2):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.policy_net = PolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
+        self.policy_net = MLPPolicyNetwork(state_dim, action_dim, hidden_dim).to(self.device)
         self.discount = discount
         self.kl_delta = kl_delta
         self.cg_iters = cg_iters
