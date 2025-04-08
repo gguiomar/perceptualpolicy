@@ -1,5 +1,11 @@
+import sys
+import os
+
+# Add the parent directory to the sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from envs.gridworld import GridWorld
-from agents.policygradient import alm
+from alm import AlmAgent
 from utils.visualization import plot_metrics, visualize_policy, plot_trajectories, plot_state_visitation_heatmap
 
 import random
@@ -8,32 +14,93 @@ import time
 import wandb
 import numpy as np
 
-from pathlib import Path 
-from utils import common
+from pathlib import Path
 
+device = 'cpu'
+seed = 1
+
+#data 
+num_train_steps = 500000
+explore_steps = 5000
+max_episode_steps = 1000
+env_buffer_size = 100000
+batch_size = 512
+seq_len = 3
+
+#learning
+gamma = 0.99
+tau = 0.005
+target_update_interval = 1
+lambda_cost = 0.1
+lr = {'model' : 0.0001, 'reward' : 0.0001, 'critic' : 0.0001, 'actor' : 0.0001}
+max_grad_norm =  100.0
+
+#exploration
+expl_start = 1.0
+expl_end = 0.1
+expl_duration = 100000
+stddev_clip = 0.3
+
+#hidden_dims and layers
+latent_dims = 50
+hidden_dims = 512
+model_hidden_dims = 1024
+
+#bias evaluation
+eval_bias = False 
+eval_bias_interval = 500
+
+#evaluation
+eval_episode_interval = 5000
+num_eval_episodes = 5
+
+#saving
+save_snapshot = False
+save_snapshot_interval = 50000
+
+wandb_log = False
+
+def make_agent(env, device):    
+
+    num_states = np.prod(env.observation_space.shape[0])
+    num_actions = np.prod(env.action_space.n)
+    action_low = env.observation_space.low
+    action_high = env.observation_space.high
+
+    env_buffer_size = 1000000
+    buffer_size = min(env_buffer_size, num_train_steps)
+
+    agent = AlmAgent(device, action_low, action_high, num_states, num_actions,
+                     buffer_size, gamma, tau, target_update_interval,
+                     lr, max_grad_norm, batch_size, seq_len, lambda_cost,
+                     expl_start, expl_end, expl_duration, stddev_clip, 
+                     latent_dims, hidden_dims, model_hidden_dims,
+                     log_wandb = False, log_interval=500)
+
+    return agent
 
 class ALM_Helper:
-    def __init__(self, cfg, env):
+    def __init__(self, env):
         self.work_dir = Path.cwd()
-        self.cfg = cfg
-        self.device = torch.device("cpu")
+        self.device = torch.device("cpu") #can be changed to cuda as required.
         self.set_seed()
         self.train_env = env
-        self.agent = common.make_agent(self.train_env, self.device, self.cfg)
+        self.eval_env = env
+        self.agent = make_agent(self.train_env, self.device)
         self._train_step = 0
         self._train_episode = 0
         self._best_eval_returns = -np.inf
 
     def set_seed(self):
-        random.seed(self.cfg.seed)
-        np.random.seed(self.cfg.seed)
-        torch.manual_seed(self.cfg.seed)
-        torch.cuda.manual_seed_all(self.cfg.seed)
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
 
     def _explore(self):
         state, done = self.train_env.reset(), False
         
-        for _ in range(1, self.cfg.explore_steps):
+        for _ in range(1, explore_steps):
             action = self.train_env.action_space.sample()
             next_state, reward, done, info = self.train_env.step(action)
             self.agent.env_buffer.push((state, action, reward, next_state, False if info.get("TimeLimit.truncated", False) else done))
@@ -49,7 +116,7 @@ class ALM_Helper:
 
         state, done, episode_start_time = self.train_env.reset(), False, time.time()
         
-        for _ in range(1, self.cfg.num_train_steps-self.cfg.explore_steps+1):  
+        for _ in range(1, num_train_steps-explore_steps+1):  
 
             action = self.agent.get_action(state, self._train_step)
             next_state, reward, done, info = self.train_env.step(action)
@@ -59,16 +126,16 @@ class ALM_Helper:
 
             self.agent.update(self._train_step)
 
-            if (self._train_step)%self.cfg.eval_episode_interval==0:
+            if (self._train_step)%eval_episode_interval==0:
                 self._eval()
 
-            if self.cfg.save_snapshot and (self._train_step)%self.cfg.save_snapshot_interval==0:
+            if save_snapshot and (self._train_step)%save_snapshot_interval==0:
                 self.save_snapshot()
 
             if done:
                 self._train_episode += 1
                 print("Episode: {}, total numsteps: {}, return: {}".format(self._train_episode, self._train_step, round(info["episode"]["r"], 2)))
-                if self.cfg.wandb_log:
+                if wandb_log:
                     episode_metrics = dict()
                     episode_metrics['episodic_length'] = info["episode"]["l"]
                     episode_metrics['episodic_return'] = info["episode"]["r"]
@@ -84,11 +151,12 @@ class ALM_Helper:
     def _eval(self):
         returns = 0 
         steps = 0
-        for _ in range(self.cfg.num_eval_episodes):
+        for _ in range(num_eval_episodes):
             done = False 
             state = self.eval_env.reset()
             while not done:
                 action = self.agent.get_action(state, self._train_step, True)
+                print(action)
                 next_state, _, done ,info = self.eval_env.step(action)
                 state = next_state
                 
@@ -98,14 +166,14 @@ class ALM_Helper:
             print("Episode: {}, total numsteps: {}, return: {}".format(self._train_episode, self._train_step, round(info["episode"]["r"], 2)))
 
         eval_metrics = dict()
-        eval_metrics['eval_episodic_return'] = returns/self.cfg.num_eval_episodes
-        eval_metrics['eval_episodic_length'] = steps/self.cfg.num_eval_episodes
+        eval_metrics['eval_episodic_return'] = returns/num_eval_episodes
+        eval_metrics['eval_episodic_length'] = steps/num_eval_episodes
 
-        if self.cfg.save_snapshot and returns/self.cfg.num_eval_episodes >= self._best_eval_returns:
+        if save_snapshot and returns/num_eval_episodes >= self._best_eval_returns:
             self.save_snapshot(best=True)
-            self._best_eval_returns = returns/self.cfg.num_eval_episodes
+            self._best_eval_returns = returns/num_eval_episodes
 
-        if self.cfg.wandb_log:
+        if wandb_log:
             wandb.log(eval_metrics, step = self._train_step)
         
     def _eval_bias(self):
@@ -120,7 +188,7 @@ class ALM_Helper:
         bias = final_mc_list - lower_bound
         normalized_bias_per_state = bias / final_mc_norm_list
 
-        if self.cfg.wandb_log:
+        if wandb_log:
             metrics = dict()
             metrics['mean_bias'] = np.mean(bias)
             metrics['std_bias'] = np.std(bias)
@@ -154,7 +222,7 @@ class ALM_Helper:
                 if i_step == ep_len -1 :
                     discounted_return_list[i_step] = reward_list[i_step]
                 else :
-                    discounted_return_list[i_step] = reward_list[i_step] + self.cfg.gamma * discounted_return_list[i_step + 1]
+                    discounted_return_list[i_step] = reward_list[i_step] + gamma * discounted_return_list[i_step + 1]
 
             final_mc_list = np.concatenate((final_mc_list, discounted_return_list[:n_mc_cutoff]))
             final_obs_list += obs_list[:n_mc_cutoff]
@@ -171,11 +239,17 @@ class ALM_Helper:
         torch.save(save_dict, snapshot)
 
 if __name__ == "__main__":
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
+
     env = GridWorld(grid_size=10, stochastic=False, noise=0)
-    alm_helper = ALM_Helper(cfg,env)
+    state_dim = env.observation_space.shape[0]
+    action_dim = env.action_space.n
+    
+    alm_helper = ALM_Helper(env)
     alm_helper.train()
 
-    plot_metrics(rewards, losses, entropies)
-    visualize_policy(env, agent)
-    plot_trajectories(env, agent, num_trajectories=10, max_steps=100)
-    plot_state_visitation_heatmap(env, agent, max_steps=100)
+    #plot_metrics(rewards, losses, entropies)
+    #visualize_policy(env, agent)
+    #plot_trajectories(env, agent, num_trajectories=10, max_steps=100)
+    #plot_state_visitation_heatmap(env, agent, max_steps=100)

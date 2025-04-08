@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the parent directory to the sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import torch
 import torch.nn as nn
 import torch.distributions as td
@@ -5,7 +11,9 @@ import torch.nn.functional as F
 import numpy as np
 import wandb
 import utils
-from models import Encoder, ModelPrior, RewardPrior, Discriminator, Critic, Actor
+from alm_model import Encoder, ModelPrior, RewardPrior, Discriminator, Critic, Actor
+from utils.replay_buffer import ReplayMemory
+from utils import torch_utils
 
 class AlmAgent(object):
     def __init__(self, device, action_low, action_high, num_states, num_actions,
@@ -39,22 +47,22 @@ class AlmAgent(object):
         self.log_wandb = log_wandb
         self.log_interval = log_interval
 
-        self.env_buffer = utils.ReplayMemory(env_buffer_size, num_states, num_actions, np.float32)
+        self.env_buffer = ReplayMemory(env_buffer_size, num_states, num_actions, np.float32)
         self._init_networks(num_states, num_actions, latent_dims, hidden_dims, model_hidden_dims)
         self._init_optims(lr)
 
     def get_action(self, state, step, eval=False):
-        std = utils.linear_schedule(self.expl_start, self.expl_end, self.expl_duration, step)
+        std = torch_utils.linear_schedule(self.expl_start, self.expl_end, self.expl_duration, step)
         with torch.no_grad():
             state = torch.FloatTensor(state).unsqueeze(0).to(self.device)
             z = self.encoder(state).sample()   
             action_dist = self.actor(z, std)    
-            action = action_dist.sample(clip=None)
+            #action = action_dist.sample(clip=None)
             
-            if eval:
-                action = action_dist.mean
+            #if eval:
+            #    action = action_dist.mean
 
-        return action.cpu().numpy()[0]
+        return action_dist #action.cpu().numpy()[0]
     
     def get_representation(self, state):
         with torch.no_grad():
@@ -100,7 +108,7 @@ class AlmAgent(object):
 
     def update(self, step):
         metrics = dict()
-        std = utils.linear_schedule(self.expl_start, self.expl_end, self.expl_duration, step)
+        std = torch_utils.linear_schedule(self.expl_start, self.expl_end, self.expl_duration, step)
 
         if step % self.log_interval == 0 and self.log_wandb:
             log = True 
@@ -111,8 +119,8 @@ class AlmAgent(object):
         self.update_rest(std, step, log, metrics)
 
         if step%self.target_update_interval==0:
-            utils.soft_update(self.encoder_target, self.encoder, self.tau)
-            utils.soft_update(self.critic_target, self.critic, self.tau)
+            torch_utils.soft_update(self.encoder_target, self.encoder, self.tau)
+            torch_utils.soft_update(self.critic_target, self.critic, self.tau)
 
         if log: 
             wandb.log(metrics, step=step)  
@@ -129,7 +137,7 @@ class AlmAgent(object):
             
         self.model_opt.zero_grad()
         alm_loss.backward()
-        model_grad_norm = torch.nn.utils.clip_grad_norm_(utils.get_parameters(self.world_model_list), max_norm=self.max_grad_norm, error_if_nonfinite=True)
+        model_grad_norm = torch.nn.utils.clip_grad_norm_(torch_utils.get_parameters(self.world_model_list), max_norm=self.max_grad_norm, error_if_nonfinite=True)
         self.model_opt.step()
 
         if log:
@@ -170,7 +178,7 @@ class AlmAgent(object):
         return kl, z_next_prior_dist.rsample()
 
     def _alm_reward_loss(self, z_batch, action_batch, log, metrics):
-        with utils.FreezeParameters(self.reward_list):
+        with torch_utils.FreezeParameters(self.reward_list):
             reward = self.reward(z_batch, action_batch)
 
         if log:
@@ -181,9 +189,10 @@ class AlmAgent(object):
     def _alm_value_loss(self, z_batch, std, log, metrics):
         with torch.no_grad():  
             action_dist = self.actor(z_batch, std)
-            action_batch = action_dist.sample(clip=self.stddev_clip)
+            action_batch = action_dist #action_dist.sample(clip=self.stddev_clip)
 
-        with utils.FreezeParameters(self.critic_list):
+        with torch_utils.FreezeParameters(self.critic_list):
+            action_batch = F.one_hot(action_batch, num_classes=4).float()
             Q1, Q2 = self.critic(z_batch, action_batch)
             Q = torch.min(Q1, Q2)
 
@@ -223,7 +232,7 @@ class AlmAgent(object):
         classifier_loss = self._intrinsic_reward_loss(z_batch, action_batch, z_next_batch, z_next_prior_batch, log, metrics)
         self.reward_opt.zero_grad()
         (reward_loss + classifier_loss).backward()
-        reward_grad_norm = torch.nn.utils.clip_grad_norm_(utils.get_parameters(self.reward_list), max_norm=self.max_grad_norm, error_if_nonfinite=True)
+        reward_grad_norm = torch.nn.utils.clip_grad_norm_(torch_utils.get_parameters(self.reward_list), max_norm=self.max_grad_norm, error_if_nonfinite=True)
         self.reward_opt.step()
         
         if log:
@@ -261,8 +270,9 @@ class AlmAgent(object):
     def update_critic(self, z_batch, action_batch, reward_batch, z_next_batch, discount_batch, std, log, metrics):
         with torch.no_grad():    
             next_action_dist = self.actor(z_next_batch, std)
-            next_action_batch = next_action_dist.sample(clip=self.stddev_clip)
+            next_action_batch = next_action_dist#next_action_dist.sample(clip=self.stddev_clip)
 
+            next_action_batch = F.one_hot(next_action_batch, num_classes=4).float()
             target_Q1, target_Q2 = self.critic_target(z_next_batch, next_action_batch)
             target_V = torch.min(target_Q1, target_Q2)
             target_Q = reward_batch.unsqueeze(-1) + discount_batch.unsqueeze(-1)*(target_V)
@@ -272,7 +282,7 @@ class AlmAgent(object):
 
         self.critic_opt.zero_grad()
         critic_loss.backward()
-        critic_grad_norm = torch.nn.utils.clip_grad_norm_(utils.get_parameters(self.critic_list), max_norm=self.max_grad_norm, error_if_nonfinite=True)
+        critic_grad_norm = torch.nn.utils.clip_grad_norm_(torch_utils.get_parameters(self.critic_list), max_norm=self.max_grad_norm, error_if_nonfinite=True)
         self.critic_opt.step()
 
         if log:
@@ -288,14 +298,14 @@ class AlmAgent(object):
 
         self.actor_opt.zero_grad()
         actor_loss.backward()
-        actor_grad_norm = torch.nn.utils.clip_grad_norm_(utils.get_parameters(self.actor_list), max_norm=self.max_grad_norm, error_if_nonfinite=True)
+        actor_grad_norm = torch.nn.utils.clip_grad_norm_(torch_utils.get_parameters(self.actor_list), max_norm=self.max_grad_norm, error_if_nonfinite=True)
         self.actor_opt.step()
 
         if log:
             metrics['actor_grad_norm'] = actor_grad_norm.mean()
 
     def _td_loss(self, z_batch, std, log, metrics):
-        with utils.FreezeParameters([self.critic]):
+        with torch_utils.FreezeParameters([self.critic]):
             action_dist = self.actor(z_batch, std)
             action_batch = action_dist.sample(clip=self.stddev_clip)
             Q1, Q2 = self.critic(z_batch, action_batch)
@@ -308,7 +318,7 @@ class AlmAgent(object):
         actor_loss = 0
         z_seq, action_seq = self._rollout_imagination(z_batch, std)
 
-        with utils.FreezeParameters([self.model, self.reward, self.classifier, self.critic]):
+        with torch_utils.FreezeParameters([self.model, self.reward, self.classifier, self.critic]):
             reward = self.reward(z_seq[:-1], action_seq[:-1])
             kl_reward = self.classifier.get_reward(z_seq[:-1], action_seq[:-1], z_seq[1:].detach())
             discount = self.gamma * torch.ones_like(reward)
@@ -339,26 +349,27 @@ class AlmAgent(object):
     def _rollout_imagination(self, z_batch, std):
         z_seq = [z_batch]
         action_seq = []
-        with utils.FreezeParameters([self.model]):
+        with torch_utils.FreezeParameters([self.model]):
             for t in range(self.seq_len):
                 action_dist = self.actor(z_batch.detach(), std)
-                action_batch = action_dist.sample(self.stddev_clip)
+                action_batch = action_dist #action_dist.sample(self.stddev_clip)
+                action_batch = F.one_hot(action_batch, num_classes=4).float()
                 z_batch = self.model(z_batch, action_batch).rsample()
                 action_seq.append(action_batch)
                 z_seq.append(z_batch)
 
             action_dist = self.actor(z_batch.detach(), std)
-            action_batch = action_dist.sample(self.stddev_clip)
+            action_batch = action_dist #action_dist.sample(self.stddev_clip)
             action_seq.append(action_batch)
 
         z_seq = torch.stack(z_seq, dim=0)
-        action_seq = torch.stack(action_seq, dim=0)
+        action_seq = torch.stack(action_seq) #torch.stack(action_seq, dim=0)
         return z_seq, action_seq
 
     def _init_networks(self, num_states, num_actions, latent_dims, hidden_dims, model_hidden_dims):
         self.encoder = Encoder(num_states, hidden_dims, latent_dims).to(self.device)
         self.encoder_target = Encoder(num_states, hidden_dims, latent_dims).to(self.device)
-        utils.hard_update(self.encoder_target, self.encoder)
+        torch_utils.hard_update(self.encoder_target, self.encoder)
 
         self.model = ModelPrior(latent_dims, num_actions, model_hidden_dims).to(self.device)
         self.reward = RewardPrior(latent_dims, hidden_dims, num_actions).to(self.device)
@@ -366,7 +377,7 @@ class AlmAgent(object):
 
         self.critic = Critic(latent_dims, hidden_dims, num_actions).to(self.device)
         self.critic_target = Critic(latent_dims, hidden_dims, num_actions).to(self.device)
-        utils.hard_update(self.critic_target, self.critic)
+        torch_utils.hard_update(self.critic_target, self.critic)
 
         self.actor = Actor(latent_dims, hidden_dims, num_actions, self.action_low, self.action_high).to(self.device)
 
@@ -376,8 +387,8 @@ class AlmAgent(object):
         self.critic_list = [self.critic]
 
     def _init_optims(self, lr):
-        self.model_opt = torch.optim.Adam(utils.get_parameters(self.world_model_list), lr=lr['model'])
-        self.reward_opt = torch.optim.Adam(utils.get_parameters(self.reward_list), lr=lr['reward'])
+        self.model_opt = torch.optim.Adam(torch_utils.get_parameters(self.world_model_list), lr=lr['model'])
+        self.reward_opt = torch.optim.Adam(torch_utils.get_parameters(self.reward_list), lr=lr['reward'])
         self.actor_opt = torch.optim.Adam(self.actor.parameters(), lr=lr['actor'])
         self.critic_opt = torch.optim.Adam(self.critic.parameters(), lr=lr['critic'])
 

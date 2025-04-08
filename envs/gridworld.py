@@ -1,9 +1,19 @@
 import numpy as np
+import random
 
 # Simple space definitions to replace gym.spaces
 class DiscreteSpace:
     def __init__(self, n):
         self.n = n
+    
+    def sample(self):
+        return random.randint(0, self.n - 1)
+
+    def __contains__(self, x):
+        return isinstance(x, int) and 0 <= x < self.n
+
+    def __repr__(self):
+        return f"Discrete({self.n})"
         
 class BoxSpace:
     def __init__(self, low, high, shape, dtype):
@@ -112,7 +122,7 @@ class GridWorld:
         
         # Move agent based on action
         next_pos = list(self.agent_pos)
-        
+
         if action == self.UP and self.agent_pos[1] < self.grid_size - 1:
             next_pos[1] += 1
         elif action == self.DOWN and self.agent_pos[1] > 0:
@@ -144,7 +154,7 @@ class GridWorld:
         else:
             reward = -1.0  # Small negative reward for each step
         
-        return state, reward, done, {}
+        return state, reward, done, {"episode": {"r": reward, "l": self.steps}}
     
     def render(self, mode='human'):
         """Render the environment (not implemented for console)"""

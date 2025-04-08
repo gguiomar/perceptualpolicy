@@ -5,6 +5,9 @@ from typing import Iterable
 
 # NN weight utils
 
+def linear_schedule(start_sigma: float, end_sigma: float, duration: int, t: int):
+    return end_sigma + (1 - min(t / duration, 1)) * (start_sigma - end_sigma)
+
 def weight_init(m):
     if isinstance(m, nn.Linear):
         nn.init.orthogonal_(m.weight.data)

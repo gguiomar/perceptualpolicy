@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.distributions as td
 import numpy as np
 import utils
+from utils import torch_utils
 
 class Encoder(nn.Module):
     def __init__(self, input_shape, hidden_dims, latent_dims):
@@ -16,7 +17,7 @@ class Encoder(nn.Module):
 
         self.std_min = 0.1
         self.std_max = 10.0
-        self.apply(utils.weight_init)
+        self.apply(torch_utils.weight_init)
 
     def forward(self, x):
         x = self.encoder(x)
@@ -36,7 +37,7 @@ class ModelPrior(nn.Module):
         self.std_min = 0.1
         self.std_max = 10.0
         self.model = self._build_model()
-        self.apply(utils.weight_init)
+        self.apply(torch_utils.weight_init)
 
     def _build_model(self):
         model = [nn.Linear(self.action_dims + self.latent_dims, self.hidden_dims)]
@@ -63,7 +64,7 @@ class RewardPrior(nn.Module):
             nn.Linear(latent_dims + action_dims, hidden_dims), nn.LayerNorm(hidden_dims), 
             nn.Tanh(), nn.Linear(hidden_dims, hidden_dims),
             nn.ELU(), nn.Linear(hidden_dims, 1))
-        self.apply(utils.weight_init)
+        self.apply(torch_utils.weight_init)
         
     def forward(self, z, a):
         z_a = torch.cat([z, a], -1)
@@ -77,7 +78,7 @@ class Discriminator(nn.Module):
             nn.Linear(2 * latent_dims + action_dims, hidden_dims), nn.LayerNorm(hidden_dims), 
             nn.Tanh(), nn.Linear(hidden_dims, hidden_dims),
             nn.ELU(), nn.Linear(hidden_dims, 2))
-        self.apply(utils.weight_init)
+        self.apply(torch_utils.weight_init)
 
     def forward(self, z, a, z_next):
         x = torch.cat([z, a, z_next], -1)
@@ -103,7 +104,7 @@ class Critic(nn.Module):
             nn.Tanh(), nn.Linear(hidden_dims, hidden_dims),
             nn.ELU(), nn.Linear(hidden_dims, 1))
             
-        self.apply(utils.weight_init)
+        self.apply(torch_utils.weight_init)
 
     def forward(self, x, a):
         x_a = torch.cat([x, a], -1)
@@ -119,15 +120,20 @@ class Actor(nn.Module):
         self.fc1 = nn.Linear(input_shape, hidden_dims) 
         self.fc2 = nn.Linear(hidden_dims, hidden_dims)
         self.mean = nn.Linear(hidden_dims, output_shape)
-        self.apply(utils.weight_init)
+        self.apply(torch_utils.weight_init)
 
     def forward(self, x, std):
         x = F.elu(self.fc1(x))
         x = F.elu(self.fc2(x))
         mean = torch.tanh(self.mean(x))
         std = torch.ones_like(mean) * std
-        dist = utils.TruncatedNormal(mean, std, self.low, self.high)
-        return  dist
+        dist = torch_utils.TruncatedNormal(mean, std, self.low, self.high)
+        action_sample = dist.sample()
+
+        # Convert vector to discrete action index
+        action = torch.argmax(action_sample, dim=-1)
+
+        return action
         
 class StochasticActor(nn.Module):
     def __init__(self, input_shape, hidden_dims, output_shape, low, high):
@@ -139,7 +145,7 @@ class StochasticActor(nn.Module):
         self.fc3 = nn.Linear(hidden_dims, 2*output_shape)
         self.std_min = np.exp(-5)
         self.std_max = np.exp(2)
-        self.apply(utils.weight_init)
+        self.apply(torch_utils.weight_init)
 
     def forward(self, x):
         x = F.elu(self.fc1(x))
@@ -149,5 +155,10 @@ class StochasticActor(nn.Module):
         mean = torch.tanh(mean)
         std = self.std_max - F.softplus(self.std_max-std)
         std = self.std_min  + F.softplus(std-self.std_min) 
-        dist = utils.TruncatedNormal(mean, std, self.low, self.high)
-        return dist
+        dist = torch_utils.TruncatedNormal(mean, std, self.low, self.high)
+        action_sample = dist.sample()
+
+        # Convert vector to discrete action index
+        action = torch.argmax(action_sample, dim=-1)
+
+        return action
