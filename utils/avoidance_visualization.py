@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import seaborn as sns
+from matplotlib.animation import FuncAnimation
 
 def plot_avoidance_training_curves(rewards, losses, metrics, metric_name,
                                    avoidance_rates, shock_rates,
@@ -145,12 +146,12 @@ def plot_avoidance_trajectories_2d(env, agent, num_trajectories=5, max_steps=100
     # Draw center lines and grid
     ax.axvline(env.center_x, color='gray', linestyle='--', lw=1)
     ax.axhline(env.center_y, color='gray', linestyle='--', lw=1)
-    ax.set_xticks(np.arange(-0.5, env.grid_size, 1), minor=True)
-    ax.set_yticks(np.arange(-0.5, env.grid_size, 1), minor=True)
+    ax.set_xticks(np.arange(-0.5, env.width, 1), minor=True)
+    ax.set_yticks(np.arange(-0.5, env.height, 1), minor=True)
     ax.grid(which='minor', color='gray', linestyle='-', linewidth=0.5)
     ax.tick_params(which='minor', size=0)
-    ax.set_xlim(-0.5, env.grid_size - 0.5)
-    ax.set_ylim(-0.5, env.grid_size - 0.5)
+    ax.set_xlim(-0.5, env.width - 0.5)
+    ax.set_ylim(-0.5, env.height - 0.5)
     ax.set_aspect('equal', adjustable='box')
     ax.set_xlabel("X position")
     ax.set_ylabel("Y position")
@@ -177,7 +178,7 @@ def plot_avoidance_heatmap_2d(env, agent, num_episodes=100, max_steps=100, save_
         max_steps: Maximum steps per episode.
         save_path: Path to save the plot.
     """
-    visitation_counts = np.zeros((env.grid_size, env.grid_size))
+    visitation_counts = np.zeros((env.height, env.width))
     device = agent.device
     task_id = env.current_task_id 
 
@@ -195,7 +196,7 @@ def plot_avoidance_heatmap_2d(env, agent, num_episodes=100, max_steps=100, save_
         while not done and steps < max_steps:
             x, y = env.agent_pos
             # Ensure indices are within bounds before incrementing
-            if 0 <= x < env.grid_size and 0 <= y < env.grid_size:
+            if 0 <= x < env.width and 0 <= y < env.height:
                 visitation_counts[int(round(y)), int(round(x))] += 1 # Use rounded int indices
 
             state_tensor = torch.FloatTensor(state).to(device)
@@ -223,10 +224,10 @@ def plot_avoidance_heatmap_2d(env, agent, num_episodes=100, max_steps=100, save_
     task_str = f"Task {'X' if task_id == 1 else 'Y'}-Shuttle"
     ax.set_title(f"State Visitation Heatmap ({agent.__class__.__name__} - {agent.policy_type}) - {task_str}")
     # Ensure correct tick labels for grid coordinates
-    ax.set_xticks(np.arange(env.grid_size) + 0.5)
-    ax.set_yticks(np.arange(env.grid_size) + 0.5)
-    ax.set_xticklabels(np.arange(env.grid_size))
-    ax.set_yticklabels(np.arange(env.grid_size))
+    ax.set_xticks(np.arange(env.width) + 0.5)
+    ax.set_yticks(np.arange(env.height) + 0.5)
+    ax.set_xticklabels(np.arange(env.width))
+    ax.set_yticklabels(np.arange(env.height))
     plt.setp(ax.get_yticklabels(), rotation=0)
 
 

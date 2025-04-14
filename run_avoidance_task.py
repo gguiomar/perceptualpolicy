@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Import the environment
-from envs.active_avoidance_env import ActiveAvoidanceEnv2D
+from envs.active_avoidance_env_test import ActiveAvoidanceEnv2D
 
 # Import agents
 from agents.ppo_agent import PPOAgent
@@ -16,7 +16,8 @@ from agents.trpo_agent import TRPOAgent
 from utils.avoidance_visualization import (
     plot_avoidance_training_curves,
     plot_avoidance_trajectories_2d,
-    plot_avoidance_heatmap_2d
+    plot_avoidance_heatmap_2d,
+    animate_avoidance_trajectories_2d
 )
 
 SEED = 42
@@ -29,11 +30,12 @@ os.makedirs('plots', exist_ok=True)
 # --- Configuration ---
 config = {
     # Environment params
-    'grid_size': 8,
-    'tone_duration_steps': 20,
-    'shock_delay_steps': 20,
+    'height': 10,
+    'width': 20,
+    'tone_duration_steps': 10,
+    'shock_delay_steps': 10,
     'max_steps_per_episode': 100,
-    'initial_task': ActiveAvoidanceEnv2D.TASK_X_SHUTTLE,
+    'initial_task': ActiveAvoidanceEnv2D.AVOID_TONE_1,
 
     # Agent params
     'agent_class': MaxEntAgent, 
@@ -57,7 +59,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 env = ActiveAvoidanceEnv2D(
-    grid_size=config['grid_size'],
+    height=config['height'],
+    width=config['width'],
     tone_duration_steps=config['tone_duration_steps'],
     shock_delay_steps=config['shock_delay_steps'],
     max_steps_per_episode=config['max_steps_per_episode'],
@@ -175,7 +178,7 @@ for episode in range(config['num_episodes']):
         avg_shock = np.mean(shock_rate_history[-50:]) * 100
 
         metric_name = 'Entropy' if isinstance(agent, (MaxEntAgent, FisherMaxEntAgent)) else 'KL'
-        print(f"Ep {episode+1}/{config['num_episodes']} | Task: {'X' if env.current_task_id == 1 else 'Y'} | "
+        print(f"Ep {episode+1}/{config['num_episodes']} | Task: {'Tone1' if env.current_task_id == 1 else 'Tone2'} | "
               f"Rwd: {avg_reward:.2f} | Loss: {avg_loss:.4f} | {metric_name}: {avg_metric:.4f} | "
               f"Avoid%: {avg_avoid:.1f} | Shock%: {avg_shock:.1f}")
 
