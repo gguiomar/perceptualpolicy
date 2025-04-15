@@ -113,18 +113,12 @@ class ActiveAvoidanceEnv2D:
         # Determine starting position randomly, ensuring it's on the correct
         # side of the relevant midline for the current task.
         start_x, start_y = 0, 0
-        if self.current_task_id == self.AVOID_TONE_1: # Task 1: Need to cross vertical midline
-            if np.random.rand() < 0.5: # Start left half
-                start_x = np.random.randint(0, int(np.floor(self.center_x)) + 1)
-            else: # Start right half
-                start_x = np.random.randint(int(np.ceil(self.center_x)), self.width)
-            start_y = np.random.randint(0, self.height)
-        elif self.current_task_id == self.AVOID_TONE_2: # Task 2: Need to cross horizontal midline
-            if np.random.rand() < 0.5: # Start bottom half
-                start_y = np.random.randint(0, int(np.floor(self.center_y)) + 1)
-            else: # Start top half
-                start_y = np.random.randint(int(np.ceil(self.center_y)), self.height)
-            start_x = np.random.randint(0, self.width)
+
+        if np.random.rand() < 0.5: # Start left half
+            start_x = np.random.randint(0, int(np.floor(self.center_x)) + 1)
+        else: # Start right half
+            start_x = np.random.randint(int(np.ceil(self.center_x)), self.width)
+        start_y = np.random.randint(0, self.height)
 
         self.agent_pos = [start_x, start_y]
         self.start = tuple(self.agent_pos) # Store start pos
@@ -144,7 +138,7 @@ class ActiveAvoidanceEnv2D:
             self.current_task_id = new_task_id
         else: # Default: toggle between Task 1 and Task 2
             self.current_task_id = self.AVOID_TONE_2 if self.current_task_id == self.AVOID_TONE_1 else self.AVOID_TONE_1
-        print(f"Switched to Task {self.current_task_id} ({'X' if self.current_task_id == 1 else 'Y'}-Shuttle)")
+        print(f"Switched to Task {self.current_task_id} ({'Tone1' if self.current_task_id == 1 else 'Tone2'}-Shuttle)")
 
     def step(self, action):
         """Executes one time step in the environment."""
@@ -155,7 +149,8 @@ class ActiveAvoidanceEnv2D:
         done = False   # Flag indicating if the episode ended this step
         info = {
             'shocked': False, 
-            'avoided': False, 
+            'avoided': False,
+            'ignored': False,
             'task': self.current_task_id,
             'tone1_active': self.tone1_on > 0.5,
             'tone2_active': self.tone2_on > 0.5
@@ -188,12 +183,17 @@ class ActiveAvoidanceEnv2D:
 
             # Check if the agent performed the correct avoidance action for the CURRENT task
             avoided = False
+            ignored = False
             if self.current_task_id == self.AVOID_TONE_1: # Task 1 rule
-                if (self.tone1_on > 0.5 and self.current_zone[0] != new_zone[0]) or (self.tone2_on > 0.5):
+                if (self.tone1_on > 0.5 and self.current_zone[0] != new_zone[0]):
                     avoided = True
+                if (self.tone2_on > 0.5):
+                    ignored = True
             elif self.current_task_id == self.AVOID_TONE_2: # Task 2 rule
-                if (self.tone2_on > 0.5 and self.current_zone[1] != new_zone[1]) or (self.tone1_on > 0.5):
+                if (self.tone2_on > 0.5 and self.current_zone[0] != new_zone[0]):
                     avoided = True
+                if (self.tone1_on > 0.5):
+                    ignored = True
 
             if avoided:
                 reward += 10.0 # Positive reward
@@ -202,12 +202,16 @@ class ActiveAvoidanceEnv2D:
                 # Turn off both tones
                 self.tone1_on = 0.0
                 self.tone2_on = 0.0
+            elif ignored:
+                info['ignored'] = True
+                reward -= 1.0
+                done = True
             else:
                 # If not avoided, check if the shock timer has expired
                 if self.time_since_tone_onset >= self.shock_delay_steps:
                     # Shock occurs
                     reward -= 10.0 # Negative reward
-                    done = True    # End the episode
+                    #done = True    # End the episode
                     info['shocked'] = True
                     # Turn off both tones
                     self.tone1_on = 0.0

@@ -17,7 +17,8 @@ from utils.avoidance_visualization import (
     plot_avoidance_training_curves,
     plot_avoidance_trajectories_2d,
     plot_avoidance_heatmap_2d,
-    animate_avoidance_trajectories_2d
+    plot_avoidance_trajectory_step_by_step,
+    plot_multiple_avoidance_trajectories
 )
 
 SEED = 42
@@ -214,4 +215,12 @@ except Exception as e:
 # except Exception as e:
 #     print(f"Could not generate heatmap plot: {e}")
 
+try:
+    save_name = f"plots/{config['agent_name']}_trajectory_animation_task{task_id_final}.png"
+    plot_avoidance_trajectory_step_by_step(env, agent, max_steps=config['max_steps_per_episode'], save_path=save_name)
+except Exception as e:
+    print(f"Could not generate trajectory plot: {e}")
+
 print("Run complete.")
+
+plot_multiple_avoidance_trajectories(env, agent, num_runs=4, max_steps=config['max_steps_per_episode'], save_path=save_name)
