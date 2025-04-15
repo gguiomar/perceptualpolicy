@@ -150,7 +150,6 @@ class ActiveAvoidanceEnv2D:
         info = {
             'shocked': False, 
             'avoided': False,
-            'ignored': False,
             'task': self.current_task_id,
             'tone1_active': self.tone1_on > 0.5,
             'tone2_active': self.tone2_on > 0.5
@@ -176,46 +175,40 @@ class ActiveAvoidanceEnv2D:
                 self.tone1_on = 0.0
                 self.tone2_on = 1.0
 
+        avoided = False
+        new_zone = self._get_zone(self.agent_pos) # Check zone after moving
         # --- Main trial logic: applies only if either tone is active ---
         if self.tone1_on > 0.5 or self.tone2_on > 0.5:
             self.time_since_tone_onset += 1 # Increment tone timer
-            new_zone = self._get_zone(self.agent_pos) # Check zone after moving
-
             # Check if the agent performed the correct avoidance action for the CURRENT task
-            avoided = False
-            ignored = False
             if self.current_task_id == self.AVOID_TONE_1: # Task 1 rule
-                if (self.tone1_on > 0.5 and self.current_zone[0] != new_zone[0]):
+                ##TODO: This condiiton needs to be checked if aligned with real experiment
+                if (self.tone1_on > 0.5 and self.current_zone[0] != new_zone[0]) or (self.tone2_on > 0.5 and self.time_since_tone_onset >= self.shock_delay_steps):
                     avoided = True
-                if (self.tone2_on > 0.5):
-                    ignored = True
             elif self.current_task_id == self.AVOID_TONE_2: # Task 2 rule
-                if (self.tone2_on > 0.5 and self.current_zone[0] != new_zone[0]):
+                ##TODO: This condiiton needs to be checked if aligned with real experiment
+                if (self.tone2_on > 0.5 and self.current_zone[0] != new_zone[0]) or (self.tone1_on > 0.5 and self.time_since_tone_onset >= self.shock_delay_steps):
                     avoided = True
-                if (self.tone1_on > 0.5):
-                    ignored = True
 
-            if avoided:
-                reward += 10.0 # Positive reward
+        ##TODO: Current setup the agent gets reward for ignoring the tone
+        if avoided:
+            reward += 10.0 # Positive reward
+            done = True    # End the episode
+            info['avoided'] = True
+            # Turn off both tones
+            self.tone1_on = 0.0
+            self.tone2_on = 0.0
+            
+        # If not avoided, check if the shock timer has expired
+        if self.time_since_tone_onset >= self.shock_delay_steps and not avoided:
+            # Shock occurs
+            reward -= 10.0 # Negative reward
+            if self.current_zone[0] != new_zone[0]:
                 done = True    # End the episode
-                info['avoided'] = True
-                # Turn off both tones
-                self.tone1_on = 0.0
-                self.tone2_on = 0.0
-            elif ignored:
-                info['ignored'] = True
-                reward -= 1.0
-                done = True
-            else:
-                # If not avoided, check if the shock timer has expired
-                if self.time_since_tone_onset >= self.shock_delay_steps:
-                    # Shock occurs
-                    reward -= 10.0 # Negative reward
-                    #done = True    # End the episode
-                    info['shocked'] = True
-                    # Turn off both tones
-                    self.tone1_on = 0.0
-                    self.tone2_on = 0.0
+            info['shocked'] = True
+            # Turn off both tones
+            self.tone1_on = 0.0
+            self.tone2_on = 0.0
 
             # Update the agent's current zone if the episode is still ongoing
             if not done:

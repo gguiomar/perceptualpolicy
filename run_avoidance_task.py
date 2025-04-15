@@ -33,8 +33,8 @@ config = {
     # Environment params
     'height': 10,
     'width': 20,
-    'tone_duration_steps': 10,
-    'shock_delay_steps': 10,
+    'tone_duration_steps': 30,
+    'shock_delay_steps': 30,
     'max_steps_per_episode': 100,
     'initial_task': ActiveAvoidanceEnv2D.AVOID_TONE_1,
 
@@ -221,6 +221,11 @@ try:
 except Exception as e:
     print(f"Could not generate trajectory plot: {e}")
 
+try:
+    save_name = f"plots/{config['agent_name']}_trajectory_animation_task{task_id_final}.png"
+    plot_multiple_avoidance_trajectories(env, agent, num_runs=4, max_steps=config['max_steps_per_episode'], save_path=save_name)
+except Exception as e:
+    print(f"Could not generate trajectory plot: {e}")
+
 print("Run complete.")
 
-plot_multiple_avoidance_trajectories(env, agent, num_runs=4, max_steps=config['max_steps_per_episode'], save_path=save_name)

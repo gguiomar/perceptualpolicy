@@ -434,7 +434,7 @@ def plot_avoidance_trajectory_step_by_step(env, agent, max_steps=100, save_path=
 
 def plot_multiple_avoidance_trajectories(env, agent, num_runs=4, max_steps=100, save_path=None, 
                                         visualization_type='animation', fps=5, 
-                                        gallery_save_dir=None):
+                                        gallery_save_dir=None, random_seed=None):
     """
     Plots multiple trajectories from different runs side by side.
     
@@ -447,9 +447,15 @@ def plot_multiple_avoidance_trajectories(env, agent, num_runs=4, max_steps=100, 
         visualization_type: Either 'animation' or 'gallery'.
         fps: Frames per second for animation.
         gallery_save_dir: Directory to save gallery images. If None, uses save_path directory.
+        random_seed: Base random seed. If provided, each run will use a different seed.
     """
     device = agent.device
     task_id = env.current_task_id
+    
+    # Store original random state if we need to restore it
+    original_rng_state = None
+    if hasattr(env, 'np_random') and env.np_random is not None:
+        original_rng_state = env.np_random.get_state()
     
     # Collect data for multiple runs
     all_trajectories = []
@@ -460,6 +466,14 @@ def plot_multiple_avoidance_trajectories(env, agent, num_runs=4, max_steps=100, 
     all_colors = []
     
     for run in range(num_runs):
+        # Set a different random seed for each run if provided
+        if random_seed is not None:
+            run_seed = random_seed + run
+            if hasattr(env, 'seed'):
+                env.seed(run_seed)
+            elif hasattr(env, 'np_random') and env.np_random is not None:
+                env.np_random.seed(run_seed)
+        
         # Collect trajectory data for this run
         state = env.reset()
         trajectory_x = [env.agent_pos[0]]
@@ -513,6 +527,10 @@ def plot_multiple_avoidance_trajectories(env, agent, num_runs=4, max_steps=100, 
         all_tones.append(tones)
         all_outcomes.append(outcome)
         all_colors.append(color)
+    
+    # Restore original random state if we changed it
+    if original_rng_state is not None and hasattr(env, 'np_random') and env.np_random is not None:
+        env.np_random.set_state(original_rng_state)
     
     # Function to set up the grid properly
     def setup_grid(ax):
