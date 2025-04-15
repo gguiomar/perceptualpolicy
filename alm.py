@@ -57,12 +57,12 @@ class AlmAgent(object):
             state = torch.FloatTensor(state).unsqueeze(0).to(self.device)
             z = self.encoder(state).sample()   
             action_dist = self.actor(z, std)    
-            #action = action_dist.sample(clip=None)
+            action = action_dist.sample(clip=None)
             
-            #if eval:
-            #    action = action_dist.mean
+            if eval:
+                action = action_dist.mean
 
-        return action_dist #action.cpu().numpy()[0]
+        return action.cpu().numpy()[0]
     
     def get_representation(self, state):
         with torch.no_grad():
@@ -189,10 +189,9 @@ class AlmAgent(object):
     def _alm_value_loss(self, z_batch, std, log, metrics):
         with torch.no_grad():  
             action_dist = self.actor(z_batch, std)
-            action_batch = action_dist #action_dist.sample(clip=self.stddev_clip)
+            action_batch = action_dist.sample(clip=self.stddev_clip)
 
         with torch_utils.FreezeParameters(self.critic_list):
-            action_batch = F.one_hot(action_batch, num_classes=4).float()
             Q1, Q2 = self.critic(z_batch, action_batch)
             Q = torch.min(Q1, Q2)
 
@@ -270,9 +269,8 @@ class AlmAgent(object):
     def update_critic(self, z_batch, action_batch, reward_batch, z_next_batch, discount_batch, std, log, metrics):
         with torch.no_grad():    
             next_action_dist = self.actor(z_next_batch, std)
-            next_action_batch = next_action_dist#next_action_dist.sample(clip=self.stddev_clip)
+            next_action_batch = next_action_dist.sample(clip=self.stddev_clip)
 
-            next_action_batch = F.one_hot(next_action_batch, num_classes=4).float()
             target_Q1, target_Q2 = self.critic_target(z_next_batch, next_action_batch)
             target_V = torch.min(target_Q1, target_Q2)
             target_Q = reward_batch.unsqueeze(-1) + discount_batch.unsqueeze(-1)*(target_V)
@@ -352,18 +350,17 @@ class AlmAgent(object):
         with torch_utils.FreezeParameters([self.model]):
             for t in range(self.seq_len):
                 action_dist = self.actor(z_batch.detach(), std)
-                action_batch = action_dist #action_dist.sample(self.stddev_clip)
-                action_batch = F.one_hot(action_batch, num_classes=4).float()
+                action_batch = action_dist.sample(self.stddev_clip)
                 z_batch = self.model(z_batch, action_batch).rsample()
                 action_seq.append(action_batch)
                 z_seq.append(z_batch)
 
             action_dist = self.actor(z_batch.detach(), std)
-            action_batch = action_dist #action_dist.sample(self.stddev_clip)
+            action_batch = action_dist.sample(self.stddev_clip)
             action_seq.append(action_batch)
 
         z_seq = torch.stack(z_seq, dim=0)
-        action_seq = torch.stack(action_seq) #torch.stack(action_seq, dim=0)
+        action_seq = torch.stack(action_seq, dim=0)
         return z_seq, action_seq
 
     def _init_networks(self, num_states, num_actions, latent_dims, hidden_dims, model_hidden_dims):

@@ -16,7 +16,11 @@ import numpy as np
 
 from pathlib import Path
 
-device = 'cpu'
+wandb.login()
+
+wandb.init("kmor-perceptualpolicy-initial")
+
+device = 'cuda'
 seed = 1
 
 #data 
@@ -58,7 +62,7 @@ num_eval_episodes = 5
 save_snapshot = False
 save_snapshot_interval = 50000
 
-wandb_log = False
+wandb_log = True
 
 def make_agent(env, device):    
 
@@ -75,14 +79,14 @@ def make_agent(env, device):
                      lr, max_grad_norm, batch_size, seq_len, lambda_cost,
                      expl_start, expl_end, expl_duration, stddev_clip, 
                      latent_dims, hidden_dims, model_hidden_dims,
-                     log_wandb = False, log_interval=500)
+                     log_wandb = True, log_interval=500)
 
     return agent
 
 class ALM_Helper:
     def __init__(self, env):
         self.work_dir = Path.cwd()
-        self.device = torch.device("cpu") #can be changed to cuda as required.
+        self.device = torch.device("cuda") #can be changed to cuda as required.
         self.set_seed()
         self.train_env = env
         self.eval_env = env
@@ -115,10 +119,20 @@ class ALM_Helper:
         self._eval()
 
         state, done, episode_start_time = self.train_env.reset(), False, time.time()
+        returns = 0
         
         for _ in range(1, num_train_steps-explore_steps+1):  
 
             action = self.agent.get_action(state, self._train_step)
+
+            # Before environment step
+            if isinstance(action, torch.Tensor):
+                action = action.numpy()
+
+            if isinstance(action, np.ndarray):
+                if action.ndim > 0:
+                    action = int(np.argmax(action))
+
             next_state, reward, done, info = self.train_env.step(action)
             self._train_step += 1
 
@@ -134,7 +148,9 @@ class ALM_Helper:
 
             if done:
                 self._train_episode += 1
+                returns += info["episode"]["r"]
                 print("Episode: {}, total numsteps: {}, return: {}".format(self._train_episode, self._train_step, round(info["episode"]["r"], 2)))
+                print("Cumulative Returns:", returns)
                 if wandb_log:
                     episode_metrics = dict()
                     episode_metrics['episodic_length'] = info["episode"]["l"]
@@ -156,7 +172,15 @@ class ALM_Helper:
             state = self.eval_env.reset()
             while not done:
                 action = self.agent.get_action(state, self._train_step, True)
-                print(action)
+
+                # Before environment step
+                if isinstance(action, torch.Tensor):
+                    action = action.cpu().numpy()
+
+                if isinstance(action, np.ndarray):
+                    if action.ndim > 0:
+                        action = int(np.argmax(action))
+
                 next_state, _, done ,info = self.eval_env.step(action)
                 state = next_state
                 
@@ -242,7 +266,7 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    env = GridWorld(grid_size=10, stochastic=False, noise=0)
+    env = GridWorld(grid_size=10, stochastic=False, noise=0.1, add_obstacles=False)
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
     

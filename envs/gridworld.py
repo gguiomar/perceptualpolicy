@@ -1,19 +1,14 @@
 import numpy as np
 import random
+import torch
 
 # Simple space definitions to replace gym.spaces
 class DiscreteSpace:
     def __init__(self, n):
         self.n = n
-    
+
     def sample(self):
         return random.randint(0, self.n - 1)
-
-    def __contains__(self, x):
-        return isinstance(x, int) and 0 <= x < self.n
-
-    def __repr__(self):
-        return f"Discrete({self.n})"
         
 class BoxSpace:
     def __init__(self, low, high, shape, dtype):
@@ -28,8 +23,9 @@ class GridWorld:
     """
     # Action definitions
     UP, DOWN, LEFT, RIGHT = 0, 1, 2, 3
+
     
-    def __init__(self, grid_size=10, start=(0, 0), goal=(9, 9), max_steps=100, 
+    def __init__(self, grid_size=10, start=(0, 0), goal=(9, 9), max_steps=80, 
                  stochastic=False, noise=0.1, add_obstacles=False, custom_obstacles=None):
         """
         Initialize GridWorld environment
@@ -69,6 +65,9 @@ class GridWorld:
         # Initialize agent position
         self.agent_pos = None
         self.steps = 0
+        # Save previous position and distance
+        self.prev_pos = None
+        self.prev_distance = 10
         self.reset()
     
     def _generate_obstacles(self):
@@ -103,6 +102,11 @@ class GridWorld:
         """Convert agent position to normalized state representation"""
         return np.array(self.agent_pos, dtype=np.float32) / (self.grid_size - 1)
     
+    def _distance_to_goal(self, pos):
+        """Euclidean distance from given position to goal"""
+        return np.linalg.norm(np.array(pos) - np.array(self.goal))
+    
+    
     def step(self, action):
         """
         Take an action in the environment
@@ -122,6 +126,10 @@ class GridWorld:
         
         # Move agent based on action
         next_pos = list(self.agent_pos)
+
+        # Save previous position and distance
+        self.prev_pos = list(self.agent_pos)
+        self.prev_distance = self._distance_to_goal(self.prev_pos)
 
         if action == self.UP and self.agent_pos[1] < self.grid_size - 1:
             next_pos[1] += 1
@@ -148,11 +156,25 @@ class GridWorld:
         if self.steps >= self.max_steps:
             done = True
         
+
+        new_distance = self._distance_to_goal(self.agent_pos)
+
         # Compute reward
         if tuple(self.agent_pos) == self.goal:
-            reward = 50.0  # Positive reward for reaching goal
+            reward = 10.0  # Positive reward for reaching goal
         else:
-            reward = -1.0  # Small negative reward for each step
+            distance_to_goal = self._distance_to_goal(self.agent_pos)
+            reward = 0.0  # Default if no bounds match
+            goal_reward = 10.0
+            max_bound = min(self.grid_size, 10)  # Up to grid size or 10 intervals
+
+            # Positive reward for moving closer to goal
+            for i in range(1, max_bound):
+                lower = i - 1
+                upper = i
+                if distance_to_goal > lower and distance_to_goal <= upper:
+                    reward = (1.0 - 0.1 * i) * goal_reward
+                    break
         
         return state, reward, done, {"episode": {"r": reward, "l": self.steps}}
     

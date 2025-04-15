@@ -128,12 +128,7 @@ class Actor(nn.Module):
         mean = torch.tanh(self.mean(x))
         std = torch.ones_like(mean) * std
         dist = torch_utils.TruncatedNormal(mean, std, self.low, self.high)
-        action_sample = dist.sample()
-
-        # Convert vector to discrete action index
-        action = torch.argmax(action_sample, dim=-1)
-
-        return action
+        return  dist
         
 class StochasticActor(nn.Module):
     def __init__(self, input_shape, hidden_dims, output_shape, low, high):
@@ -156,9 +151,4 @@ class StochasticActor(nn.Module):
         std = self.std_max - F.softplus(self.std_max-std)
         std = self.std_min  + F.softplus(std-self.std_min) 
         dist = torch_utils.TruncatedNormal(mean, std, self.low, self.high)
-        action_sample = dist.sample()
-
-        # Convert vector to discrete action index
-        action = torch.argmax(action_sample, dim=-1)
-
-        return action
+        return dist
