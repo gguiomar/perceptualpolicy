@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Import the environment
-from envs.active_avoidance_env_test import ActiveAvoidanceEnv2D
+from envs.active_avoidance_env import ActiveAvoidanceEnv2D
 
 # Import agents
 from agents.ppo_agent import PPOAgent
