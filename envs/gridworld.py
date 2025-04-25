@@ -25,7 +25,7 @@ class GridWorld:
     UP, DOWN, LEFT, RIGHT = 0, 1, 2, 3
 
     
-    def __init__(self, grid_size=10, start=(0, 0), goal=(9, 9), max_steps=80, 
+    def __init__(self, grid_size=10, start=(0, 0), goal=(9, 9), max_steps=100, 
                  stochastic=False, noise=0.1, add_obstacles=False, custom_obstacles=None):
         """
         Initialize GridWorld environment
@@ -65,9 +65,6 @@ class GridWorld:
         # Initialize agent position
         self.agent_pos = None
         self.steps = 0
-        # Save previous position and distance
-        self.prev_pos = None
-        self.prev_distance = 10
         self.reset()
     
     def _generate_obstacles(self):
@@ -102,11 +99,6 @@ class GridWorld:
         """Convert agent position to normalized state representation"""
         return np.array(self.agent_pos, dtype=np.float32) / (self.grid_size - 1)
     
-    def _distance_to_goal(self, pos):
-        """Euclidean distance from given position to goal"""
-        return np.linalg.norm(np.array(pos) - np.array(self.goal))
-    
-    
     def step(self, action):
         """
         Take an action in the environment
@@ -124,13 +116,12 @@ class GridWorld:
         if self.stochastic and np.random.random() < self.noise:
             action = np.random.randint(0, 4)
         
+        # Compute distance before and after the move
+        prev_distance = np.linalg.norm(np.array(self.agent_pos) - np.array(self.goal))
+
         # Move agent based on action
         next_pos = list(self.agent_pos)
-
-        # Save previous position and distance
-        self.prev_pos = list(self.agent_pos)
-        self.prev_distance = self._distance_to_goal(self.prev_pos)
-
+        
         if action == self.UP and self.agent_pos[1] < self.grid_size - 1:
             next_pos[1] += 1
         elif action == self.DOWN and self.agent_pos[1] > 0:
@@ -148,35 +139,33 @@ class GridWorld:
         
         # Get new state
         state = self._get_state()
+
+        # Compute new distance
+        new_distance = np.linalg.norm(np.array(self.agent_pos) - np.array(self.goal))
         
-        # Check if goal reached
-        done = tuple(self.agent_pos) == self.goal
-        
+        # Reward logic
+        if tuple(self.agent_pos) == self.goal:
+            reward = 100.0
+            done = True
+        else:
+            # Add bonus if close to goal (central zone)
+            if new_distance < 2:
+                reward = 2.0  # central bonus
+            elif new_distance >= 2 and new_distance < 4:
+                reward = 1.0
+            elif new_distance >= 4 and new_distance < 6:
+                reward = 0.5
+            elif new_distance >= 6 and new_distance < 8:
+                reward = 0.0
+            else:
+                reward = -1.0
+            done = False
+
         # Check if max steps reached
         if self.steps >= self.max_steps:
             done = True
-        
 
-        new_distance = self._distance_to_goal(self.agent_pos)
-
-        # Compute reward
-        if tuple(self.agent_pos) == self.goal:
-            reward = 10.0  # Positive reward for reaching goal
-        else:
-            distance_to_goal = self._distance_to_goal(self.agent_pos)
-            reward = 0.0  # Default if no bounds match
-            goal_reward = 10.0
-            max_bound = min(self.grid_size, 10)  # Up to grid size or 10 intervals
-
-            # Positive reward for moving closer to goal
-            for i in range(1, max_bound):
-                lower = i - 1
-                upper = i
-                if distance_to_goal > lower and distance_to_goal <= upper:
-                    reward = (1.0 - 0.1 * i) * goal_reward
-                    break
-        
-        return state, reward, done, {"episode": {"r": reward, "l": self.steps}}
+        return state, reward, done, {"episode": {"r": reward, "l": self.steps}}, new_distance, prev_distance
     
     def render(self, mode='human'):
         """Render the environment (not implemented for console)"""

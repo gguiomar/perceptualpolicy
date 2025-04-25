@@ -24,10 +24,10 @@ device = 'cuda'
 seed = 1
 
 #data 
-num_train_steps = 500000
-explore_steps = 5000
-max_episode_steps = 1000
-env_buffer_size = 100000
+num_train_steps = 250000
+explore_steps = 10000
+max_episode_steps = 100
+env_buffer_size = 125000
 batch_size = 512
 seq_len = 3
 
@@ -47,8 +47,8 @@ stddev_clip = 0.3
 
 #hidden_dims and layers
 latent_dims = 50
-hidden_dims = 512
-model_hidden_dims = 1024
+hidden_dims = 32    
+model_hidden_dims = 32
 
 #bias evaluation
 eval_bias = False 
@@ -71,7 +71,7 @@ def make_agent(env, device):
     action_low = env.observation_space.low
     action_high = env.observation_space.high
 
-    env_buffer_size = 1000000
+    env_buffer_size = 100000
     buffer_size = min(env_buffer_size, num_train_steps)
 
     agent = AlmAgent(device, action_low, action_high, num_states, num_actions,
@@ -106,7 +106,7 @@ class ALM_Helper:
         
         for _ in range(1, explore_steps):
             action = self.train_env.action_space.sample()
-            next_state, reward, done, info = self.train_env.step(action)
+            next_state, reward, done, info, _, _ = self.train_env.step(action)
             self.agent.env_buffer.push((state, action, reward, next_state, False if info.get("TimeLimit.truncated", False) else done))
 
             if done:
@@ -133,7 +133,7 @@ class ALM_Helper:
                 if action.ndim > 0:
                     action = int(np.argmax(action))
 
-            next_state, reward, done, info = self.train_env.step(action)
+            next_state, reward, done, info, new_distance, prev_distance = self.train_env.step(action)
             self._train_step += 1
 
             self.agent.env_buffer.push((state, action, reward, next_state, False if info.get("TimeLimit.truncated", False) else done))
@@ -157,6 +157,8 @@ class ALM_Helper:
                     episode_metrics['episodic_return'] = info["episode"]["r"]
                     episode_metrics['steps_per_second'] = info["episode"]["l"]/(time.time() - episode_start_time)
                     episode_metrics['env_buffer_length'] = len(self.agent.env_buffer)
+                    episode_metrics['new_distance'] = new_distance
+                    episode_metrics['prev_distance'] = prev_distance
                     wandb.log(episode_metrics, step=self._train_step)
                 state, done, episode_start_time = self.train_env.reset(), False, time.time()
             else:
@@ -181,7 +183,7 @@ class ALM_Helper:
                     if action.ndim > 0:
                         action = int(np.argmax(action))
 
-                next_state, _, done ,info = self.eval_env.step(action)
+                next_state, _, done ,info, _, _ = self.eval_env.step(action)
                 state = next_state
                 
             returns += info["episode"]["r"]
@@ -236,7 +238,7 @@ class ALM_Helper:
                 a = self.agent.get_action(o, self._train_step, True)
                 obs_list.append(o)
                 act_list.append(a)
-                o, r, d, _ = self.eval_env.step(a)
+                o, r, d, _, _, _ = self.eval_env.step(a)
                 ep_ret += r
                 ep_len += 1
                 reward_list.append(r)
