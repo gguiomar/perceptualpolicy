@@ -24,12 +24,12 @@ device = 'cuda'
 seed = 1
 
 #data 
-num_train_steps = 250000
-explore_steps = 10000
-max_episode_steps = 100
-env_buffer_size = 125000
+num_train_steps = 500000
+explore_steps = 20000
+max_episode_steps = 35
+env_buffer_size = 500000
 batch_size = 512
-seq_len = 3
+seq_len = 5
 
 #learning
 gamma = 0.99
@@ -42,7 +42,7 @@ max_grad_norm =  100.0
 #exploration
 expl_start = 1.0
 expl_end = 0.1
-expl_duration = 100000
+expl_duration = 20000
 stddev_clip = 0.3
 
 #hidden_dims and layers

@@ -25,7 +25,7 @@ class GridWorld:
     UP, DOWN, LEFT, RIGHT = 0, 1, 2, 3
 
     
-    def __init__(self, grid_size=10, start=(0, 0), goal=(9, 9), max_steps=100, 
+    def __init__(self, grid_size=10, start=(0, 0), goal=(9, 9), max_steps=35, 
                  stochastic=False, noise=0.1, add_obstacles=False, custom_obstacles=None):
         """
         Initialize GridWorld environment
