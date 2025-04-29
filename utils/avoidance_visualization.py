@@ -7,6 +7,63 @@ import seaborn as sns
 from matplotlib.animation import FuncAnimation
 import pandas as pd # Import pandas for rolling window calculations
 import os
+def plot_loss_components(history, smooth_window=50, save_path=None):
+    """
+    Plots the components of the MaxEnt loss function over training episodes.
+
+    Args:
+        history (dict): Dictionary containing training history lists including
+                        'episode', 'loss' (total), 'pg_loss', 'entropy_loss'.
+        smooth_window (int): Window size for rolling average smoothing.
+        save_path (str, optional): Path to save the plot. If None, displays the plot.
+    """
+    df = pd.DataFrame(history)
+    if df.empty or 'pg_loss' not in df.columns or 'entropy_loss' not in df.columns:
+        print("History is missing required loss components, cannot generate plot.")
+        return
+
+    # Use pandas rolling mean for smoothing
+    min_periods_for_smoothing = max(1, smooth_window // 5)
+
+    # Smooth total loss
+    df['loss_smooth'] = df['loss'].rolling(
+        window=smooth_window, min_periods=min_periods_for_smoothing, center=True
+    ).mean()
+
+    # Smooth Policy Gradient loss component
+    df['pg_loss_smooth'] = df['pg_loss'].rolling(
+        window=smooth_window, min_periods=min_periods_for_smoothing, center=True
+    ).mean()
+
+    # Smooth Entropy Bonus loss component
+    df['entropy_loss_smooth'] = df['entropy_loss'].rolling(
+        window=smooth_window, min_periods=min_periods_for_smoothing, center=True
+    ).mean()
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    # Plot smoothed components
+    ax.plot(df['episode'], df['loss_smooth'], label=f'Total Loss (Smoothed w={smooth_window})', color='red', linewidth=2)
+    ax.plot(df['episode'], df['pg_loss_smooth'], label=f'PG Loss Component (Smoothed w={smooth_window})', color='blue', linestyle='--')
+    ax.plot(df['episode'], df['entropy_loss_smooth'], label=f'Entropy Loss Component (Smoothed w={smooth_window})', color='green', linestyle=':')
+
+
+    ax.set_xlabel('Episode')
+    ax.set_ylabel('Loss Value')
+    ax.set_title(f'MaxEnt Loss Components (Smoothed Window={smooth_window})')
+    ax.legend(loc='best')
+    ax.grid(True, which='both', linestyle='--', linewidth=0.5)
+
+    plt.tight_layout()
+
+    if save_path:
+        # Ensure directory exists
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.savefig(save_path)
+        print(f"Loss components plot saved to {save_path}")
+        plt.close(fig)
+    else:
+        plt.show()
 
 def plot_avoidance_training_curves(rewards, losses, metrics, metric_name,
                                    avoidance_rates, shock_rates, # Keep args for compatibility, but ignore them

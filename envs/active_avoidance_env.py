@@ -54,8 +54,8 @@ class ActiveAvoidanceEnv2D:
             move_penalty: Penalty applied for taking a move action.
             shock_penalty_per_step: Penalty applied for each step during shock.
         """
-        if width < 3:
-             raise ValueError("Width must be at least 3 for alternating start positions.")
+        #if width < 3:
+        #     raise ValueError("Width must be at least 3 for alternating start positions.")
         self.height = height
         self.width = width
         self.center_x = (width - 1) / 2.0
@@ -96,8 +96,8 @@ class ActiveAvoidanceEnv2D:
 
     def _get_state(self):
         """Calculates and returns the normalized state vector for the agent."""
-        norm_x = self.agent_pos[0] / (self.width - 1)
-        norm_y = self.agent_pos[1] / (self.height - 1)
+        norm_x = self.agent_pos[0] / (self.width-1)
+        norm_y = self.agent_pos[1] / (self.height-1)
         norm_trial_time = min(self.steps_in_episode / self.max_steps_per_episode, 1.0)
         # Return the state vector including current tone sound status
         return np.array([norm_x, norm_y, norm_trial_time, self.tone1_on, self.tone2_on], dtype=np.float32)
@@ -134,8 +134,8 @@ class ActiveAvoidanceEnv2D:
         # Schedule tone: Randomly choose tone 1 or 2, schedule start time
         self.active_tone_this_trial = np.random.choice([1, 2])
         # Tone starts in the first half of the trial
-        self.tone_start_step = np.random.randint(0, self.max_steps_per_episode // 2)
-
+        #self.tone_start_step = np.random.randint(0, self.max_steps_per_episode // 2)
+        self.tone_start_step = 0
         return self._get_state()
 
     def switch_task(self, new_task_id=None):
@@ -218,11 +218,11 @@ class ActiveAvoidanceEnv2D:
             if is_relevant_tone_active_now and crossed_midline:
                 # Successful avoidance of the relevant tone
                 reward += self.avoidance_reward # possible positive reward for avoiding the shock
-                done = True
+                # done = True # TODO: check if works better
                 info['avoided'] = True
-                self.is_tone_active = False # Stop tone logic
-                self.tone1_on = 0.0 # Turn off sound
-                self.tone2_on = 0.0
+                self.is_tone_active = False # Stop tone logic TODO: check if needed
+                # self.tone1_on = 0.0 # Turn off sound
+                # self.tone2_on = 0.0
 
             # Check if tone duration expires
             elif self.time_since_tone_onset >= self.max_tone_duration_steps:
@@ -247,9 +247,10 @@ class ActiveAvoidanceEnv2D:
 
             # Check for Escape
             if crossed_midline:
-                done = True
+                # done = True # TODO: check if works better
                 info['escaped'] = True
                 self.is_shock_active = False # Stop shock
+                self.is_tone_active = False
 
         # --- Update current zone for next step's comparison ---
         self.current_zone = new_zone
