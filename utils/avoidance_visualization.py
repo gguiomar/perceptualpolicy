@@ -147,6 +147,105 @@ def plot_dual_task_performance(history, task_switch_episode=None, save_path=None
     """
     Plots the probability of shuttling in response to Tone 1 and Tone 2
     across the entire training session, highlighting the task switch,
+    using a fixed running average window of 20 and interpolation for smoothness.
+
+    Args:
+        history (dict): Dictionary containing training history lists like
+                        'episode', 'presented_tone', 'shuttled', 'task_id'.
+        task_switch_episode (int, optional): Episode number where the task rule switched.
+        save_path (str, optional): Path to save the plot. If None, displays the plot.
+    """
+    df = pd.DataFrame(history)
+    if df.empty or 'presented_tone' not in df.columns or 'shuttled' not in df.columns:
+        print("History is missing required columns for dual task plot.")
+        return
+    if 'episode' not in df.columns:
+        df['episode'] = df.index # Add episode column if missing
+
+    smooth_window_size = 20
+    # Use a smaller min_periods, like 1, for interpolation to work better at edges/gaps
+    min_periods_for_smoothing = 1 # Changed from max(1, smooth_window_size // 5)
+
+    # --- Calculate Smoothed Rates Separately ---
+    # Create boolean masks
+    is_tone1 = df['presented_tone'] == 1
+    is_tone2 = df['presented_tone'] == 2
+
+    # Calculate rolling mean ONLY for relevant trials, store temporarily
+    # We multiply by 100 *before* rolling to average the percentages
+    shuttle_pct = df['shuttled'] * 100
+    tone1_shuttle_smooth_sparse = shuttle_pct[is_tone1].rolling(
+        window=smooth_window_size,
+        min_periods=min_periods_for_smoothing,
+        center=True
+    ).mean()
+
+    tone2_shuttle_smooth_sparse = shuttle_pct[is_tone2].rolling(
+        window=smooth_window_size,
+        min_periods=min_periods_for_smoothing,
+        center=True
+    ).mean()
+
+    # --- Interpolate over all episodes for smoother plotting ---
+    # Create a full episode index
+    all_episodes_index = pd.Index(range(df['episode'].min(), df['episode'].max() + 1), name='episode')
+
+    # Reindex the sparse smoothed data onto the full index, creating NaNs
+    tone1_shuttle_smooth_full = tone1_shuttle_smooth_sparse.reindex(all_episodes_index)
+    tone2_shuttle_smooth_full = tone2_shuttle_smooth_sparse.reindex(all_episodes_index)
+
+    # Interpolate linearly to fill the gaps
+    # limit_direction='both' helps fill NaNs at the start/end
+    tone1_shuttle_smooth_interpolated = tone1_shuttle_smooth_full.interpolate(method='linear', limit_direction='both', limit_area='inside')
+    tone2_shuttle_smooth_interpolated = tone2_shuttle_smooth_full.interpolate(method='linear', limit_direction='both', limit_area='inside')
+    # Optional: Fill remaining NaNs at the very beginning/end if needed (e.g., with 0 or forward/backward fill)
+    tone1_shuttle_smooth_interpolated = tone1_shuttle_smooth_interpolated.fillna(0) # Example: fill remaining NaNs with 0
+    tone2_shuttle_smooth_interpolated = tone2_shuttle_smooth_interpolated.fillna(0) # Example: fill remaining NaNs with 0
+
+
+    # --- Plotting ---
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    # Plot the *interpolated* smoothed shuttle rates against the full episode range
+    ax.plot(all_episodes_index, tone1_shuttle_smooth_interpolated, label=f'Tone 1 Shuttle %', color='blue')
+    ax.plot(all_episodes_index, tone2_shuttle_smooth_interpolated, label=f'Tone 2 Shuttle %', color='red')
+
+    # Add task switch line
+    if task_switch_episode is not None:
+        ax.axvline(task_switch_episode, color='black', linestyle='--', lw=2, label=f'Task Switch (Ep {task_switch_episode})')
+        if not df.empty:
+            max_episode = df['episode'].max()
+            # Avoid division by zero if task_switch_episode is 0 or max_episode
+            if task_switch_episode > 0:
+                 mid_point1 = task_switch_episode / 2
+                 ax.text(mid_point1, 102, 'Task 1 Active (Shuttle for T1)', horizontalalignment='center', verticalalignment='bottom', fontsize=10)
+            if max_episode > task_switch_episode:
+                 mid_point2 = task_switch_episode + (max_episode - task_switch_episode) / 2
+                 ax.text(mid_point2, 102, 'Task 2 Active (Shuttle for T2)', horizontalalignment='center', verticalalignment='bottom', fontsize=10)
+
+
+    ax.set_xlabel('Episode')
+    ax.set_ylabel('Shuttle Rate (%)')
+    ax.set_title(f'Shuttle Response Probability (Running Avg Window={smooth_window_size}, Interpolated)')
+    ax.set_ylim(-5, 105)
+    ax.legend(loc='best')
+    ax.grid(True, which='both', linestyle='--', linewidth=0.5)
+
+    plt.tight_layout(rect=[0, 0, 1, 0.97])
+
+    if save_path:
+        # Ensure directory exists before saving
+        save_dir = os.path.dirname(save_path)
+        if save_dir: # Check if dirname is not empty (e.g., if path is just a filename)
+             os.makedirs(save_dir, exist_ok=True)
+        plt.savefig(save_path)
+        print(f"Dual task performance plot saved to {save_path}")
+        plt.close(fig)
+    else:
+        plt.show()
+    """
+    Plots the probability of shuttling in response to Tone 1 and Tone 2
+    across the entire training session, highlighting the task switch,
     using a fixed running average window of 20.
 
     Args:

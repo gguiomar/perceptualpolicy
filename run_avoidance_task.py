@@ -10,9 +10,9 @@ import pandas as pd
 from envs.active_avoidance_env import ActiveAvoidanceEnv2D
 
 # Import agents
-from agents.ppo_agent import PPOAgent
+#from agents.ppo_agent import PPOAgent
 from agents.maxent_agent import MaxEntAgent, FisherMaxEntAgent
-from agents.trpo_agent import TRPOAgent
+#from agents.trpo_agent import TRPOAgent
 
 # Import the visualization functions
 from utils.avoidance_visualization import (
@@ -47,7 +47,7 @@ config = {
 
     # Agent params
     'agent_class': MaxEntAgent, # Choose between PPOAgent, MaxEntAgent, FisherMaxEntAgent, TRPOAgent
-    'agent_name': '2MaxEntAgent_RNN_adap_temp',
+    'agent_name': 'MaxEntAgent_GRU_adap_temp',
     'policy_type': 'rnn',
     'hidden_dim': 128,           # Hidden dimension for RNN
     # 'hidden_dims': [128, 128], # multi-layer MLP - comment out for rnn
@@ -117,19 +117,26 @@ elif config['policy_type'] in ['rnn', 'transformer']:
     if config['policy_type'] == 'rnn':
          agent_params['rnn_type'] = config.get('rnn_type', 'gru')
 
-if AgentClass == PPOAgent:
-    agent_params['epsilon'] = config['epsilon']
-elif AgentClass in [MaxEntAgent, FisherMaxEntAgent]:
-     # Pass the *initial* temperature
-     agent_params['temperature'] = config['temperature']
-     agent_params['gradient_clip_norm'] = config.get('gradient_clip_norm', None)
-     if AgentClass == FisherMaxEntAgent:
-          agent_params['use_natural_gradient'] = config.get('use_natural_gradient', True)
-          agent_params['cg_iters'] = config.get('cg_iters', 10)
-          agent_params['cg_damping'] = config.get('cg_damping', 1e-2)
-elif AgentClass == TRPOAgent:
-     agent_params['kl_delta'] = config['kl_delta']
-
+# PPO and TRPO removed for now
+# if AgentClass == PPOAgent:
+#     agent_params['epsilon'] = config['epsilon']
+# elif AgentClass in [MaxEntAgent, FisherMaxEntAgent]:
+#      # Pass the *initial* temperature
+#      agent_params['temperature'] = config['temperature']
+#      agent_params['gradient_clip_norm'] = config.get('gradient_clip_norm', None)
+#      if AgentClass == FisherMaxEntAgent:
+#           agent_params['use_natural_gradient'] = config.get('use_natural_gradient', True)
+#           agent_params['cg_iters'] = config.get('cg_iters', 10)
+#           agent_params['cg_damping'] = config.get('cg_damping', 1e-2)
+# elif AgentClass == TRPOAgent:
+#      agent_params['kl_delta'] = config['kl_delta']
+# Pass the *initial* temperature
+#      agent_params['temperature'] = config['temperature']
+#      agent_params['gradient_clip_norm'] = config.get('gradient_clip_norm', None)
+#      if AgentClass == FisherMaxEntAgent:
+#           agent_params['use_natural_gradient'] = config.get('use_natural_gradient', True)
+#           agent_params['cg_iters'] = config.get('cg_iters', 10)
+#           agent_params['cg_damping'] = config.get('cg_damping', 1e-2)
 agent = AgentClass(**agent_params)
 
 print(f"Created {config['agent_name']} with {config['policy_type']} policy.")
