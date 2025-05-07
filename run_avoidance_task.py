@@ -29,6 +29,9 @@ from utils.avoidance_visualization import (
 # --- After training: visualize weight changes over time ---
 import matplotlib.animation as animation
 
+from sklearn.decomposition import PCA
+from matplotlib.animation import FuncAnimation
+
 # Set seeds for reproducibility
 SEED = 42
 torch.manual_seed(SEED)
@@ -497,7 +500,6 @@ if config['policy_type'] in ["rnn"] and len(episode_hidden_states) > 0:
     print(f"Sampling every {config['hidden_state_sampling_rate']} episodes")
     
     # Perform PCA
-    from sklearn.decomposition import PCA
     pca = PCA(n_components=2)
     hidden_states_2d = pca.fit_transform(hidden_states_array)
     
@@ -543,7 +545,6 @@ if config['policy_type'] in ["rnn"] and len(episode_hidden_states) > 0:
         
         return scatter1, scatter2
     
-    from matplotlib.animation import FuncAnimation
     anim = FuncAnimation(fig, update, frames=len(hidden_states_2d), 
                         interval=50, blit=True)
     anim.save(f"plots/{config['agent_name']}_hidden_states_evolution.gif", 
