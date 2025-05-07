@@ -3,6 +3,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import random
 from collections import defaultdict
 import pandas as pd
 
@@ -25,12 +26,22 @@ from utils.avoidance_visualization import (
     plot_loss_components
 )
 
+# --- After training: visualize weight changes over time ---
+import matplotlib.animation as animation
+
+# Set seeds for reproducibility
 SEED = 42
 torch.manual_seed(SEED)
 np.random.seed(SEED)
+random.seed(SEED)
+torch.cuda.manual_seed(SEED)
+torch.cuda.manual_seed_all(SEED)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
 
 # Ensure plots directory exists
 os.makedirs('plots', exist_ok=True)
+os.makedirs("plots/weights", exist_ok=True)
 
 # --- Configuration ---
 config = {
@@ -68,9 +79,11 @@ config = {
     'adaptive_temp_window': 50,      # Window size for averaging reward
 
     # Training params
-    'num_episodes': 14000,
-    'task_switch_episode': 7000,
-    'log_interval': 20 # How often to print progress
+    'num_episodes': 20000,
+    'task_switch_episode': 10000,
+    'log_interval': 20, # How often to print progress
+    'hidden_state_sampling_rate': 50,  # Sample every N episodes for visualization
+    'weights_sampling_rate': 50 # How often to sample weights
 }
 # --- Use initial temperature if adaptive is disabled ---
 if not config.get('use_adaptive_temp', False):
@@ -81,7 +94,13 @@ else:
 # -------------------------------------------------------
 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# Check for MPS (Mac GPU) first, then CUDA, then fall back to CPU
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
+    device = torch.device("cpu")
 print(f"Using device: {device}")
 
 # --- Environment Setup ---
@@ -100,6 +119,9 @@ env = ActiveAvoidanceEnv2D(
 state_dim = env.observation_space.shape[0]
 action_dim = env.action_space.n
 
+# --- Track weights ---
+policy_weights_over_time = []
+gru_input_weights_over_time = []
 
 # --- Create Agent ---
 AgentClass = config['agent_class']
@@ -150,6 +172,11 @@ history = defaultdict(list)
 # Use pandas Series for efficient rolling window calculation
 reward_series = pd.Series(dtype=np.float64)
 
+# Add hidden state collection
+hidden_states_history = []
+episode_hidden_states = []
+episode_indices = []  # Track which episodes we're sampling from
+
 for episode in range(config['num_episodes']):
     current_task_id = env.current_task_id
 
@@ -157,6 +184,23 @@ for episode in range(config['num_episodes']):
         print(f"\n--- Switching Task at Episode {episode} ---")
         env.switch_task()
         current_task_id = env.current_task_id
+
+        # Save weight heatmap at task switch
+        try:
+            fig, ax = plt.subplots(figsize=(10, 4))
+            W_policy = agent.policy_net.fc.weight.detach().cpu().numpy()
+            im = ax.imshow(W_policy, aspect='auto', cmap='bwr', vmin=-1.0, vmax=1.0)
+            plt.colorbar(im, ax=ax, label='Weight Value')
+            action_labels = ['Up', 'Down', 'Left', 'Right', 'Stay']
+            ax.set_yticks(range(len(action_labels)))
+            ax.set_yticklabels(action_labels)
+            ax.set_xlabel("GRU Hidden Units")
+            ax.set_ylabel("Action")
+            ax.set_title(f"Policy Weights at Task Switch (Episode {episode})")
+            plt.savefig(f"plots/weights/{config['agent_name']}_policy_weights_task_switch.png")
+            plt.close()
+        except Exception as e:
+            print(f"[Warning] Could not save task switch weight heatmap: {e}")
 
     # --- Adaptive Temperature Update ---
     if config.get('use_adaptive_temp', False) and episode >= config['adaptive_temp_window']:
@@ -196,7 +240,12 @@ for episode in range(config['num_episodes']):
 
     for step in range(config['max_steps_per_episode']):
         if config['policy_type'] in ["rnn"]:
-            action, log_prob, _, h_new = agent.select_action(state, hidden_state)
+            # Handle state tensor conversion properly
+            if isinstance(state, torch.Tensor):
+                state_tensor = state.to(device)
+            else:
+                state_tensor = torch.FloatTensor(state).to(device)
+            action, log_prob, _, h_new = agent.select_action(state_tensor, hidden_state)
             hidden_states_list.append(hidden_state)
             hidden_state = h_new
         else:
@@ -214,11 +263,57 @@ for episode in range(config['num_episodes']):
     else:
         ep_info = info
 
+    # Store episode's final hidden state
+    if config['policy_type'] in ["rnn"] and episode % config['hidden_state_sampling_rate'] == 0:
+        # Reshape the hidden state to 2D before storing
+        hidden_state_flat = hidden_state.detach().cpu().numpy().reshape(-1)
+        episode_hidden_states.append(hidden_state_flat)
+        episode_indices.append(episode)
+
     # Agent Update (will use the potentially updated temperature)
     update_args = [states, actions, rewards, log_probs_old_list]
     if config['policy_type'] in ["rnn"]:
          update_args.append(hidden_states_list)
     update_info = agent.update(*update_args)
+
+    # --- Track weights every 50 episodes ---
+    if episode % config['weights_sampling_rate'] == 0:
+        # Track policy head weights (GRU → action logits)
+        try:
+            W_policy = agent.policy_net.fc.weight.detach().cpu().numpy().copy()
+            policy_weights_over_time.append(W_policy)
+        except Exception as e:
+            print(f"[Warning] Could not track policy weights at episode {episode}: {e}")
+
+        # Track GRU input weights (input -> GRU gates)
+        try:
+            W_ih = agent.policy_net.rnn.weight_ih_l0.detach().cpu().numpy().copy()
+            W_reset, W_update, W_new = np.split(W_ih, 3, axis=0)
+            gru_input_weights_over_time.append({
+                'reset': W_reset,
+                'update': W_update,
+                'new': W_new
+            })
+        except Exception as e:
+            print(f"[Warning] Could not track GRU input weights at episode {episode}: {e}")
+
+    # Save weight heatmap at last episode
+    if episode == config['num_episodes'] - 1:
+        try:
+            fig, ax = plt.subplots(figsize=(10, 4))
+            W_policy = agent.policy_net.fc.weight.detach().cpu().numpy()
+            im = ax.imshow(W_policy, aspect='auto', cmap='bwr', vmin=-1.0, vmax=1.0)
+            plt.colorbar(im, ax=ax, label='Weight Value')
+            action_labels = ['Up', 'Down', 'Left', 'Right', 'Stay']
+            ax.set_yticks(range(len(action_labels)))
+            ax.set_yticklabels(action_labels)
+            ax.set_xlabel("GRU Hidden Units")
+            ax.set_ylabel("Action")
+            ax.set_title(f"Policy Weights at Final Episode {episode}")
+            plt.savefig(f"plots/weights/{config['agent_name']}_policy_weights_final.png")
+            plt.close()
+        except Exception as e:
+            print(f"[Warning] Could not save final weight heatmap: {e}")
 
     # Record History
     history['episode'].append(episode)
@@ -296,6 +391,42 @@ for episode in range(config['num_episodes']):
 
 print("Training finished.")
 
+# --- Policy head animation ---
+"""
+Interpretation: 
+    - Red indicates positive weights (encouraging the action),
+    - Blue indicates negative weights (discouraging the action).
+    - Stronger colors represent stronger connections between hidden units and actions.
+"""
+try:
+    fig, ax = plt.subplots(figsize=(10, 4))
+    im = ax.imshow(policy_weights_over_time[0], aspect='auto', cmap='bwr', vmin=-1.0, vmax=1.0)
+    plt.colorbar(im, ax=ax)
+    
+    # Add action labels
+    action_labels = ['Up', 'Down', 'Left', 'Right', 'Stay']  # Matches environment's action mapping: UP=0, DOWN=1, LEFT=2, RIGHT=3, STAY=4
+    ax.set_yticks(range(len(action_labels)))
+    ax.set_yticklabels(action_labels)
+    
+    # Add x-axis labels for GRU units
+    ax.set_xlabel("GRU Hidden Units (0-127)")
+    ax.set_ylabel("Action")
+    
+    
+    ax.set_title("Policy Head Weights (GRU → Action)")
+
+    def update_policy(i):
+        im.set_array(policy_weights_over_time[i])
+        ax.set_title(f"Policy Weights at Episode {i*50}")
+        return [im]
+
+    ani = animation.FuncAnimation(fig, update_policy, frames=len(policy_weights_over_time), blit=True)
+    ani.save(f"plots/weights/{config['agent_name']}_policy_weights_evolution.gif", writer='imagemagick', fps=30)
+    plt.close()
+    print("Saved policy head weight evolution animation.")
+except Exception as e:
+    print(f"[Error] Could not create policy weight animation: {e}")
+
 # --- Plotting Results & Visualization ---
 print("Plotting results...")
 metric_name = 'Entropy'
@@ -355,3 +486,66 @@ for i in range(num_example_trajectories):
     except Exception as e:
         print(f"Could not generate step-by-step trajectory animation example {i+1}: {e}")
 print("Run complete.")
+
+# After training, create hidden state visualizations
+if config['policy_type'] in ["rnn"] and len(episode_hidden_states) > 0:
+    print("\nGenerating hidden state visualizations...")
+    
+    # Convert hidden states to numpy array
+    hidden_states_array = np.array(episode_hidden_states)
+    print(f"Hidden states shape: {hidden_states_array.shape}")
+    print(f"Sampling every {config['hidden_state_sampling_rate']} episodes")
+    
+    # Perform PCA
+    from sklearn.decomposition import PCA
+    pca = PCA(n_components=2)
+    hidden_states_2d = pca.fit_transform(hidden_states_array)
+    
+    # Create discrete color map for tasks
+    task_colors = ['blue', 'red']  # One color per task
+    task_ids = [history['task_id'][i] for i in episode_indices]
+    
+    # Create PCA visualization
+    plt.figure(figsize=(12, 8))
+    for task_id in [1, 2]:  # Plot each task separately
+        mask = [t == task_id for t in task_ids]
+        plt.scatter(hidden_states_2d[mask, 0], hidden_states_2d[mask, 1], 
+                   c=task_colors[task_id-1], label=f'Task {task_id}', alpha=0.6)
+    
+    plt.title('PCA of Hidden States During Training\n(Sampled every {} episodes)'.format(config['hidden_state_sampling_rate']))
+    plt.xlabel('Principal Component 1')
+    plt.ylabel('Principal Component 2')
+    plt.legend()
+    plt.savefig(f"plots/{config['agent_name']}_hidden_states_pca.png")
+    plt.close()
+    
+    # Create animation of hidden state evolution
+    fig, ax = plt.subplots(figsize=(10, 8))
+    
+    # Create separate scatter plots for each task
+    scatter1 = ax.scatter([], [], c=task_colors[0], label='Task 1', alpha=0.6)
+    scatter2 = ax.scatter([], [], c=task_colors[1], label='Task 2', alpha=0.6)
+    
+    ax.set_xlim(hidden_states_2d[:, 0].min() - 0.1, hidden_states_2d[:, 0].max() + 0.1)
+    ax.set_ylim(hidden_states_2d[:, 1].min() - 0.1, hidden_states_2d[:, 1].max() + 0.1)
+    ax.set_title('Evolution of Hidden States During Training\n(Sampled every {} episodes)'.format(config['hidden_state_sampling_rate']))
+    ax.set_xlabel('Principal Component 1')
+    ax.set_ylabel('Principal Component 2')
+    ax.legend()
+    
+    def update(frame):
+        # Update data for each task separately
+        task1_mask = [t == 1 for t in task_ids[:frame]]
+        task2_mask = [t == 2 for t in task_ids[:frame]]
+        
+        scatter1.set_offsets(hidden_states_2d[:frame][task1_mask])
+        scatter2.set_offsets(hidden_states_2d[:frame][task2_mask])
+        
+        return scatter1, scatter2
+    
+    from matplotlib.animation import FuncAnimation
+    anim = FuncAnimation(fig, update, frames=len(hidden_states_2d), 
+                        interval=50, blit=True)
+    anim.save(f"plots/{config['agent_name']}_hidden_states_evolution.gif", 
+              writer='pillow', fps=20)
+    plt.close()
