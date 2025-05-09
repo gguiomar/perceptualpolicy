@@ -162,7 +162,7 @@ def plot_dual_task_performance(history, task_switch_episode=None, save_path=None
     if 'episode' not in df.columns:
         df['episode'] = df.index # Add episode column if missing
 
-    smooth_window_size = 20
+    smooth_window_size = 200
     # Use a smaller min_periods, like 1, for interpolation to work better at edges/gaps
     min_periods_for_smoothing = 1 # Changed from max(1, smooth_window_size // 5)
 
@@ -259,7 +259,7 @@ def plot_dual_task_performance(history, task_switch_episode=None, save_path=None
         print("History is empty, cannot generate dual task performance plot.")
         return
 
-    smooth_window_size = 20
+    smooth_window_size = 200
     min_periods_for_smoothing = max(1, smooth_window_size // 5) # e.g., 4 for window 20
 
     # Calculate shuttle rate for Tone 1 trials

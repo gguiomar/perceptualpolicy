@@ -41,13 +41,13 @@ config = {
     'shock_onset_delay_steps': 6, # Steps after tone onset before shock starts
     'max_steps_per_episode': 12,
     'initial_task': ActiveAvoidanceEnv2D.AVOID_TONE_1,
-    'move_penalty': -0.05,
+    'move_penalty': -0.01,
     'shock_penalty_per_step': -1.0,
     'avoidance_reward': 0.3,
 
     # Agent params
     'agent_class': MaxEntAgent, # Choose between PPOAgent, MaxEntAgent, FisherMaxEntAgent, TRPOAgent
-    'agent_name': 'MaxEntAgent_GRU_adap_temp',
+    'agent_name': 'MaxEntAgent_GRU_adap_temp_v3_',
     'policy_type': 'rnn',
     'hidden_dim': 128,           # Hidden dimension for RNN
     # 'hidden_dims': [128, 128], # multi-layer MLP - comment out for rnn
@@ -68,8 +68,8 @@ config = {
     'adaptive_temp_window': 50,      # Window size for averaging reward
 
     # Training params
-    'num_episodes': 14000,
-    'task_switch_episode': 7000,
+    'num_episodes': 20000,
+    'task_switch_episode': 10000,
     'log_interval': 20 # How often to print progress
 }
 # --- Use initial temperature if adaptive is disabled ---
@@ -80,6 +80,12 @@ else:
      config['temperature'] = config.get('initial_temperature', 0.1)
 # -------------------------------------------------------
 
+# save hyperparameters
+hyperparams_file = f"plots/{config['agent_name']}_hyperparameters.txt"
+with open(hyperparams_file, 'w') as f:
+    for key, value in config.items():
+        f.write(f"{key}: {value}\n")
+print(f"Hyperparameters saved to {hyperparams_file}")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
