@@ -1,0 +1,531 @@
+2025-04-25 13:34:48,804 INFO    MainThread:143587 [internal.py:wandb_internal():90] W&B internal server running at pid: 143587, started at: 2025-04-25 13:34:48.803904
+2025-04-25 13:34:48,806 DEBUG   SenderThread:143587 [sender.py:send():236] send: header
+2025-04-25 13:34:48,806 INFO    WriterThread:143587 [datastore.py:open_for_write():75] open: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/run-2s0k8dfh.wandb
+2025-04-25 13:34:48,806 DEBUG   SenderThread:143587 [sender.py:send():236] send: run
+2025-04-25 13:34:49,190 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: check_version
+2025-04-25 13:34:49,197 INFO    SenderThread:143587 [dir_watcher.py:__init__():216] watching files in: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files
+2025-04-25 13:34:49,197 INFO    SenderThread:143587 [sender.py:_start_run_threads():815] run started: 2s0k8dfh with start time 1745580888
+2025-04-25 13:34:49,197 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:34:49,197 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:34:49,197 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: check_version
+2025-04-25 13:34:49,367 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: run_start
+2025-04-25 13:34:49,388 DEBUG   HandlerThread:143587 [meta.py:__init__():35] meta init
+2025-04-25 13:34:49,388 DEBUG   HandlerThread:143587 [meta.py:__init__():49] meta init done
+2025-04-25 13:34:49,388 DEBUG   HandlerThread:143587 [meta.py:probe():209] probe
+2025-04-25 13:34:49,399 DEBUG   HandlerThread:143587 [meta.py:_setup_git():199] setup git
+2025-04-25 13:34:49,405 DEBUG   HandlerThread:143587 [meta.py:_setup_git():206] setup git done
+2025-04-25 13:34:49,405 DEBUG   HandlerThread:143587 [meta.py:_save_pip():53] save pip
+2025-04-25 13:34:49,406 DEBUG   HandlerThread:143587 [meta.py:_save_pip():67] save pip done
+2025-04-25 13:34:49,406 DEBUG   HandlerThread:143587 [meta.py:_save_conda():74] save conda
+2025-04-25 13:34:50,199 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_created():269] file/dir created: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/requirements.txt
+2025-04-25 13:34:50,199 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_created():269] file/dir created: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/conda-environment.yaml
+2025-04-25 13:34:50,199 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_created():269] file/dir created: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:34:51,065 DEBUG   HandlerThread:143587 [meta.py:_save_conda():84] save conda done
+2025-04-25 13:34:51,065 DEBUG   HandlerThread:143587 [meta.py:probe():247] probe done
+2025-04-25 13:34:51,070 DEBUG   SenderThread:143587 [sender.py:send():236] send: files
+2025-04-25 13:34:51,070 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-metadata.json with policy now
+2025-04-25 13:34:51,075 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: stop_status
+2025-04-25 13:34:51,076 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: stop_status
+2025-04-25 13:34:51,199 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/conda-environment.yaml
+2025-04-25 13:34:51,199 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_created():269] file/dir created: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-metadata.json
+2025-04-25 13:34:51,199 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_created():269] file/dir created: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:34:51,340 DEBUG   SenderThread:143587 [sender.py:send():236] send: telemetry
+2025-04-25 13:34:51,701 INFO    Thread-11 :143587 [upload_job.py:push():138] Uploaded file /tmp/tmp_hzjjlq5wandb/2o8glv3r-wandb-metadata.json
+2025-04-25 13:34:53,010 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:34:53,200 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:34:54,443 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:34:54,443 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:34:54,444 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:34:54,446 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:34:55,200 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:34:55,200 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:34:55,529 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:34:55,531 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:34:55,531 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:34:55,531 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:34:56,200 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:34:56,638 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:34:56,639 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:34:56,639 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:34:56,641 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:34:57,201 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:34:57,201 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:34:57,698 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:34:57,698 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:34:57,699 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:34:57,699 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:34:58,201 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:34:58,726 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:34:58,727 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:34:58,727 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:34:58,729 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:34:59,202 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:34:59,202 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:34:59,755 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:34:59,755 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:34:59,756 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:34:59,756 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:00,202 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:00,783 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:00,784 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:00,784 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:00,786 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:01,202 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:01,202 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:01,804 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:01,805 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:01,805 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:01,805 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:02,202 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:02,844 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:02,845 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:02,845 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:02,847 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:03,203 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:03,203 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:03,872 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:03,873 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:03,873 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:03,874 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:04,203 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:04,954 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:04,955 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:04,955 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:04,957 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:05,203 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:05,204 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:06,062 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:06,062 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:06,063 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:06,063 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:06,204 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:06,341 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: stop_status
+2025-04-25 13:35:06,341 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: stop_status
+2025-04-25 13:35:07,158 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:07,159 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:07,159 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:07,159 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:07,204 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:07,204 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:08,267 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:08,268 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:08,268 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:08,268 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:09,205 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:09,205 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:09,378 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:09,379 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:09,379 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:09,379 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:10,205 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:10,490 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:10,491 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:10,491 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:10,491 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:11,205 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:11,206 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:11,612 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:11,613 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:11,613 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:11,613 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:12,206 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:12,681 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:12,682 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:12,682 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:12,683 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:13,206 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:13,206 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:13,748 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:13,749 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:13,749 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:13,749 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:14,206 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:14,801 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:14,802 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:14,802 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:14,802 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:14,803 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:15,207 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:15,207 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:15,856 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:15,859 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:15,859 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:15,860 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:16,207 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:16,896 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:16,897 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:16,897 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:16,898 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:17,207 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:17,207 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:17,694 DEBUG   SenderThread:143587 [sender.py:send():236] send: stats
+2025-04-25 13:35:17,930 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:17,931 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:17,931 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:17,931 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:18,207 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:18,964 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:19,198 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:19,198 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:19,200 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:19,208 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:19,208 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/config.yaml
+2025-04-25 13:35:19,208 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:20,005 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:20,006 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:20,006 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:20,007 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:20,208 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:21,055 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:21,056 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:21,056 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:21,057 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:21,208 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:21,208 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:21,640 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: stop_status
+2025-04-25 13:35:21,640 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: stop_status
+2025-04-25 13:35:22,105 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:22,106 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:22,106 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:22,108 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:22,209 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:23,171 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:23,171 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:23,172 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:23,172 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:23,209 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:23,209 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:24,244 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:24,245 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:24,245 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:24,247 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:25,209 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:25,210 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:25,341 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:25,341 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:25,342 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:25,342 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:26,210 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:26,487 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:26,488 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:26,488 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:26,490 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:27,210 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:27,210 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:27,579 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:27,580 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:27,580 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:27,580 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:28,210 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:28,693 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:28,694 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:28,694 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:28,696 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:29,211 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:29,211 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:29,773 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:29,774 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:29,774 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:29,775 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:30,211 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:30,708 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:30,709 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:30,710 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:30,712 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:31,211 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:31,212 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:31,570 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:31,571 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:31,571 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:31,572 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:32,212 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:32,428 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:32,429 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:32,429 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:32,429 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:33,212 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:33,212 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:33,411 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:33,412 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:33,412 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:33,412 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:34,212 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:34,481 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:34,482 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:34,483 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:34,483 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:35,213 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:35,213 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:35,558 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:35,559 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:35,559 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:35,560 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:35,560 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:36,213 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:36,626 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:36,627 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:36,628 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:36,628 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:36,949 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: stop_status
+2025-04-25 13:35:36,949 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: stop_status
+2025-04-25 13:35:37,214 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:37,214 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:37,656 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:37,657 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:37,657 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:37,658 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:38,214 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:38,684 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:38,684 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:38,685 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:38,685 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:39,214 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:39,214 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:39,711 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:39,712 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:39,713 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:39,715 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:40,215 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:40,739 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:40,740 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:40,740 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:40,741 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:41,215 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:41,215 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:41,766 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:41,767 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:41,768 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:41,770 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:42,215 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:42,790 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:42,791 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:42,791 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:42,791 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:43,216 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:43,216 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:43,812 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:43,813 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:43,814 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:43,816 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:44,216 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:44,826 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:44,826 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:44,827 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:44,827 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:45,216 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:45,217 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:45,867 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:45,867 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:45,868 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:45,870 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:46,217 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:46,909 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:46,910 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:46,910 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:46,911 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:47,217 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:47,217 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:47,975 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:47,976 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:47,976 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:47,978 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:47,982 DEBUG   SenderThread:143587 [sender.py:send():236] send: stats
+2025-04-25 13:35:48,217 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:49,026 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:49,027 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:49,027 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:49,028 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:49,218 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:49,218 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:50,064 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:50,065 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:50,065 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:50,065 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:50,218 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:51,102 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:51,103 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:51,104 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:51,104 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:51,219 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:51,219 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:52,164 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:52,165 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:52,165 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:52,166 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:52,219 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:52,266 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: stop_status
+2025-04-25 13:35:52,266 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: stop_status
+2025-04-25 13:35:53,214 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:53,214 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:53,215 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:53,215 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:53,219 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:53,219 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:54,250 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:54,251 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:54,251 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:54,252 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:55,220 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:55,220 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:55,314 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:55,315 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:55,315 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:55,316 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:56,220 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:56,429 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:56,430 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:56,430 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:56,431 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:56,431 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:57,220 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:57,221 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:57,540 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:57,541 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:57,542 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:57,542 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:58,221 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:58,451 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:58,452 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:58,452 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:58,454 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:35:59,221 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:35:59,221 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:35:59,321 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:35:59,322 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:35:59,322 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:35:59,323 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:36:00,186 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:36:00,187 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:36:00,187 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:36:00,188 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:36:00,221 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:36:01,100 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: partial_history
+2025-04-25 13:36:01,101 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:36:01,101 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:36:01,102 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:36:01,132 WARNING MainThread:143587 [internal.py:wandb_internal():153] Internal process interrupt: 1
+2025-04-25 13:36:01,135 DEBUG   SenderThread:143587 [sender.py:send():236] send: telemetry
+2025-04-25 13:36:01,222 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:36:01,222 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:36:02,222 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:36:03,223 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:36:03,723 DEBUG   SenderThread:143587 [sender.py:send():236] send: exit
+2025-04-25 13:36:03,723 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:03,723 INFO    SenderThread:143587 [sender.py:send_exit():372] handling exit code: 255
+2025-04-25 13:36:03,724 INFO    SenderThread:143587 [sender.py:send_exit():374] handling runtime: 74
+2025-04-25 13:36:03,724 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:36:03,724 INFO    SenderThread:143587 [sender.py:send_exit():380] send defer
+2025-04-25 13:36:03,724 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:03,725 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:03,725 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 0
+2025-04-25 13:36:03,725 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:03,725 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 0
+2025-04-25 13:36:03,725 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 1
+2025-04-25 13:36:03,725 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:03,725 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 1
+2025-04-25 13:36:03,817 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:03,817 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 1
+2025-04-25 13:36:03,817 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 2
+2025-04-25 13:36:03,817 DEBUG   SenderThread:143587 [sender.py:send():236] send: stats
+2025-04-25 13:36:03,818 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:03,818 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 2
+2025-04-25 13:36:03,819 DEBUG   SenderThread:143587 [sender.py:send():236] send: history
+2025-04-25 13:36:03,819 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:36:03,820 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:36:03,820 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:03,820 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 2
+2025-04-25 13:36:03,820 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 3
+2025-04-25 13:36:03,820 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:03,820 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 3
+2025-04-25 13:36:03,820 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:03,820 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 3
+2025-04-25 13:36:03,820 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 4
+2025-04-25 13:36:03,821 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:03,821 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 4
+2025-04-25 13:36:03,821 DEBUG   SenderThread:143587 [sender.py:send():236] send: summary
+2025-04-25 13:36:03,822 INFO    SenderThread:143587 [sender.py:_save_file():952] saving file wandb-summary.json with policy end
+2025-04-25 13:36:03,822 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:03,822 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 4
+2025-04-25 13:36:03,822 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 5
+2025-04-25 13:36:03,822 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:03,822 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 5
+2025-04-25 13:36:03,823 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:03,823 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 5
+2025-04-25 13:36:03,828 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,098 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 6
+2025-04-25 13:36:04,099 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:04,099 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:04,099 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 6
+2025-04-25 13:36:04,099 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:04,099 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 6
+2025-04-25 13:36:04,099 INFO    SenderThread:143587 [dir_watcher.py:finish():353] shutting down directory watcher
+2025-04-25 13:36:04,200 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,223 INFO    Thread-7  :143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:36:04,224 INFO    SenderThread:143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/config.yaml
+2025-04-25 13:36:04,224 INFO    SenderThread:143587 [dir_watcher.py:_on_file_modified():286] file/dir modified: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:36:04,224 INFO    SenderThread:143587 [dir_watcher.py:finish():383] scan: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files
+2025-04-25 13:36:04,224 INFO    SenderThread:143587 [dir_watcher.py:finish():397] scan save: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log output.log
+2025-04-25 13:36:04,224 INFO    SenderThread:143587 [dir_watcher.py:finish():397] scan save: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/requirements.txt requirements.txt
+2025-04-25 13:36:04,224 INFO    SenderThread:143587 [dir_watcher.py:finish():397] scan save: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-metadata.json wandb-metadata.json
+2025-04-25 13:36:04,225 INFO    SenderThread:143587 [dir_watcher.py:finish():397] scan save: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/conda-environment.yaml conda-environment.yaml
+2025-04-25 13:36:04,225 INFO    SenderThread:143587 [dir_watcher.py:finish():397] scan save: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json wandb-summary.json
+2025-04-25 13:36:04,225 INFO    SenderThread:143587 [dir_watcher.py:finish():397] scan save: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/config.yaml config.yaml
+2025-04-25 13:36:04,233 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 7
+2025-04-25 13:36:04,233 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:04,235 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:04,235 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 7
+2025-04-25 13:36:04,235 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:04,235 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 7
+2025-04-25 13:36:04,235 INFO    SenderThread:143587 [file_pusher.py:finish():171] shutting down file pusher
+2025-04-25 13:36:04,336 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,336 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:04,437 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,437 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:04,538 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,539 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:04,640 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,640 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:04,741 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,742 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:04,772 INFO    Thread-14 :143587 [upload_job.py:push():138] Uploaded file /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/conda-environment.yaml
+2025-04-25 13:36:04,803 INFO    Thread-13 :143587 [upload_job.py:push():138] Uploaded file /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/requirements.txt
+2025-04-25 13:36:04,823 INFO    Thread-12 :143587 [upload_job.py:push():138] Uploaded file /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/output.log
+2025-04-25 13:36:04,843 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,843 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:04,853 INFO    Thread-16 :143587 [upload_job.py:push():138] Uploaded file /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/config.yaml
+2025-04-25 13:36:04,899 INFO    Thread-15 :143587 [upload_job.py:push():138] Uploaded file /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/files/wandb-summary.json
+2025-04-25 13:36:04,945 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:04,945 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:05,047 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:05,047 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:05,100 INFO    Thread-6 (_thread_body):143587 [sender.py:transition_state():393] send defer: 8
+2025-04-25 13:36:05,100 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:05,100 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 8
+2025-04-25 13:36:05,100 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:05,100 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 8
+2025-04-25 13:36:05,148 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:05,945 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 9
+2025-04-25 13:36:05,945 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:05,945 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:05,945 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 9
+2025-04-25 13:36:05,946 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:05,946 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 9
+2025-04-25 13:36:05,946 INFO    SenderThread:143587 [sender.py:transition_state():393] send defer: 10
+2025-04-25 13:36:05,947 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: defer
+2025-04-25 13:36:05,947 DEBUG   SenderThread:143587 [sender.py:send():236] send: final
+2025-04-25 13:36:05,947 INFO    HandlerThread:143587 [handler.py:handle_request_defer():163] handle defer: 10
+2025-04-25 13:36:05,947 DEBUG   SenderThread:143587 [sender.py:send():236] send: footer
+2025-04-25 13:36:05,947 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: defer
+2025-04-25 13:36:05,947 INFO    SenderThread:143587 [sender.py:send_request_defer():389] handle sender defer: 10
+2025-04-25 13:36:06,047 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: poll_exit
+2025-04-25 13:36:06,047 DEBUG   SenderThread:143587 [sender.py:send_request():250] send_request: poll_exit
+2025-04-25 13:36:06,047 INFO    SenderThread:143587 [file_pusher.py:join():176] waiting for file pusher
+2025-04-25 13:36:06,582 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: sampled_history
+2025-04-25 13:36:06,584 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: get_summary
+2025-04-25 13:36:06,585 DEBUG   HandlerThread:143587 [handler.py:handle_request():140] handle_request: shutdown
+2025-04-25 13:36:06,586 INFO    HandlerThread:143587 [handler.py:finish():806] shutting down handler
+2025-04-25 13:36:06,947 INFO    WriterThread:143587 [datastore.py:close():279] close: /home/themandalorian/ETH/Thesis/perceptualpolicy/wandb/run-20250425_133448-2s0k8dfh/run-2s0k8dfh.wandb
+2025-04-25 13:36:07,481 INFO    SenderThread:143587 [sender.py:finish():1114] shutting down sender
+2025-04-25 13:36:07,481 INFO    SenderThread:143587 [file_pusher.py:finish():171] shutting down file pusher
+2025-04-25 13:36:07,481 INFO    SenderThread:143587 [file_pusher.py:join():176] waiting for file pusher
+2025-04-25 13:36:07,487 INFO    MainThread:143587 [internal.py:handle_exit():80] Internal process exited

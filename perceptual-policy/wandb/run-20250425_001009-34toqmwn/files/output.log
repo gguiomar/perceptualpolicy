@@ -1,0 +1,49 @@
+Using device: cuda
+buffer limit is =  100000
+Episode: 0, total numsteps: 0, return: -1.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: -0.2
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 1, total numsteps: 16, return: -1.0
+Cumulative Returns: -1.0
+Episode: 2, total numsteps: 32, return: 0.0
+Cumulative Returns: -1.0
+Episode: 3, total numsteps: 48, return: -1.0
+Cumulative Returns: -2.0
+Episode: 4, total numsteps: 64, return: 0.0
+Cumulative Returns: -2.0
+Episode: 5, total numsteps: 80, return: 0.0
+Cumulative Returns: -2.0
+Episode: 6, total numsteps: 96, return: 0.0
+Cumulative Returns: -2.0
+Episode: 7, total numsteps: 112, return: -0.2
+Cumulative Returns: -2.2
+Episode: 8, total numsteps: 128, return: -1.0
+Cumulative Returns: -3.2
+Episode: 9, total numsteps: 144, return: -1.0
+Cumulative Returns: -4.2
+Episode: 10, total numsteps: 160, return: -0.2
+Cumulative Returns: -4.4
+Episode: 11, total numsteps: 176, return: -1.0
+Cumulative Returns: -5.4
+Episode: 12, total numsteps: 192, return: 0.0
+Cumulative Returns: -5.4
+Episode: 13, total numsteps: 208, return: -0.2
+Cumulative Returns: -5.6000000000000005
+Episode: 14, total numsteps: 224, return: -1.0
+Cumulative Returns: -6.6000000000000005
+Episode: 15, total numsteps: 240, return: -1.0
+Cumulative Returns: -7.6000000000000005
+Episode: 16, total numsteps: 256, return: 0.0
+Cumulative Returns: -7.6000000000000005
+Episode: 17, total numsteps: 272, return: 0.0
+Cumulative Returns: -7.6000000000000005
+Traceback (most recent call last):
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 276, in <module>
+    alm_helper.train()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 126, in train
+    action = self.agent.get_action(state, self._train_step)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 56, in get_action
+    with torch.no_grad():
+KeyboardInterrupt

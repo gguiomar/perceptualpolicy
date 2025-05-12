@@ -1,0 +1,552 @@
+Using device: cuda
+buffer limit is =  90000
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 1, total numsteps: 18, return: 0.0
+Cumulative Returns: 0.0
+Episode: 2, total numsteps: 36, return: 0.0
+Cumulative Returns: 0.0
+Episode: 3, total numsteps: 54, return: 0.0
+Cumulative Returns: 0.0
+Episode: 4, total numsteps: 72, return: 0.0
+Cumulative Returns: 0.0
+Episode: 5, total numsteps: 90, return: 0.0
+Cumulative Returns: 0.0
+Episode: 6, total numsteps: 108, return: 0.0
+Cumulative Returns: 0.0
+Episode: 7, total numsteps: 126, return: 0.0
+Cumulative Returns: 0.0
+Episode: 8, total numsteps: 144, return: 0.0
+Cumulative Returns: 0.0
+Episode: 9, total numsteps: 162, return: 0.0
+Cumulative Returns: 0.0
+Episode: 10, total numsteps: 180, return: 0.0
+Cumulative Returns: 0.0
+Episode: 11, total numsteps: 198, return: 0.0
+Cumulative Returns: 0.0
+Episode: 12, total numsteps: 216, return: 0.0
+Cumulative Returns: 0.0
+Episode: 13, total numsteps: 234, return: 0.0
+Cumulative Returns: 0.0
+Episode: 14, total numsteps: 252, return: 0.0
+Cumulative Returns: 0.0
+Episode: 15, total numsteps: 270, return: 0.0
+Cumulative Returns: 0.0
+Episode: 16, total numsteps: 288, return: 0.0
+Cumulative Returns: 0.0
+Episode: 17, total numsteps: 306, return: 0.0
+Cumulative Returns: 0.0
+Episode: 18, total numsteps: 324, return: 0.0
+Cumulative Returns: 0.0
+Episode: 19, total numsteps: 342, return: 0.0
+Cumulative Returns: 0.0
+Episode: 20, total numsteps: 360, return: 0.0
+Cumulative Returns: 0.0
+Episode: 21, total numsteps: 378, return: 0.0
+Cumulative Returns: 0.0
+Episode: 22, total numsteps: 396, return: 0.0
+Cumulative Returns: 0.0
+Episode: 23, total numsteps: 414, return: 0.0
+Cumulative Returns: 0.0
+Episode: 24, total numsteps: 432, return: 0.0
+Cumulative Returns: 0.0
+Episode: 25, total numsteps: 450, return: 0.0
+Cumulative Returns: 0.0
+Episode: 26, total numsteps: 468, return: 0.0
+Cumulative Returns: 0.0
+Episode: 27, total numsteps: 486, return: 0.0
+Cumulative Returns: 0.0
+Episode: 28, total numsteps: 504, return: 0.0
+Cumulative Returns: 0.0
+Episode: 29, total numsteps: 522, return: 0.0
+Cumulative Returns: 0.0
+Episode: 30, total numsteps: 540, return: 0.0
+Cumulative Returns: 0.0
+Episode: 31, total numsteps: 558, return: 0.0
+Cumulative Returns: 0.0
+Episode: 32, total numsteps: 576, return: 0.0
+Cumulative Returns: 0.0
+Episode: 33, total numsteps: 594, return: 0.0
+Cumulative Returns: 0.0
+Episode: 34, total numsteps: 612, return: 0.0
+Cumulative Returns: 0.0
+Episode: 35, total numsteps: 630, return: 0.0
+Cumulative Returns: 0.0
+Episode: 36, total numsteps: 648, return: 0.0
+Cumulative Returns: 0.0
+Episode: 37, total numsteps: 666, return: 0.0
+Cumulative Returns: 0.0
+Episode: 38, total numsteps: 684, return: 0.0
+Cumulative Returns: 0.0
+Episode: 39, total numsteps: 702, return: 0.0
+Cumulative Returns: 0.0
+Episode: 40, total numsteps: 720, return: 0.0
+Cumulative Returns: 0.0
+Episode: 41, total numsteps: 738, return: 0.0
+Cumulative Returns: 0.0
+Episode: 42, total numsteps: 756, return: 0.0
+Cumulative Returns: 0.0
+Episode: 43, total numsteps: 774, return: 0.0
+Cumulative Returns: 0.0
+Episode: 44, total numsteps: 792, return: 0.0
+Cumulative Returns: 0.0
+Episode: 45, total numsteps: 810, return: 0.0
+Cumulative Returns: 0.0
+Episode: 46, total numsteps: 828, return: 0.0
+Cumulative Returns: 0.0
+Episode: 47, total numsteps: 846, return: 0.0
+Cumulative Returns: 0.0
+Episode: 48, total numsteps: 864, return: 0.0
+Cumulative Returns: 0.0
+Episode: 49, total numsteps: 882, return: 0.0
+Cumulative Returns: 0.0
+Episode: 50, total numsteps: 900, return: 0.0
+Cumulative Returns: 0.0
+Episode: 51, total numsteps: 918, return: 0.0
+Cumulative Returns: 0.0
+Episode: 52, total numsteps: 936, return: 0.0
+Cumulative Returns: 0.0
+Episode: 53, total numsteps: 954, return: 0.0
+Cumulative Returns: 0.0
+Episode: 54, total numsteps: 972, return: 0.0
+Cumulative Returns: 0.0
+Episode: 55, total numsteps: 990, return: 0.0
+Cumulative Returns: 0.0
+Episode: 56, total numsteps: 1008, return: 0.0
+Cumulative Returns: 0.0
+Episode: 57, total numsteps: 1026, return: 0.0
+Cumulative Returns: 0.0
+Episode: 58, total numsteps: 1044, return: 0.0
+Cumulative Returns: 0.0
+Episode: 59, total numsteps: 1062, return: 0.0
+Cumulative Returns: 0.0
+Episode: 60, total numsteps: 1080, return: 0.0
+Cumulative Returns: 0.0
+Episode: 61, total numsteps: 1098, return: 0.0
+Cumulative Returns: 0.0
+Episode: 62, total numsteps: 1116, return: 0.0
+Cumulative Returns: 0.0
+Episode: 63, total numsteps: 1134, return: 0.0
+Cumulative Returns: 0.0
+Episode: 64, total numsteps: 1152, return: 0.0
+Cumulative Returns: 0.0
+Episode: 65, total numsteps: 1170, return: 0.0
+Cumulative Returns: 0.0
+Episode: 66, total numsteps: 1188, return: 0.0
+Cumulative Returns: 0.0
+Episode: 67, total numsteps: 1206, return: 0.0
+Cumulative Returns: 0.0
+Episode: 68, total numsteps: 1224, return: 0.0
+Cumulative Returns: 0.0
+Episode: 69, total numsteps: 1242, return: 0.0
+Cumulative Returns: 0.0
+Episode: 70, total numsteps: 1260, return: 0.0
+Cumulative Returns: 0.0
+Episode: 71, total numsteps: 1278, return: 0.0
+Cumulative Returns: 0.0
+Episode: 72, total numsteps: 1296, return: 0.0
+Cumulative Returns: 0.0
+Episode: 73, total numsteps: 1314, return: 0.0
+Cumulative Returns: 0.0
+Episode: 74, total numsteps: 1332, return: 0.0
+Cumulative Returns: 0.0
+Episode: 75, total numsteps: 1350, return: 0.0
+Cumulative Returns: 0.0
+Episode: 76, total numsteps: 1368, return: 0.0
+Cumulative Returns: 0.0
+Episode: 77, total numsteps: 1386, return: 0.0
+Cumulative Returns: 0.0
+Episode: 78, total numsteps: 1404, return: 0.0
+Cumulative Returns: 0.0
+Episode: 79, total numsteps: 1422, return: 0.0
+Cumulative Returns: 0.0
+Episode: 80, total numsteps: 1440, return: 0.0
+Cumulative Returns: 0.0
+Episode: 81, total numsteps: 1458, return: 0.0
+Cumulative Returns: 0.0
+Episode: 82, total numsteps: 1476, return: 0.0
+Cumulative Returns: 0.0
+Episode: 83, total numsteps: 1494, return: 0.0
+Cumulative Returns: 0.0
+Episode: 84, total numsteps: 1512, return: 0.0
+Cumulative Returns: 0.0
+Episode: 85, total numsteps: 1530, return: 0.0
+Cumulative Returns: 0.0
+Episode: 86, total numsteps: 1548, return: 0.0
+Cumulative Returns: 0.0
+Episode: 87, total numsteps: 1566, return: 0.0
+Cumulative Returns: 0.0
+Episode: 88, total numsteps: 1584, return: 0.0
+Cumulative Returns: 0.0
+Episode: 89, total numsteps: 1602, return: 0.0
+Cumulative Returns: 0.0
+Episode: 90, total numsteps: 1620, return: 0.0
+Cumulative Returns: 0.0
+Episode: 91, total numsteps: 1638, return: 0.0
+Cumulative Returns: 0.0
+Episode: 92, total numsteps: 1656, return: 0.0
+Cumulative Returns: 0.0
+Episode: 93, total numsteps: 1674, return: 0.0
+Cumulative Returns: 0.0
+Episode: 94, total numsteps: 1692, return: 0.0
+Cumulative Returns: 0.0
+Episode: 95, total numsteps: 1710, return: 0.0
+Cumulative Returns: 0.0
+Episode: 96, total numsteps: 1728, return: 0.0
+Cumulative Returns: 0.0
+Episode: 97, total numsteps: 1746, return: 0.0
+Cumulative Returns: 0.0
+Episode: 98, total numsteps: 1764, return: 0.0
+Cumulative Returns: 0.0
+Episode: 99, total numsteps: 1782, return: 0.0
+Cumulative Returns: 0.0
+Episode: 100, total numsteps: 1800, return: 0.0
+Cumulative Returns: 0.0
+Episode: 101, total numsteps: 1818, return: 0.0
+Cumulative Returns: 0.0
+Episode: 102, total numsteps: 1836, return: 0.0
+Cumulative Returns: 0.0
+Episode: 103, total numsteps: 1854, return: 0.0
+Cumulative Returns: 0.0
+Episode: 104, total numsteps: 1872, return: 0.0
+Cumulative Returns: 0.0
+Episode: 105, total numsteps: 1890, return: 0.0
+Cumulative Returns: 0.0
+Episode: 106, total numsteps: 1908, return: 0.0
+Cumulative Returns: 0.0
+Episode: 107, total numsteps: 1926, return: 0.0
+Cumulative Returns: 0.0
+Episode: 108, total numsteps: 1944, return: 0.0
+Cumulative Returns: 0.0
+Episode: 109, total numsteps: 1962, return: 0.0
+Cumulative Returns: 0.0
+Episode: 110, total numsteps: 1980, return: 0.0
+Cumulative Returns: 0.0
+Episode: 111, total numsteps: 1998, return: 0.0
+Cumulative Returns: 0.0
+Episode: 112, total numsteps: 2016, return: 0.0
+Cumulative Returns: 0.0
+Episode: 113, total numsteps: 2034, return: 0.0
+Cumulative Returns: 0.0
+Episode: 114, total numsteps: 2052, return: 0.0
+Cumulative Returns: 0.0
+Episode: 115, total numsteps: 2070, return: 0.0
+Cumulative Returns: 0.0
+Episode: 116, total numsteps: 2088, return: 0.0
+Cumulative Returns: 0.0
+Episode: 117, total numsteps: 2106, return: 0.0
+Cumulative Returns: 0.0
+Episode: 118, total numsteps: 2124, return: 0.0
+Cumulative Returns: 0.0
+Episode: 119, total numsteps: 2142, return: 0.0
+Cumulative Returns: 0.0
+Episode: 120, total numsteps: 2160, return: 0.0
+Cumulative Returns: 0.0
+Episode: 121, total numsteps: 2178, return: 0.0
+Cumulative Returns: 0.0
+Episode: 122, total numsteps: 2196, return: 0.0
+Cumulative Returns: 0.0
+Episode: 123, total numsteps: 2214, return: 0.0
+Cumulative Returns: 0.0
+Episode: 124, total numsteps: 2232, return: 0.0
+Cumulative Returns: 0.0
+Episode: 125, total numsteps: 2250, return: 0.0
+Cumulative Returns: 0.0
+Episode: 126, total numsteps: 2268, return: 0.0
+Cumulative Returns: 0.0
+Episode: 127, total numsteps: 2286, return: 0.0
+Cumulative Returns: 0.0
+Episode: 128, total numsteps: 2304, return: 0.0
+Cumulative Returns: 0.0
+Episode: 129, total numsteps: 2322, return: 0.0
+Cumulative Returns: 0.0
+Episode: 130, total numsteps: 2340, return: 0.0
+Cumulative Returns: 0.0
+Episode: 131, total numsteps: 2358, return: 0.0
+Cumulative Returns: 0.0
+Episode: 132, total numsteps: 2376, return: 0.0
+Cumulative Returns: 0.0
+Episode: 133, total numsteps: 2394, return: 0.0
+Cumulative Returns: 0.0
+Episode: 134, total numsteps: 2412, return: 0.0
+Cumulative Returns: 0.0
+Episode: 135, total numsteps: 2430, return: 0.0
+Cumulative Returns: 0.0
+Episode: 136, total numsteps: 2448, return: 0.0
+Cumulative Returns: 0.0
+Episode: 137, total numsteps: 2466, return: 0.0
+Cumulative Returns: 0.0
+Episode: 138, total numsteps: 2484, return: 0.0
+Cumulative Returns: 0.0
+Episode: 139, total numsteps: 2502, return: 0.0
+Cumulative Returns: 0.0
+Episode: 140, total numsteps: 2520, return: 0.0
+Cumulative Returns: 0.0
+Episode: 141, total numsteps: 2538, return: 0.0
+Cumulative Returns: 0.0
+Episode: 142, total numsteps: 2556, return: 0.0
+Cumulative Returns: 0.0
+Episode: 143, total numsteps: 2574, return: 0.0
+Cumulative Returns: 0.0
+Episode: 144, total numsteps: 2592, return: 0.0
+Cumulative Returns: 0.0
+Episode: 145, total numsteps: 2610, return: 0.0
+Cumulative Returns: 0.0
+Episode: 146, total numsteps: 2628, return: 0.0
+Cumulative Returns: 0.0
+Episode: 147, total numsteps: 2646, return: 0.0
+Cumulative Returns: 0.0
+Episode: 148, total numsteps: 2664, return: 0.0
+Cumulative Returns: 0.0
+Episode: 149, total numsteps: 2682, return: 0.0
+Cumulative Returns: 0.0
+Episode: 150, total numsteps: 2700, return: 0.0
+Cumulative Returns: 0.0
+Episode: 151, total numsteps: 2718, return: 0.0
+Cumulative Returns: 0.0
+Episode: 152, total numsteps: 2736, return: 0.0
+Cumulative Returns: 0.0
+Episode: 153, total numsteps: 2754, return: 0.0
+Cumulative Returns: 0.0
+Episode: 154, total numsteps: 2772, return: 0.0
+Cumulative Returns: 0.0
+Episode: 155, total numsteps: 2790, return: 0.0
+Cumulative Returns: 0.0
+Episode: 156, total numsteps: 2808, return: 0.0
+Cumulative Returns: 0.0
+Episode: 157, total numsteps: 2826, return: 0.0
+Cumulative Returns: 0.0
+Episode: 158, total numsteps: 2844, return: 0.0
+Cumulative Returns: 0.0
+Episode: 159, total numsteps: 2862, return: 0.0
+Cumulative Returns: 0.0
+Episode: 160, total numsteps: 2880, return: 0.0
+Cumulative Returns: 0.0
+Episode: 161, total numsteps: 2898, return: 0.0
+Cumulative Returns: 0.0
+Episode: 162, total numsteps: 2916, return: 0.0
+Cumulative Returns: 0.0
+Episode: 163, total numsteps: 2934, return: 0.0
+Cumulative Returns: 0.0
+Episode: 164, total numsteps: 2952, return: 0.0
+Cumulative Returns: 0.0
+Episode: 165, total numsteps: 2970, return: 0.0
+Cumulative Returns: 0.0
+Episode: 166, total numsteps: 2988, return: 0.0
+Cumulative Returns: 0.0
+Episode: 167, total numsteps: 3006, return: 0.0
+Cumulative Returns: 0.0
+Episode: 168, total numsteps: 3024, return: 0.0
+Cumulative Returns: 0.0
+Episode: 169, total numsteps: 3042, return: 0.0
+Cumulative Returns: 0.0
+Episode: 170, total numsteps: 3060, return: 0.0
+Cumulative Returns: 0.0
+Episode: 171, total numsteps: 3078, return: 0.0
+Cumulative Returns: 0.0
+Episode: 172, total numsteps: 3096, return: 0.0
+Cumulative Returns: 0.0
+Episode: 173, total numsteps: 3114, return: 0.0
+Cumulative Returns: 0.0
+Episode: 174, total numsteps: 3132, return: 0.0
+Cumulative Returns: 0.0
+Episode: 175, total numsteps: 3150, return: 0.0
+Cumulative Returns: 0.0
+Episode: 176, total numsteps: 3168, return: 0.0
+Cumulative Returns: 0.0
+Episode: 177, total numsteps: 3186, return: 0.0
+Cumulative Returns: 0.0
+Episode: 178, total numsteps: 3204, return: 0.0
+Cumulative Returns: 0.0
+Episode: 179, total numsteps: 3222, return: 0.0
+Cumulative Returns: 0.0
+Episode: 180, total numsteps: 3240, return: 0.0
+Cumulative Returns: 0.0
+Episode: 181, total numsteps: 3258, return: 0.0
+Cumulative Returns: 0.0
+Episode: 182, total numsteps: 3276, return: 0.0
+Cumulative Returns: 0.0
+Episode: 183, total numsteps: 3294, return: 0.0
+Cumulative Returns: 0.0
+Episode: 184, total numsteps: 3312, return: 0.0
+Cumulative Returns: 0.0
+Episode: 185, total numsteps: 3330, return: 0.0
+Cumulative Returns: 0.0
+Episode: 186, total numsteps: 3348, return: 0.0
+Cumulative Returns: 0.0
+Episode: 187, total numsteps: 3366, return: 0.0
+Cumulative Returns: 0.0
+Episode: 188, total numsteps: 3384, return: 0.0
+Cumulative Returns: 0.0
+Episode: 189, total numsteps: 3402, return: 0.0
+Cumulative Returns: 0.0
+Episode: 190, total numsteps: 3420, return: 0.0
+Cumulative Returns: 0.0
+Episode: 191, total numsteps: 3438, return: 0.0
+Cumulative Returns: 0.0
+Episode: 192, total numsteps: 3456, return: 0.0
+Cumulative Returns: 0.0
+Episode: 193, total numsteps: 3474, return: 0.0
+Cumulative Returns: 0.0
+Episode: 194, total numsteps: 3492, return: 0.0
+Cumulative Returns: 0.0
+Episode: 195, total numsteps: 3510, return: 0.0
+Cumulative Returns: 0.0
+Episode: 196, total numsteps: 3528, return: 0.0
+Cumulative Returns: 0.0
+Episode: 197, total numsteps: 3546, return: 0.0
+Cumulative Returns: 0.0
+Episode: 198, total numsteps: 3564, return: 0.0
+Cumulative Returns: 0.0
+Episode: 199, total numsteps: 3582, return: 0.0
+Cumulative Returns: 0.0
+Episode: 200, total numsteps: 3600, return: 0.0
+Cumulative Returns: 0.0
+Episode: 201, total numsteps: 3618, return: 0.0
+Cumulative Returns: 0.0
+Episode: 202, total numsteps: 3636, return: 0.0
+Cumulative Returns: 0.0
+Episode: 203, total numsteps: 3654, return: 0.0
+Cumulative Returns: 0.0
+Episode: 204, total numsteps: 3672, return: 0.0
+Cumulative Returns: 0.0
+Episode: 205, total numsteps: 3690, return: 0.0
+Cumulative Returns: 0.0
+Episode: 206, total numsteps: 3708, return: 0.0
+Cumulative Returns: 0.0
+Episode: 207, total numsteps: 3726, return: 0.0
+Cumulative Returns: 0.0
+Episode: 208, total numsteps: 3744, return: 0.0
+Cumulative Returns: 0.0
+Episode: 209, total numsteps: 3762, return: 0.0
+Cumulative Returns: 0.0
+Episode: 210, total numsteps: 3780, return: 0.0
+Cumulative Returns: 0.0
+Episode: 211, total numsteps: 3798, return: 0.0
+Cumulative Returns: 0.0
+Episode: 212, total numsteps: 3816, return: 0.0
+Cumulative Returns: 0.0
+Episode: 213, total numsteps: 3834, return: 0.0
+Cumulative Returns: 0.0
+Episode: 214, total numsteps: 3852, return: 0.0
+Cumulative Returns: 0.0
+Episode: 215, total numsteps: 3870, return: 0.0
+Cumulative Returns: 0.0
+Episode: 216, total numsteps: 3888, return: 0.0
+Cumulative Returns: 0.0
+Episode: 217, total numsteps: 3906, return: 0.0
+Cumulative Returns: 0.0
+Episode: 218, total numsteps: 3924, return: 0.0
+Cumulative Returns: 0.0
+Episode: 219, total numsteps: 3942, return: 0.0
+Cumulative Returns: 0.0
+Episode: 220, total numsteps: 3960, return: 0.0
+Cumulative Returns: 0.0
+Episode: 221, total numsteps: 3978, return: 0.0
+Cumulative Returns: 0.0
+Episode: 222, total numsteps: 3996, return: 0.0
+Cumulative Returns: 0.0
+Episode: 223, total numsteps: 4014, return: 0.0
+Cumulative Returns: 0.0
+Episode: 224, total numsteps: 4032, return: 0.0
+Cumulative Returns: 0.0
+Episode: 225, total numsteps: 4050, return: 0.0
+Cumulative Returns: 0.0
+Episode: 226, total numsteps: 4068, return: 0.0
+Cumulative Returns: 0.0
+Episode: 227, total numsteps: 4086, return: 0.0
+Cumulative Returns: 0.0
+Episode: 228, total numsteps: 4104, return: 0.0
+Cumulative Returns: 0.0
+Episode: 229, total numsteps: 4122, return: 0.0
+Cumulative Returns: 0.0
+Episode: 230, total numsteps: 4140, return: 0.0
+Cumulative Returns: 0.0
+Episode: 231, total numsteps: 4158, return: 0.0
+Cumulative Returns: 0.0
+Episode: 232, total numsteps: 4176, return: 0.0
+Cumulative Returns: 0.0
+Episode: 233, total numsteps: 4194, return: 0.0
+Cumulative Returns: 0.0
+Episode: 234, total numsteps: 4212, return: 0.0
+Cumulative Returns: 0.0
+Episode: 235, total numsteps: 4230, return: 0.0
+Cumulative Returns: 0.0
+Episode: 236, total numsteps: 4248, return: 0.0
+Cumulative Returns: 0.0
+Episode: 237, total numsteps: 4266, return: 0.0
+Cumulative Returns: 0.0
+Episode: 238, total numsteps: 4284, return: 0.0
+Cumulative Returns: 0.0
+Episode: 239, total numsteps: 4302, return: 0.0
+Cumulative Returns: 0.0
+Episode: 240, total numsteps: 4320, return: 0.0
+Cumulative Returns: 0.0
+Episode: 241, total numsteps: 4338, return: 0.0
+Cumulative Returns: 0.0
+Episode: 242, total numsteps: 4356, return: 0.0
+Cumulative Returns: 0.0
+Episode: 243, total numsteps: 4374, return: 0.0
+Cumulative Returns: 0.0
+Episode: 244, total numsteps: 4392, return: 0.0
+Cumulative Returns: 0.0
+Episode: 245, total numsteps: 4410, return: 0.0
+Cumulative Returns: 0.0
+Episode: 246, total numsteps: 4428, return: 0.0
+Cumulative Returns: 0.0
+Episode: 247, total numsteps: 4446, return: 0.0
+Cumulative Returns: 0.0
+Episode: 248, total numsteps: 4464, return: 0.0
+Cumulative Returns: 0.0
+Episode: 249, total numsteps: 4482, return: 0.0
+Cumulative Returns: 0.0
+Episode: 249, total numsteps: 4500, return: 0.0
+Episode: 249, total numsteps: 4500, return: 0.0
+Episode: 249, total numsteps: 4500, return: 0.0
+Episode: 249, total numsteps: 4500, return: 0.0
+Episode: 249, total numsteps: 4500, return: 0.0
+Episode: 250, total numsteps: 4500, return: 0.0
+Cumulative Returns: 0.0
+Episode: 251, total numsteps: 4518, return: 0.0
+Cumulative Returns: 0.0
+Episode: 252, total numsteps: 4536, return: 0.0
+Cumulative Returns: 0.0
+Episode: 253, total numsteps: 4554, return: 0.0
+Cumulative Returns: 0.0
+Episode: 254, total numsteps: 4572, return: 0.0
+Cumulative Returns: 0.0
+Episode: 255, total numsteps: 4590, return: 0.0
+Cumulative Returns: 0.0
+Episode: 256, total numsteps: 4608, return: 0.0
+Cumulative Returns: 0.0
+Episode: 257, total numsteps: 4626, return: 0.0
+Cumulative Returns: 0.0
+Episode: 258, total numsteps: 4644, return: 0.0
+Cumulative Returns: 0.0
+Episode: 259, total numsteps: 4662, return: 0.0
+Cumulative Returns: 0.0
+Traceback (most recent call last):
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 274, in <module>
+    alm_helper.train()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 141, in train
+    self.agent.update(self._train_step)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 118, in update
+    self.update_representation(std, step, log, metrics)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 129, in update_representation
+    state_seq, action_seq, reward_seq, next_state_seq, done_seq = self.env_buffer.sample_seq(self.seq_len, self.batch_size)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/utils/replay_buffer.py", line 32, in sample_seq
+    obs, act, rew, next_obs, term = self._retrieve_batch(np.asarray([self._sample_idx(l) for _ in range(n)]), n, l)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/utils/replay_buffer.py", line 32, in <listcomp>
+    obs, act, rew, next_obs, term = self._retrieve_batch(np.asarray([self._sample_idx(l) for _ in range(n)]), n, l)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/utils/replay_buffer.py", line 43, in _sample_idx
+    idxs = np.arange(idx, idx+L)%self.buffer_limit
+KeyboardInterrupt
+Episode: 260, total numsteps: 4680, return: 0.0
+Cumulative Returns: 0.0
+Episode: 261, total numsteps: 4698, return: 0.0
+Cumulative Returns: 0.0
+Episode: 262, total numsteps: 4716, return: 0.0
+Cumulative Returns: 0.0

@@ -1,0 +1,39 @@
+Using device: cuda
+buffer limit is =  90000
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 1, total numsteps: 100, return: 0.0
+Cumulative Returns: 0.0
+Episode: 2, total numsteps: 200, return: 0.0
+Cumulative Returns: 0.0
+Episode: 3, total numsteps: 300, return: 0.0
+Cumulative Returns: 0.0
+Episode: 4, total numsteps: 400, return: 0.0
+Cumulative Returns: 0.0
+Episode: 5, total numsteps: 500, return: 0.0
+Cumulative Returns: 0.0
+Episode: 6, total numsteps: 600, return: 0.0
+Cumulative Returns: 0.0
+Episode: 7, total numsteps: 700, return: 0.0
+Cumulative Returns: 0.0
+Episode: 8, total numsteps: 800, return: 0.0
+Cumulative Returns: 0.0
+Traceback (most recent call last):
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 274, in <module>
+    alm_helper.train()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 141, in train
+    self.agent.update(self._train_step)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 118, in update
+    self.update_representation(std, step, log, metrics)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 139, in update_representation
+    alm_loss.backward()
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/_tensor.py", line 626, in backward
+    torch.autograd.backward(
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/autograd/__init__.py", line 347, in backward
+    _engine_run_backward(
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/autograd/graph.py", line 823, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

@@ -1,0 +1,55 @@
+Using device: cuda
+buffer limit is =  100000
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 0, total numsteps: 0, return: 0.0
+Episode: 1, total numsteps: 100, return: 0.0
+Cumulative Returns: 0.0
+Episode: 2, total numsteps: 200, return: 0.0
+Cumulative Returns: 0.0
+Episode: 3, total numsteps: 300, return: 0.0
+Cumulative Returns: 0.0
+Episode: 4, total numsteps: 400, return: 0.0
+Cumulative Returns: 0.0
+Episode: 5, total numsteps: 500, return: 0.0
+Cumulative Returns: 0.0
+Episode: 6, total numsteps: 600, return: 0.0
+Cumulative Returns: 0.0
+Episode: 7, total numsteps: 700, return: 0.0
+Cumulative Returns: 0.0
+Episode: 8, total numsteps: 800, return: 0.0
+Cumulative Returns: 0.0
+Episode: 9, total numsteps: 900, return: 0.0
+Cumulative Returns: 0.0
+Episode: 10, total numsteps: 1000, return: 0.0
+Cumulative Returns: 0.0
+Episode: 11, total numsteps: 1100, return: 0.0
+Cumulative Returns: 0.0
+Episode: 12, total numsteps: 1200, return: 0.0
+Cumulative Returns: 0.0
+Episode: 13, total numsteps: 1300, return: 0.0
+Cumulative Returns: 0.0
+Episode: 14, total numsteps: 1400, return: 0.0
+Cumulative Returns: 0.0
+Episode: 15, total numsteps: 1500, return: 0.0
+Cumulative Returns: 0.0
+Episode: 16, total numsteps: 1600, return: 0.0
+Cumulative Returns: 0.0
+Episode: 17, total numsteps: 1700, return: 0.0
+Cumulative Returns: 0.0
+Traceback (most recent call last):
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 274, in <module>
+    alm_helper.train()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 141, in train
+    self.agent.update(self._train_step)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 119, in update
+    self.update_rest(std, step, log, metrics)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 223, in update_rest
+    self.update_actor(z_dist.sample(), std, log, metrics)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 295, in update_actor
+    actor_loss = self._lambda_svg_loss(z_batch, std, log, metrics)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 323, in _lambda_svg_loss
+    q_values_1, q_values_2 = self.critic(z_seq, action_seq.detach())
+KeyboardInterrupt

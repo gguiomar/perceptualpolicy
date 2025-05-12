@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 274, in <module>
+    alm_helper.train()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 118, in train
+    self._explore()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 109, in _explore
+    next_state, reward, done, info = self.train_env.step(action)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/envs/gridworld.py", line 150, in step
+    return state, reward, done, {"episode": {"r": reward, "l": self.steps}}
+UnboundLocalError: local variable 'reward' referenced before assignment
+Using device: cuda
+buffer limit is =  100000

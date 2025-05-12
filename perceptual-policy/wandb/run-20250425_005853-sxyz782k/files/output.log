@@ -1,0 +1,283 @@
+Using device: cuda
+buffer limit is =  100000
+Episode: 0, total numsteps: 0, return: -0.0
+Episode: 0, total numsteps: 0, return: 1.1
+Episode: 0, total numsteps: 0, return: 1.06
+Episode: 0, total numsteps: 0, return: -0.0
+Episode: 0, total numsteps: 0, return: 1.09
+Episode: 1, total numsteps: 16, return: -0.0
+Cumulative Returns: 0.0
+Episode: 2, total numsteps: 32, return: 1.01
+Cumulative Returns: 1.0101525445522108
+Episode: 3, total numsteps: 48, return: 1.09
+Cumulative Returns: 2.0965814970624335
+Episode: 4, total numsteps: 64, return: 1.01
+Cumulative Returns: 3.104363715599752
+Episode: 5, total numsteps: 80, return: 1.08
+Cumulative Returns: 4.187144299607172
+Episode: 6, total numsteps: 96, return: -0.0
+Cumulative Returns: 4.187144299607172
+Episode: 7, total numsteps: 112, return: -0.0
+Cumulative Returns: 4.187144299607172
+Episode: 8, total numsteps: 128, return: -0.0
+Cumulative Returns: 4.187144299607172
+Episode: 9, total numsteps: 144, return: -0.0
+Cumulative Returns: 4.187144299607172
+Episode: 10, total numsteps: 160, return: -0.0
+Cumulative Returns: 4.187144299607172
+Episode: 11, total numsteps: 176, return: -0.0
+Cumulative Returns: 4.187144299607172
+Episode: 12, total numsteps: 192, return: 1.02
+Cumulative Returns: 5.20996092352069
+Episode: 13, total numsteps: 208, return: 1.03
+Cumulative Returns: 6.240737329925105
+Episode: 14, total numsteps: 224, return: -0.0
+Cumulative Returns: 6.240737329925105
+Episode: 15, total numsteps: 240, return: -0.0
+Cumulative Returns: 6.240737329925105
+Episode: 16, total numsteps: 256, return: -0.0
+Cumulative Returns: 6.240737329925105
+Episode: 17, total numsteps: 272, return: 1.05
+Cumulative Returns: 7.287585175105533
+Episode: 18, total numsteps: 288, return: -0.0
+Cumulative Returns: 7.287585175105533
+Episode: 19, total numsteps: 304, return: 1.04
+Cumulative Returns: 8.323697819447212
+Episode: 20, total numsteps: 320, return: 1.06
+Cumulative Returns: 9.386712400720677
+Episode: 21, total numsteps: 336, return: 1.03
+Cumulative Returns: 10.416275414819378
+Episode: 22, total numsteps: 352, return: -0.0
+Cumulative Returns: 10.416275414819378
+Episode: 23, total numsteps: 368, return: 1.06
+Cumulative Returns: 11.472393123876762
+Episode: 24, total numsteps: 384, return: 1.08
+Cumulative Returns: 12.555479880825125
+Episode: 25, total numsteps: 400, return: 1.02
+Cumulative Returns: 13.578296504738642
+Episode: 26, total numsteps: 416, return: -0.0
+Cumulative Returns: 13.578296504738642
+Episode: 27, total numsteps: 432, return: 1.07
+Cumulative Returns: 14.645283636086315
+Episode: 28, total numsteps: 448, return: 1.16
+Cumulative Returns: 15.807760023524509
+Episode: 29, total numsteps: 464, return: 1.11
+Cumulative Returns: 16.917160415974966
+Episode: 30, total numsteps: 480, return: -0.0
+Cumulative Returns: 16.917160415974966
+Episode: 31, total numsteps: 496, return: -0.0
+Cumulative Returns: 16.917160415974966
+Episode: 32, total numsteps: 512, return: 1.05
+Cumulative Returns: 17.971911571461415
+Episode: 33, total numsteps: 528, return: -0.0
+Cumulative Returns: 17.971911571461415
+Episode: 34, total numsteps: 544, return: -0.0
+Cumulative Returns: 17.971911571461415
+Episode: 35, total numsteps: 560, return: 1.07
+Cumulative Returns: 19.045662555847734
+Episode: 36, total numsteps: 576, return: -0.0
+Cumulative Returns: 19.045662555847734
+Episode: 37, total numsteps: 592, return: -0.0
+Cumulative Returns: 19.045662555847734
+Episode: 38, total numsteps: 608, return: -0.0
+Cumulative Returns: 19.045662555847734
+Episode: 39, total numsteps: 624, return: -0.0
+Cumulative Returns: 19.045662555847734
+Episode: 40, total numsteps: 640, return: -0.0
+Cumulative Returns: 19.045662555847734
+Episode: 41, total numsteps: 656, return: 1.02
+Cumulative Returns: 20.06847917976125
+Episode: 42, total numsteps: 672, return: 1.05
+Cumulative Returns: 21.1232303352477
+Episode: 43, total numsteps: 688, return: 1.04
+Cumulative Returns: 22.15934297958938
+Episode: 44, total numsteps: 704, return: -0.0
+Cumulative Returns: 22.15934297958938
+Episode: 45, total numsteps: 720, return: -0.0
+Cumulative Returns: 22.15934297958938
+Episode: 46, total numsteps: 736, return: 1.16
+Cumulative Returns: 23.321819367027572
+Episode: 47, total numsteps: 752, return: 1.05
+Cumulative Returns: 24.376570522514022
+Episode: 48, total numsteps: 768, return: 1.07
+Cumulative Returns: 25.45032150690034
+Episode: 49, total numsteps: 784, return: -0.0
+Cumulative Returns: 25.45032150690034
+Episode: 50, total numsteps: 800, return: 1.02
+Cumulative Returns: 26.473138130813858
+Episode: 51, total numsteps: 816, return: -0.0
+Cumulative Returns: 26.473138130813858
+Episode: 52, total numsteps: 832, return: 1.14
+Cumulative Returns: 27.613313555912995
+Episode: 53, total numsteps: 848, return: 1.12
+Cumulative Returns: 28.73519621005075
+Episode: 54, total numsteps: 864, return: -0.0
+Cumulative Returns: 28.73519621005075
+Episode: 55, total numsteps: 880, return: -0.0
+Cumulative Returns: 28.73519621005075
+Episode: 56, total numsteps: 896, return: -0.0
+Cumulative Returns: 28.73519621005075
+Episode: 57, total numsteps: 912, return: -0.0
+Cumulative Returns: 28.73519621005075
+Episode: 58, total numsteps: 928, return: 1.04
+Cumulative Returns: 29.771308854392426
+Episode: 59, total numsteps: 944, return: -0.0
+Cumulative Returns: 29.771308854392426
+Episode: 60, total numsteps: 960, return: 1.01
+Cumulative Returns: 30.779091072929745
+Episode: 61, total numsteps: 976, return: -0.0
+Cumulative Returns: 30.779091072929745
+Episode: 62, total numsteps: 992, return: -0.0
+Cumulative Returns: 30.779091072929745
+Episode: 63, total numsteps: 1008, return: 1.06
+Cumulative Returns: 31.839088952936105
+Episode: 64, total numsteps: 1024, return: 1.04
+Cumulative Returns: 32.87520159727779
+Episode: 65, total numsteps: 1040, return: 1.05
+Cumulative Returns: 33.92204944245822
+Episode: 66, total numsteps: 1056, return: -0.0
+Cumulative Returns: 33.92204944245822
+Episode: 67, total numsteps: 1072, return: 1.15
+Cumulative Returns: 35.07313588578035
+Episode: 68, total numsteps: 1088, return: 1.05
+Cumulative Returns: 36.11998373096078
+Episode: 69, total numsteps: 1104, return: 1.04
+Cumulative Returns: 37.15609637530246
+Episode: 70, total numsteps: 1120, return: -0.0
+Cumulative Returns: 37.15609637530246
+Episode: 71, total numsteps: 1136, return: 1.06
+Cumulative Returns: 38.22040054368284
+Episode: 72, total numsteps: 1152, return: 1.05
+Cumulative Returns: 39.26724838886327
+Episode: 73, total numsteps: 1168, return: 1.02
+Cumulative Returns: 40.29006501277679
+Episode: 74, total numsteps: 1184, return: -0.0
+Cumulative Returns: 40.29006501277679
+Episode: 75, total numsteps: 1200, return: -0.0
+Cumulative Returns: 40.29006501277679
+Episode: 76, total numsteps: 1216, return: -0.0
+Cumulative Returns: 40.29006501277679
+Episode: 77, total numsteps: 1232, return: -0.0
+Cumulative Returns: 40.29006501277679
+Episode: 78, total numsteps: 1248, return: 1.06
+Cumulative Returns: 41.35307959405026
+Episode: 79, total numsteps: 1264, return: -0.0
+Cumulative Returns: 41.35307959405026
+Episode: 80, total numsteps: 1280, return: -0.0
+Cumulative Returns: 41.35307959405026
+Episode: 81, total numsteps: 1296, return: -0.0
+Cumulative Returns: 41.35307959405026
+Episode: 82, total numsteps: 1312, return: 1.06
+Cumulative Returns: 42.413077474056614
+Episode: 83, total numsteps: 1328, return: 1.09
+Cumulative Returns: 43.49961120825706
+Episode: 84, total numsteps: 1344, return: -0.0
+Cumulative Returns: 43.49961120825706
+Episode: 85, total numsteps: 1360, return: 1.05
+Cumulative Returns: 44.55436236374351
+Episode: 86, total numsteps: 1376, return: 1.05
+Cumulative Returns: 45.60911351922996
+Episode: 87, total numsteps: 1392, return: -0.0
+Cumulative Returns: 45.60911351922996
+Episode: 88, total numsteps: 1408, return: -0.0
+Cumulative Returns: 45.60911351922996
+Episode: 89, total numsteps: 1424, return: 1.07
+Cumulative Returns: 46.67610065057763
+Episode: 90, total numsteps: 1440, return: 1.13
+Cumulative Returns: 47.80880487848734
+Episode: 91, total numsteps: 1456, return: 1.07
+Cumulative Returns: 48.8805551519413
+Episode: 92, total numsteps: 1472, return: -0.0
+Cumulative Returns: 48.8805551519413
+Episode: 93, total numsteps: 1488, return: 1.01
+Cumulative Returns: 49.888337370478624
+Episode: 94, total numsteps: 1504, return: 1.14
+Cumulative Returns: 51.02851279557776
+Episode: 95, total numsteps: 1520, return: 1.03
+Cumulative Returns: 52.05807580967646
+Episode: 96, total numsteps: 1536, return: -0.0
+Cumulative Returns: 52.05807580967646
+Episode: 97, total numsteps: 1552, return: 1.04
+Cumulative Returns: 53.09418845401814
+Episode: 98, total numsteps: 1568, return: -0.0
+Cumulative Returns: 53.09418845401814
+Episode: 99, total numsteps: 1584, return: 1.06
+Cumulative Returns: 54.15849262239852
+Episode: 100, total numsteps: 1600, return: -0.0
+Cumulative Returns: 54.15849262239852
+Episode: 101, total numsteps: 1616, return: -0.0
+Cumulative Returns: 54.15849262239852
+Episode: 102, total numsteps: 1632, return: -0.0
+Cumulative Returns: 54.15849262239852
+Episode: 103, total numsteps: 1648, return: 1.05
+Cumulative Returns: 55.20534046757895
+Episode: 104, total numsteps: 1664, return: 1.01
+Cumulative Returns: 56.213122686116265
+Episode: 105, total numsteps: 1680, return: 1.06
+Cumulative Returns: 57.27174899184101
+Episode: 106, total numsteps: 1696, return: 1.08
+Cumulative Returns: 58.35483574878937
+Episode: 107, total numsteps: 1712, return: -0.0
+Cumulative Returns: 58.35483574878937
+Episode: 108, total numsteps: 1728, return: -0.0
+Cumulative Returns: 58.35483574878937
+Episode: 109, total numsteps: 1744, return: -0.0
+Cumulative Returns: 58.35483574878937
+Episode: 110, total numsteps: 1760, return: -0.0
+Cumulative Returns: 58.35483574878937
+Episode: 111, total numsteps: 1776, return: -0.0
+Cumulative Returns: 58.35483574878937
+Episode: 112, total numsteps: 1792, return: 1.07
+Cumulative Returns: 59.426586022243335
+Episode: 113, total numsteps: 1808, return: -0.0
+Cumulative Returns: 59.426586022243335
+Episode: 114, total numsteps: 1824, return: 1.06
+Cumulative Returns: 60.490890190623716
+Episode: 115, total numsteps: 1840, return: -0.0
+Cumulative Returns: 60.490890190623716
+Episode: 116, total numsteps: 1856, return: -0.0
+Cumulative Returns: 60.490890190623716
+Episode: 117, total numsteps: 1872, return: 1.06
+Cumulative Returns: 61.54951649634846
+Episode: 118, total numsteps: 1888, return: -0.0
+Cumulative Returns: 61.54951649634846
+Episode: 119, total numsteps: 1904, return: 1.02
+Cumulative Returns: 62.57233312026198
+Episode: 120, total numsteps: 1920, return: 1.02
+Cumulative Returns: 63.59213702298054
+Episode: 121, total numsteps: 1936, return: 1.05
+Cumulative Returns: 64.63824391170726
+Episode: 122, total numsteps: 1952, return: -0.0
+Cumulative Returns: 64.63824391170726
+Episode: 123, total numsteps: 1968, return: -0.0
+Cumulative Returns: 64.63824391170726
+Episode: 124, total numsteps: 1984, return: 1.05
+Cumulative Returns: 65.6929950671937
+Episode: 125, total numsteps: 2000, return: -0.0
+Cumulative Returns: 65.6929950671937
+Episode: 126, total numsteps: 2016, return: 1.15
+Cumulative Returns: 66.84408151051584
+Episode: 127, total numsteps: 2032, return: -0.0
+Cumulative Returns: 66.84408151051584
+Episode: 128, total numsteps: 2048, return: 1.02
+Cumulative Returns: 67.86689813442935
+Episode: 129, total numsteps: 2064, return: 1.06
+Cumulative Returns: 68.92689601443571
+Traceback (most recent call last):
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 276, in <module>
+    alm_helper.train()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 141, in train
+    self.agent.update(self._train_step)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 119, in update
+    self.update_rest(std, step, log, metrics)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 223, in update_rest
+    self.update_actor(z_dist.sample(), std, log, metrics)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 298, in update_actor
+    actor_loss.backward()
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/_tensor.py", line 626, in backward
+    torch.autograd.backward(
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/autograd/__init__.py", line 347, in backward
+    _engine_run_backward(
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/autograd/graph.py", line 823, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

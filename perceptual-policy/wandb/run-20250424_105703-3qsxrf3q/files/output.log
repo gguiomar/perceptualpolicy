@@ -1,0 +1,20 @@
+Using device: cuda
+buffer limit is =  90000
+Traceback (most recent call last):
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 274, in <module>
+    alm_helper.train()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 119, in train
+    self._eval()
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/main-alm.py", line 174, in _eval
+    action = self.agent.get_action(state, self._train_step, True)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm.py", line 59, in get_action
+    action_dist = self.actor(z, std)
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/themandalorian/ETH/Thesis/perceptualpolicy/alm_model.py", line 127, in forward
+    x = F.elu(self.fc2(x))
+  File "/home/themandalorian/anaconda3/envs/alm/lib/python3.10/site-packages/torch/nn/functional.py", line 1806, in elu
+    result = torch._C._nn.elu(input, alpha)
+KeyboardInterrupt
