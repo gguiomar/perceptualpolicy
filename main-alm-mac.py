@@ -23,31 +23,35 @@ wandb.init("kmor-perceptualpolicy-initial")
 device = 'cuda'
 seed = 1
 
-#data 
+# Keeping base configuration intact
 num_train_steps = 500000
-explore_steps = 20000
-max_episode_steps = 35
-env_buffer_size = 500000
+explore_steps = 5000
+
+# Longest route without revisiting a cell is 99 steps.
+max_episode_steps = 100
+env_buffer_size = 100000
 batch_size = 512
-seq_len = 5
+seq_len = 3
 
 #learning
 gamma = 0.99
 tau = 0.005
-target_update_interval = 1
+
+# Update the target ideally every 1000 steps
+target_update_interval = 10
 lambda_cost = 0.1
-lr = {'model' : 0.0001, 'reward' : 0.0001, 'critic' : 0.0001, 'actor' : 0.0001}
+lr = {'model' : 0.0001, 'reward' : 0.0001, 'critic' : 0.0001, 'actor' : 0.0001} #originally 0.0001
 max_grad_norm =  100.0
 
 #exploration
 expl_start = 1.0
-expl_end = 0.1
-expl_duration = 20000
-stddev_clip = 0.3
+expl_end = 0.25
+expl_duration = 100000
+stddev_clip = 0.25
 
-#hidden_dims and layers
-latent_dims = 50
-hidden_dims = 32    
+#hidden_dims and layers. We don't need latent dimensions more than 8 since each state is only (x,y)
+latent_dims = 8
+hidden_dims = 16    
 model_hidden_dims = 32
 
 #bias evaluation
@@ -121,20 +125,15 @@ class ALM_Helper:
         state, done, episode_start_time = self.train_env.reset(), False, time.time()
         returns = 0
         
-        for _ in range(1, num_train_steps-explore_steps+1):  
+        for _ in range(1, num_train_steps-explore_steps+1):
 
             action = self.agent.get_action(state, self._train_step)
 
-            # Before environment step
-            if isinstance(action, torch.Tensor):
-                action = action.numpy()
-
-            if isinstance(action, np.ndarray):
-                if action.ndim > 0:
-                    action = int(np.argmax(action))
+            action = int(np.argmax(action))
 
             next_state, reward, done, info, new_distance, prev_distance = self.train_env.step(action)
             self._train_step += 1
+            self.train_env.render()
 
             self.agent.env_buffer.push((state, action, reward, next_state, False if info.get("TimeLimit.truncated", False) else done))
 
@@ -175,13 +174,7 @@ class ALM_Helper:
             while not done:
                 action = self.agent.get_action(state, self._train_step, True)
 
-                # Before environment step
-                if isinstance(action, torch.Tensor):
-                    action = action.cpu().numpy()
-
-                if isinstance(action, np.ndarray):
-                    if action.ndim > 0:
-                        action = int(np.argmax(action))
+                action = int(np.argmax(action))
 
                 next_state, _, done ,info, _, _ = self.eval_env.step(action)
                 state = next_state

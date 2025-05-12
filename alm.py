@@ -51,6 +51,11 @@ class AlmAgent(object):
         self._init_networks(num_states, num_actions, latent_dims, hidden_dims, model_hidden_dims)
         self._init_optims(lr)
 
+    def cyclic_linear_schedule(self, start, end, cycle_steps, step):
+        step_in_cycle = step % cycle_steps
+        fraction = step_in_cycle / cycle_steps
+        return float(start + (end - start) * fraction)
+
     def get_action(self, state, step, eval=False):
         std = torch_utils.linear_schedule(self.expl_start, self.expl_end, self.expl_duration, step)
         with torch.no_grad():
@@ -83,6 +88,7 @@ class AlmAgent(object):
             q_values = torch.min(q_values_1, q_values_2) 
 
             returns = torch.cat([reward + self.lambda_cost * kl_reward, q_values.unsqueeze(0)])
+            returns = torch.cat([reward, q_values.unsqueeze(0)])
             discount = torch.cat([torch.ones_like(discount[:1]), discount])
             discount = torch.cumprod(discount, 0)
 
@@ -174,6 +180,8 @@ class AlmAgent(object):
             metrics['kl'] = kl.mean().item()
             metrics['prior_entropy'] = z_next_prior_dist.entropy().mean()
             metrics['posterior_entropy'] = z_next_dist.entropy().mean()
+            print(metrics['prior_entropy'])
+            print(metrics['posterior_entropy'])
 
         return kl, z_next_prior_dist.rsample()
 
@@ -324,6 +332,7 @@ class AlmAgent(object):
             q_values = torch.min(q_values_1, q_values_2) 
             
             returns = lambda_returns(reward+self.lambda_cost*kl_reward, discount, q_values[:-1], q_values[-1], self.seq_len)
+            returns = lambda_returns(reward, discount, q_values[:-1], q_values[-1], self.seq_len)
             discount = torch.cat([torch.ones_like(discount[:1]), discount])
             discount = torch.cumprod(discount[:-1], 0)
             actor_loss = -torch.mean(discount * returns)
@@ -380,6 +389,7 @@ class AlmAgent(object):
 
         self.world_model_list = [self.model, self.encoder]
         self.reward_list = [self.reward, self.classifier]
+        self.reward_list = [self.reward]
         self.actor_list = [self.actor]
         self.critic_list = [self.critic]
 
