@@ -1,1 +1,0 @@
-{"eval_episodic_return": -0.24, "eval_episodic_length": 16.0, "_timestamp": 1745532623, "_runtime": 14, "_step": 272, "episodic_length": 16, "episodic_return": 0.0, "steps_per_second": 25.683228694059768, "env_buffer_length": 2320, "new_distance": 10.63014581273465, "prev_distance": 11.313708498984761, "_wandb": {"runtime": 16}}
