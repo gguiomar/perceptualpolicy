@@ -1,0 +1,97 @@
+2025-05-12 18:01:27,417 INFO    MainThread:37771 [wandb_setup.py:_flush():76] Configure stats pid to 37771
+2025-05-12 18:01:27,417 INFO    MainThread:37771 [wandb_setup.py:_flush():76] Loading settings from /home/themandalorian/.config/wandb/settings
+2025-05-12 18:01:27,417 INFO    MainThread:37771 [wandb_setup.py:_flush():76] Loading settings from /home/themandalorian/ETH/alm/local_exp/alm/Humanoid-v2_1/wandb/settings
+2025-05-12 18:01:27,417 INFO    MainThread:37771 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2025-05-12 18:01:27,417 INFO    MainThread:37771 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program': '/home/themandalorian/ETH/alm/train.py'}
+2025-05-12 18:01:27,418 INFO    MainThread:37771 [wandb_init.py:_log_setup():461] Logging user logs to /home/themandalorian/ETH/alm/local_exp/alm/Humanoid-v2_1/wandb/run-20250512_180127-2f5u431c/logs/debug.log
+2025-05-12 18:01:27,418 INFO    MainThread:37771 [wandb_init.py:_log_setup():462] Logging internal logs to /home/themandalorian/ETH/alm/local_exp/alm/Humanoid-v2_1/wandb/run-20250512_180127-2f5u431c/logs/debug-internal.log
+2025-05-12 18:01:27,418 INFO    MainThread:37771 [wandb_init.py:init():495] calling init triggers
+2025-05-12 18:01:27,418 INFO    MainThread:37771 [wandb_init.py:init():498] wandb.init called with sweep_config: {}
+config: {'agent': 'alm', 'device': 'cuda', 'seed': 1, 'benchmark': 'gym', 'id': 'Humanoid-v2', 'num_train_steps': 500000, 'explore_steps': 5000, 'max_episode_steps': 1000, 'env_buffer_size': 100000, 'batch_size': 512, 'seq_len': 3, 'gamma': 0.99, 'tau': 0.005, 'target_update_interval': 1, 'lambda_cost': 0.1, 'lr': {'model': 0.0001, 'reward': 0.0001, 'critic': 0.0001, 'actor': 0.0001}, 'max_grad_norm': 100.0, 'expl_start': 1.0, 'expl_end': 0.1, 'expl_duration': 100000, 'stddev_clip': 0.3, 'latent_dims': 50, 'hidden_dims': 512, 'model_hidden_dims': 1024, 'eval_bias': False, 'eval_bias_interval': 500, 'eval_episode_interval': 5000, 'num_eval_episodes': 5, 'wandb_log': True, 'wandb_run_name': 'ALM', 'log_interval': 500, 'save_snapshot': False, 'save_snapshot_interval': 50000}
+2025-05-12 18:01:27,418 INFO    MainThread:37771 [wandb_init.py:init():548] starting backend
+2025-05-12 18:01:27,424 INFO    MainThread:37771 [backend.py:ensure_launched():217] starting backend process...
+2025-05-12 18:01:27,424 INFO    MainThread:37771 [backend.py:ensure_launched():222] started backend process with pid: 0
+2025-05-12 18:01:27,424 INFO    BackendThr:37771 [internal.py:wandb_internal():90] W&B internal server running at pid: 37771, started at: 2025-05-12 18:01:27.424422
+2025-05-12 18:01:27,425 INFO    MainThread:37771 [wandb_init.py:init():558] backend started and connected
+2025-05-12 18:01:27,433 INFO    MainThread:37771 [wandb_init.py:init():634] updated telemetry
+2025-05-12 18:01:27,434 INFO    WriterThread:37771 [datastore.py:open_for_write():75] open: /home/themandalorian/ETH/alm/local_exp/alm/Humanoid-v2_1/wandb/run-20250512_180127-2f5u431c/run-2f5u431c.wandb
+2025-05-12 18:01:27,438 INFO    MainThread:37771 [wandb_init.py:init():665] communicating run to backend with 30 second timeout
+2025-05-12 18:01:27,649 ERROR   SenderThread:37771 [internal_api.py:execute():161] 404 response executing GraphQL.
+2025-05-12 18:01:27,650 ERROR   SenderThread:37771 [internal_api.py:execute():162] {"errors":[{"message":"project not found","path":["upsertBucket"]}],"data":{"upsertBucket":null}}
+2025-05-12 18:01:28,439 INFO    WriterThread:37771 [datastore.py:close():279] close: /home/themandalorian/ETH/alm/local_exp/alm/Humanoid-v2_1/wandb/run-20250512_180127-2f5u431c/run-2f5u431c.wandb
+2025-05-12 18:01:28,440 INFO    HandlerThread:37771 [handler.py:finish():806] shutting down handler
+2025-05-12 18:01:28,440 ERROR   BackendThr:37771 [internal.py:wandb_internal():165] Thread SenderThread:
+Traceback (most recent call last):
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/lib/retry.py", line 108, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/internal_api.py", line 158, in execute
+    return self.client.execute(*args, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/transport/requests.py", line 39, in execute
+    request.raise_for_status()
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://api.wandb.ai/graphql
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/apis/normalize.py", line 25, in wrapper
+    return func(*args, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/internal_api.py", line 1341, in upsert_run
+    response = self.gql(mutation, variable_values=variable_values, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/lib/retry.py", line 124, in __call__
+    if not check_retry_fn(e):
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/util.py", line 887, in no_retry_auth
+    raise CommError("Permission denied, ask the project owner to grant you access")
+wandb.errors.CommError: Permission denied, ask the project owner to grant you access
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/internal_util.py", line 51, in run
+    self._run()
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/internal_util.py", line 102, in _run
+    self._process(record)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/internal.py", line 310, in _process
+    self._sm.send(record)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/sender.py", line 238, in send
+    send_handler(record)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/sender.py", line 696, in send_run
+    self._init_run(run, config_value_dict)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/sender.py", line 720, in _init_run
+    server_run, inserted = self._api.upsert_run(
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/apis/normalize.py", line 61, in wrapper
+    raise CommError(message, err).with_traceback(sys.exc_info()[2])
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/apis/normalize.py", line 25, in wrapper
+    return func(*args, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/internal/internal_api.py", line 1341, in upsert_run
+    response = self.gql(mutation, variable_values=variable_values, **kwargs)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/lib/retry.py", line 124, in __call__
+    if not check_retry_fn(e):
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/util.py", line 887, in no_retry_auth
+    raise CommError("Permission denied, ask the project owner to grant you access")
+wandb.errors.CommError: Permission denied, ask the project owner to grant you access
+2025-05-12 18:01:50,266 WARNING MainThread:37771 [wandb_init.py:init():1064] interrupted
+Traceback (most recent call last):
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/wandb_init.py", line 1043, in init
+    run = wi.init()
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/wandb_init.py", line 668, in init
+    run_result = backend.interface.communicate_run(
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 223, in communicate_run
+    return self._communicate_run(run, timeout=timeout)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 324, in _communicate_run
+    resp = self._communicate(req, timeout=timeout)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 226, in _communicate
+    return self._communicate_async(rec, local=local).get(timeout=timeout)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/site-packages/wandb/sdk/interface/router.py", line 37, in get
+    is_set = self._object_ready.wait(timeout)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/threading.py", line 600, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/themandalorian/anaconda3/envs/alm-ghugare/lib/python3.10/threading.py", line 324, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt
+2025-05-12 18:01:50,272 INFO    MainThread:37771 [internal.py:handle_exit():80] Internal process exited

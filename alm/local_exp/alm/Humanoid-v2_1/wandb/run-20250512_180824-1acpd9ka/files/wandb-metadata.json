@@ -1,0 +1,27 @@
+{
+    "os": "Linux-6.8.0-59-generic-x86_64-with-glibc2.39",
+    "python": "3.10.4",
+    "heartbeatAt": "2025-05-12T16:08:24.835901",
+    "startedAt": "2025-05-12T16:08:24.306388",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3070",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "cuda": null,
+    "args": [
+        "id=Humanoid-v2",
+        "wandb_log=True"
+    ],
+    "state": "running",
+    "program": "/home/themandalorian/ETH/alm/train.py",
+    "codePath": "train.py",
+    "git": {
+        "remote": "https://github.com/RajGhugare19/alm.git",
+        "commit": "3b70f5b8c3c11b3222b9a288ef6dd370c95d973f"
+    },
+    "email": "keyshavmor2611@gmail.com",
+    "root": "/home/themandalorian/ETH/alm",
+    "host": "Mandalore",
+    "username": "themandalorian",
+    "executable": "/home/themandalorian/anaconda3/envs/alm-ghugare/bin/python"
+}
