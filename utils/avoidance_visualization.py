@@ -7,7 +7,7 @@ import seaborn as sns
 from matplotlib.animation import FuncAnimation
 import pandas as pd # Import pandas for rolling window calculations
 import os
-def plot_loss_components(history, smooth_window=50, save_path=None):
+def plot_loss_components(history, smooth_window=200, save_path=None):
     """
     Plots the components of the MaxEnt loss function over training episodes.
 
@@ -67,7 +67,7 @@ def plot_loss_components(history, smooth_window=50, save_path=None):
 
 def plot_avoidance_training_curves(rewards, losses, metrics, metric_name,
                                    avoidance_rates, shock_rates, # Keep args for compatibility, but ignore them
-                                   smooth_window=50, save_path=None):
+                                   smooth_window=200, save_path=None):
     """
     Plots smoothed basic training curves (Reward, Loss, Metric).
     Avoidance/Shock rates are now handled by plot_dual_task_performance.

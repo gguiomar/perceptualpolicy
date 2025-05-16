@@ -6,6 +6,7 @@ import os
 import random
 from collections import defaultdict
 import pandas as pd
+import json # Add this import at the top
 
 # Import the environment
 from envs.active_avoidance_env import ActiveAvoidanceEnv2D
@@ -33,7 +34,7 @@ from sklearn.decomposition import PCA
 from matplotlib.animation import FuncAnimation
 
 # Set seeds for reproducibility
-SEED = 42
+SEED = 123
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 random.seed(SEED)
@@ -61,7 +62,7 @@ config = {
 
     # Agent params
     'agent_class': MaxEntAgent, # Choose between PPOAgent, MaxEntAgent, FisherMaxEntAgent, TRPOAgent
-    'agent_name': 'MaxEntAgent_GRU_adap_temp_2_',
+    'agent_name': 'Agent_1',
     'policy_type': 'rnn',
     'hidden_dim': 128,           # Hidden dimension for RNN
     # 'hidden_dims': [128, 128], # multi-layer MLP - comment out for rnn
@@ -79,7 +80,7 @@ config = {
     'max_temperature': 0.3,          # Maximum temperature (cap exploration)
     # Define reward range for scaling temperature (adjust based on expected rewards)
     'reward_range_for_temp': (-5.0, 0.1), # Expected min/max smoothed reward
-    'adaptive_temp_window': 50,      # Window size for averaging reward
+    'adaptive_temp_window': 60,      # Window size for averaging reward
 
     # Training params
     'num_episodes': 14000,
@@ -96,12 +97,29 @@ else:
      config['temperature'] = config.get('initial_temperature', 0.1)
 # -------------------------------------------------------
 
-# save hyperparameters
-hyperparams_file = f"plots/{config['agent_name']}_hyperparameters.txt"
-with open(hyperparams_file, 'w') as f:
-    for key, value in config.items():
-        f.write(f"{key}: {value}\n")
-print(f"Hyperparameters saved to {hyperparams_file}")
+RESULTS_DIR = "results"
+
+# Save hyperparameters as JSON
+config_to_save = config.copy()
+# Convert agent_class to its name string if it's a class object
+if callable(config_to_save.get('agent_class')) and hasattr(config_to_save['agent_class'], '__name__'):
+    config_to_save['agent_class_name'] = config_to_save['agent_class'].__name__
+    del config_to_save['agent_class'] # Remove the class object itself for JSON serialization
+elif isinstance(config_to_save.get('agent_class'), str): 
+    config_to_save['agent_class_name'] = config_to_save['agent_class']
+    if 'agent_class' in config_to_save and isinstance(config_to_save['agent_class'], str):
+        pass 
+    elif 'agent_class' in config_to_save:
+         del config_to_save['agent_class']
+
+
+hyperparams_filename = f"{config_to_save.get('agent_name', 'agent')}_hyperparameters.json"
+hyperparams_results_path = os.path.join(RESULTS_DIR, hyperparams_filename)
+
+with open(hyperparams_results_path, 'w') as f:
+    json.dump(config_to_save, f, indent=4)
+print(f"Hyperparameters saved to {hyperparams_results_path}")
+
 # Check for MPS (Mac GPU) first, then CUDA, then fall back to CPU
 if torch.backends.mps.is_available():
     device = torch.device("mps")
@@ -160,7 +178,7 @@ elif config['policy_type'] in ['rnn', 'transformer']:
 #           agent_params['cg_damping'] = config.get('cg_damping', 1e-2)
 # elif AgentClass == TRPOAgent:
 #      agent_params['kl_delta'] = config['kl_delta']
-# Pass the *initial* temperature
+# # Pass the *initial* temperature
 #      agent_params['temperature'] = config['temperature']
 #      agent_params['gradient_clip_norm'] = config.get('gradient_clip_norm', None)
 #      if AgentClass == FisherMaxEntAgent:
@@ -184,6 +202,8 @@ reward_series = pd.Series(dtype=np.float64)
 hidden_states_history = []
 episode_hidden_states = []
 episode_indices = []  # Track which episodes we're sampling from
+actions_data = []
+positions_data = []
 
 for episode in range(config['num_episodes']):
     current_task_id = env.current_task_id
@@ -232,12 +252,11 @@ for episode in range(config['num_episodes']):
         if hasattr(agent, 'set_temperature'):
              agent.set_temperature(new_temp)
         else:
-             # Fallback if method doesn't exist (should not happen with MaxEntAgent)
              agent.temperature = new_temp
     # ------------------------------------
 
     state = env.reset()
-    # (Rest of the episode loop: data collection)
+    # Rest of the episode loop: data collection
     states, actions, rewards, log_probs_old_list = [], [], [], []
     hidden_states_list = []
     episode_reward = 0
@@ -246,9 +265,11 @@ for episode in range(config['num_episodes']):
     if config['policy_type'] in ["rnn"] and hasattr(agent.policy_net, 'init_hidden'):
          hidden_state = agent.policy_net.init_hidden().to(device)
 
+    # --- position and action tracking ---
+    ep_positions = [tuple(env.agent_pos)]
+    ep_actions   = []
     for step in range(config['max_steps_per_episode']):
         if config['policy_type'] in ["rnn"]:
-            # Handle state tensor conversion properly
             if isinstance(state, torch.Tensor):
                 state_tensor = state.to(device)
             else:
@@ -259,12 +280,19 @@ for episode in range(config['num_episodes']):
         else:
             action, log_prob, _ = agent.select_action(state)
         next_state, reward, done, info = env.step(action)
+
         states.append(state)
-        actions.append(action)
+        actions.append(action) 
         rewards.append(reward)
         log_probs_old_list.append(log_prob)
         episode_reward += reward
         state = next_state
+
+        # --- current action and position to episode-specific lists ---
+        ep_actions.append(action)
+        ep_positions.append(tuple(env.agent_pos))
+        # -----------------------------------------------------------------
+
         if done:
             ep_info = info
             break
@@ -277,6 +305,8 @@ for episode in range(config['num_episodes']):
         hidden_state_flat = hidden_state.detach().cpu().numpy().reshape(-1)
         episode_hidden_states.append(hidden_state_flat)
         episode_indices.append(episode)
+        actions_data.append(ep_actions)
+        positions_data.append(ep_positions)
 
     # Agent Update (will use the potentially updated temperature)
     update_args = [states, actions, rewards, log_probs_old_list]
@@ -399,6 +429,24 @@ for episode in range(config['num_episodes']):
 
 print("Training finished.")
 
+# --- Save the trained model ---
+model_save_path = os.path.join(RESULTS_DIR, f"{config.get('agent_name', 'agent')}_model.pth")
+torch.save(agent.policy_net.state_dict(), model_save_path)
+print(f"Trained model saved to {model_save_path}")
+
+os.makedirs(os.path.join(RESULTS_DIR, "training_data"), exist_ok=True)
+np.savez_compressed(
+    os.path.join(RESULTS_DIR, "training_data",
+                 f"{config['agent_name']}_hidden_states_data.npz"),
+    hidden_states=np.array(episode_hidden_states),
+    episode_indices=np.array(episode_indices),
+    task_ids=np.array([history['task_id'][i] for i in episode_indices]),
+    tones=np.array([history['presented_tone'][i] for i in episode_indices]),
+    actions=np.array(actions_data, dtype=object),
+    positions=np.array(positions_data, dtype=object),
+)
+print(f"Saved hidden‐state + action/position data to results/training_data/{config['agent_name']}_hidden_states_data.npz")
+
 # --- Policy head animation ---
 """
 Interpretation: 
@@ -447,12 +495,12 @@ plot_avoidance_training_curves(
     metric_name=metric_name,
     avoidance_rates=[],
     shock_rates=[],
-    smooth_window=50,
+    smooth_window=200,
     save_path=f"plots/{config['agent_name']}_basic_training_curves.png",
 )
 plot_loss_components(
     history=history,
-    smooth_window=50,
+    smooth_window=200,
     save_path=f"plots/{config['agent_name']}_loss_components.png"
 )
 plot_dual_task_performance(
@@ -476,7 +524,7 @@ if config.get('use_adaptive_temp', False):
      plt.close()
 
 
-# (Keep trajectory visualization code as before)
+#trajectory visualization 
 task_id_final = env.current_task_id
 print("Generating trajectory visualizations...")
 num_example_trajectories = 4
