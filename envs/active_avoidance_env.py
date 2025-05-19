@@ -147,6 +147,11 @@ class ActiveAvoidanceEnv2D:
         else:
             self.current_task_id = self.AVOID_TONE_2 if self.current_task_id == self.AVOID_TONE_1 else self.AVOID_TONE_1
         print(f"Switched to Task {self.current_task_id} ({'Tone1' if self.current_task_id == 1 else 'Tone2'}-Shuttle)")
+    
+    def enter_extinction(self):
+        """Switches the task to extinction and thus removing all rewards/punishments related to shutteling (step cost stays)"""
+        self.shock_penalty_per_step = 0.0
+        self.avoidance_reward = 0.0
 
     def step(self, action):
         """Executes one time step in the environment."""

@@ -83,8 +83,9 @@ config = {
     'adaptive_temp_window': 60,      # Window size for averaging reward
 
     # Training params
-    'num_episodes': 14000,
+    'num_episodes': 21000,
     'task_switch_episode': 7000,
+    'extinction_episode': 14000,
     'log_interval': 20, # How often to print progress
     'hidden_state_sampling_rate': 50,  # Sample every N episodes for visualization
     'weights_sampling_rate': 50 # How often to sample weights
@@ -121,9 +122,9 @@ with open(hyperparams_results_path, 'w') as f:
 print(f"Hyperparameters saved to {hyperparams_results_path}")
 
 # Check for MPS (Mac GPU) first, then CUDA, then fall back to CPU
-if torch.backends.mps.is_available():
-    device = torch.device("mps")
-elif torch.cuda.is_available():
+#if torch.backends.mps.is_available():
+    #device = torch.device("mps")
+if torch.cuda.is_available():
     device = torch.device("cuda")
 else:
     device = torch.device("cpu")
@@ -229,6 +230,28 @@ for episode in range(config['num_episodes']):
             plt.close()
         except Exception as e:
             print(f"[Warning] Could not save task switch weight heatmap: {e}")
+
+    # Switch to extinction phase
+    if 'extinction_episode' in config and episode == config['extinction_episode']:
+        print(f"\n--- Starting Extinction Phase at Episode {episode} ---")
+        env.enter_extinction()
+
+        # Save weight heatmap at task switch
+        try:
+            fig, ax = plt.subplots(figsize=(10, 4))
+            W_policy = agent.policy_net.fc.weight.detach().cpu().numpy()
+            im = ax.imshow(W_policy, aspect='auto', cmap='bwr', vmin=-1.0, vmax=1.0)
+            plt.colorbar(im, ax=ax, label='Weight Value')
+            action_labels = ['Up', 'Down', 'Left', 'Right', 'Stay']
+            ax.set_yticks(range(len(action_labels)))
+            ax.set_yticklabels(action_labels)
+            ax.set_xlabel("GRU Hidden Units")
+            ax.set_ylabel("Action")
+            ax.set_title(f"Policy Weights before Extinction phase (Episode {episode})")
+            plt.savefig(f"plots/weights/{config['agent_name']}_policy_weights_before_extinction_phase.png")
+            plt.close()
+        except Exception as e:
+            print(f"[Warning] Could not save before extinction weight heatmap: {e}")
 
     # --- Adaptive Temperature Update ---
     if config.get('use_adaptive_temp', False) and episode >= config['adaptive_temp_window']:
@@ -347,7 +370,7 @@ for episode in range(config['num_episodes']):
             ax.set_yticklabels(action_labels)
             ax.set_xlabel("GRU Hidden Units")
             ax.set_ylabel("Action")
-            ax.set_title(f"Policy Weights at Final Episode {episode}")
+            ax.set_title(f"Policy Weights at Final Episode (after Extinction phase) {episode}")
             plt.savefig(f"plots/weights/{config['agent_name']}_policy_weights_final.png")
             plt.close()
         except Exception as e:
