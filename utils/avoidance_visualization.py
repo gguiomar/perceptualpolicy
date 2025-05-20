@@ -7,6 +7,8 @@ import seaborn as sns
 from matplotlib.animation import FuncAnimation
 import pandas as pd # Import pandas for rolling window calculations
 import os
+import matplotlib.patches as mpatches
+
 def plot_loss_components(history, smooth_window=200, save_path=None):
     """
     Plots the components of the MaxEnt loss function over training episodes.
@@ -143,17 +145,11 @@ def plot_avoidance_training_curves(rewards, losses, metrics, metric_name,
         plt.show()
 
 
-def plot_dual_task_performance(history, task_switch_episode=None, save_path=None):
+def plot_dual_task_performance(history, task_switch_episode=None, extinction_episode=None, save_path=None):
     """
-    Plots the probability of shuttling in response to Tone 1 and Tone 2
-    across the entire training session, highlighting the task switch,
-    using a fixed running average window of 20 and interpolation for smoothness.
-
-    Args:
-        history (dict): Dictionary containing training history lists like
-                        'episode', 'presented_tone', 'shuttled', 'task_id'.
-        task_switch_episode (int, optional): Episode number where the task rule switched.
-        save_path (str, optional): Path to save the plot. If None, displays the plot.
+    Enhanced: Plots the probability of shuttling in response to Tone 1 and Tone 2
+    across the entire training session, highlighting the task switch and extinction,
+    with colored backgrounds and a phase-level CS+ bar on top.
     """
     df = pd.DataFrame(history)
     if df.empty or 'presented_tone' not in df.columns or 'shuttled' not in df.columns:
@@ -163,160 +159,93 @@ def plot_dual_task_performance(history, task_switch_episode=None, save_path=None
         df['episode'] = df.index # Add episode column if missing
 
     smooth_window_size = 200
-    # Use a smaller min_periods, like 1, for interpolation to work better at edges/gaps
-    min_periods_for_smoothing = 1 # Changed from max(1, smooth_window_size // 5)
+    min_periods_for_smoothing = 1
 
-    # --- Calculate Smoothed Rates Separately ---
-    # Create boolean masks
+    # --- Calculate Smoothed Rates ---
     is_tone1 = df['presented_tone'] == 1
     is_tone2 = df['presented_tone'] == 2
-
-    # Calculate rolling mean ONLY for relevant trials, store temporarily
-    # We multiply by 100 *before* rolling to average the percentages
     shuttle_pct = df['shuttled'] * 100
     tone1_shuttle_smooth_sparse = shuttle_pct[is_tone1].rolling(
         window=smooth_window_size,
         min_periods=min_periods_for_smoothing,
         center=True
     ).mean()
-
     tone2_shuttle_smooth_sparse = shuttle_pct[is_tone2].rolling(
         window=smooth_window_size,
         min_periods=min_periods_for_smoothing,
         center=True
     ).mean()
-
-    # --- Interpolate over all episodes for smoother plotting ---
-    # Create a full episode index
     all_episodes_index = pd.Index(range(df['episode'].min(), df['episode'].max() + 1), name='episode')
-
-    # Reindex the sparse smoothed data onto the full index, creating NaNs
     tone1_shuttle_smooth_full = tone1_shuttle_smooth_sparse.reindex(all_episodes_index)
     tone2_shuttle_smooth_full = tone2_shuttle_smooth_sparse.reindex(all_episodes_index)
-
-    # Interpolate linearly to fill the gaps
-    # limit_direction='both' helps fill NaNs at the start/end
-    tone1_shuttle_smooth_interpolated = tone1_shuttle_smooth_full.interpolate(method='linear', limit_direction='both', limit_area='inside')
-    tone2_shuttle_smooth_interpolated = tone2_shuttle_smooth_full.interpolate(method='linear', limit_direction='both', limit_area='inside')
-    # Optional: Fill remaining NaNs at the very beginning/end if needed (e.g., with 0 or forward/backward fill)
-    tone1_shuttle_smooth_interpolated = tone1_shuttle_smooth_interpolated.fillna(0) # Example: fill remaining NaNs with 0
-    tone2_shuttle_smooth_interpolated = tone2_shuttle_smooth_interpolated.fillna(0) # Example: fill remaining NaNs with 0
-
+    tone1_shuttle_smooth_interpolated = tone1_shuttle_smooth_full.interpolate(method='linear', limit_direction='both', limit_area='inside').fillna(0)
+    tone2_shuttle_smooth_interpolated = tone2_shuttle_smooth_full.interpolate(method='linear', limit_direction='both', limit_area='inside').fillna(0)
 
     # --- Plotting ---
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig = plt.figure(figsize=(14, 7))
+    gs = fig.add_gridspec(2, 1, height_ratios=[0.18, 0.82], hspace=0.05)
+    ax_bar = fig.add_subplot(gs[0])
+    ax = fig.add_subplot(gs[1], sharex=ax_bar)
 
-    # Plot the *interpolated* smoothed shuttle rates against the full episode range
-    ax.plot(all_episodes_index, tone1_shuttle_smooth_interpolated, label=f'Tone 1 Shuttle %', color='blue')
-    ax.plot(all_episodes_index, tone2_shuttle_smooth_interpolated, label=f'Tone 2 Shuttle %', color='red')
+    # --- Phase-like Tone Bar (like image) ---
+    max_ep = all_episodes_index[-1]
+    ax_bar.set_ylim(0, 1)
+    ax_bar.set_xlim(all_episodes_index[0], max_ep)
+    ax_bar.set_xticks([])
+    ax_bar.set_yticks([])
+    ax_bar.axis("off")  # Hide all borders/ticks
 
-    # Add task switch line
-    if task_switch_episode is not None:
-        ax.axvline(task_switch_episode, color='black', linestyle='--', lw=2, label=f'Task Switch (Ep {task_switch_episode})')
-        if not df.empty:
-            max_episode = df['episode'].max()
-            # Avoid division by zero if task_switch_episode is 0 or max_episode
-            if task_switch_episode > 0:
-                 mid_point1 = task_switch_episode / 2
-                 ax.text(mid_point1, 102, 'Task 1 Active (Shuttle for T1)', horizontalalignment='center', verticalalignment='bottom', fontsize=10)
-            if max_episode > task_switch_episode:
-                 mid_point2 = task_switch_episode + (max_episode - task_switch_episode) / 2
-                 ax.text(mid_point2, 102, 'Task 2 Active (Shuttle for T2)', horizontalalignment='center', verticalalignment='bottom', fontsize=10)
+    # Background colored blocks per phase
+    ax_bar.axvspan(all_episodes_index[0], task_switch_episode, color='mediumseagreen', alpha=0.15)
+    ax_bar.axvspan(task_switch_episode, extinction_episode, color='cornflowerblue', alpha=0.15)
+    ax_bar.axvspan(extinction_episode, max_ep, color='gray', alpha=0.15)
 
+    # Tone bar with icon-style text
+    icon_y = 0.6
+    ax_bar.text(all_episodes_index[1], icon_y, "Tone1", fontsize=12, ha="left", va="center", color="limegreen")
+    ax_bar.text(all_episodes_index[1], icon_y - 0.25, "Tone2", fontsize=12, ha="left", va="center", color="royalblue")
+
+    # Draw lightning/shock icons at start of task phases
+    ax_bar.text(task_switch_episode - 5, 0.95, "\u26A1", fontsize=16, ha='center', va='center')
+    ax_bar.text(extinction_episode - 5, 0.95, "⚡", fontsize=16, ha='center', va='center')
+
+    # Phase labels on top
+    ax_bar.text((all_episodes_index[0] + task_switch_episode) / 2, 0.95, 'Task 1', ha='center', va='center', fontsize=12, fontweight='bold')
+    ax_bar.text((task_switch_episode + extinction_episode) / 2, 0.95, 'Task 2', ha='center', va='center', fontsize=12, fontweight='bold')
+    ax_bar.text((extinction_episode + max_ep) / 2, 0.95, 'Extinction', ha='center', va='center', fontsize=12, fontweight='bold')
+
+    # --- Main plot ---
+    ax.plot(all_episodes_index, tone1_shuttle_smooth_interpolated, label=f'Tone 1 Shuttle %', color='limegreen', lw=2)
+    ax.plot(all_episodes_index, tone2_shuttle_smooth_interpolated, label=f'Tone 2 Shuttle %', color='royalblue', lw=2)
+
+    # --- Colored backgrounds for phases ---
+    ax.axvspan(all_episodes_index[0], task_switch_episode, color='mediumseagreen', alpha=0.13, zorder=-1)
+    ax.axvspan(task_switch_episode, extinction_episode, color='cornflowerblue', alpha=0.13, zorder=-1)
+    ax.axvspan(extinction_episode, max_ep, color='gray', alpha=0.13, zorder=-1)
+
+    # --- Phase labels ---
+    #y_label = 102
+    #ax.text((all_episodes_index[0] + task_switch_episode) / 2, y_label, 'Task 1', ha='center', va='bottom', fontsize=13, fontweight='bold', color='mediumseagreen')
+    #ax.text((task_switch_episode + extinction_episode) / 2, y_label, 'Task 2', ha='center', va='bottom', fontsize=13, fontweight='bold', color='royalblue')
+    #ax.text((extinction_episode + max_ep) / 2, y_label, 'Extinction', ha='center', va='bottom', fontsize=13, fontweight='bold', color='dimgray')
+
+    # --- Task switch and extinction lines ---
+    ax.axvline(task_switch_episode, color='black', linestyle='--', lw=2, label=f'Task Switch (Ep {task_switch_episode})')
+    ax.axvline(extinction_episode, color='black', linestyle=':', lw=2, label=f'Extinction Start (Ep {extinction_episode})')
 
     ax.set_xlabel('Episode')
     ax.set_ylabel('Shuttle Rate (%)')
-    ax.set_title(f'Shuttle Response Probability (Running Avg Window={smooth_window_size}, Interpolated)')
+    ax.set_title(f'Shuttle Response Probability (Smoothed, Window={smooth_window_size})')
     ax.set_ylim(-5, 105)
-    ax.legend(loc='best')
+    ax.legend(loc='upper right', fontsize=11)
     ax.grid(True, which='both', linestyle='--', linewidth=0.5)
 
     plt.tight_layout(rect=[0, 0, 1, 0.97])
 
     if save_path:
-        # Ensure directory exists before saving
         save_dir = os.path.dirname(save_path)
-        if save_dir: # Check if dirname is not empty (e.g., if path is just a filename)
-             os.makedirs(save_dir, exist_ok=True)
-        plt.savefig(save_path)
-        print(f"Dual task performance plot saved to {save_path}")
-        plt.close(fig)
-    else:
-        plt.show()
-    """
-    Plots the probability of shuttling in response to Tone 1 and Tone 2
-    across the entire training session, highlighting the task switch,
-    using a fixed running average window of 20.
-
-    Args:
-        history (dict): Dictionary containing training history lists like
-                        'episode', 'presented_tone', 'shuttled', 'task_id'.
-        task_switch_episode (int, optional): Episode number where the task rule switched.
-        save_path (str, optional): Path to save the plot. If None, displays the plot.
-    """
-    df = pd.DataFrame(history)
-    if df.empty:
-        print("History is empty, cannot generate dual task performance plot.")
-        return
-
-    smooth_window_size = 200
-    min_periods_for_smoothing = max(1, smooth_window_size // 5) # e.g., 4 for window 20
-
-    # Calculate shuttle rate for Tone 1 trials
-    tone1_trials = df[df['presented_tone'] == 1].copy()
-    if not tone1_trials.empty:
-        # Apply rolling average
-        tone1_trials['shuttle_smooth'] = tone1_trials['shuttled'].rolling(
-            window=smooth_window_size,
-            min_periods=min_periods_for_smoothing,
-            center=True
-        ).mean() * 100
-    else:
-        tone1_trials['shuttle_smooth'] = np.nan
-
-    # Calculate shuttle rate for Tone 2 trials
-    tone2_trials = df[df['presented_tone'] == 2].copy()
-    if not tone2_trials.empty:
-        # Apply rolling average
-        tone2_trials['shuttle_smooth'] = tone2_trials['shuttled'].rolling(
-            window=smooth_window_size,
-            min_periods=min_periods_for_smoothing,
-            center=True
-        ).mean() * 100
-    else:
-        tone2_trials['shuttle_smooth'] = np.nan
-
-    fig, ax = plt.subplots(figsize=(12, 6))
-
-    # Plot smoothed shuttle rates
-    if not tone1_trials.empty:
-        ax.plot(tone1_trials['episode'], tone1_trials['shuttle_smooth'], label=f'Tone 1 Shuttle %', color='blue')
-
-    if not tone2_trials.empty:
-        ax.plot(tone2_trials['episode'], tone2_trials['shuttle_smooth'], label=f'Tone 2 Shuttle %', color='red')
-
-    # Add task switch line
-    if task_switch_episode is not None:
-        ax.axvline(task_switch_episode, color='black', linestyle='--', lw=2, label=f'Task Switch (Ep {task_switch_episode})')
-        if not df.empty:
-            max_episode = df['episode'].max()
-            mid_point1 = task_switch_episode / 2
-            mid_point2 = task_switch_episode + (max_episode - task_switch_episode) / 2
-            ax.text(mid_point1, 102, 'Task 1 Active (Shuttle for T1)', horizontalalignment='center', verticalalignment='bottom', fontsize=10)
-            ax.text(mid_point2, 102, 'Task 2 Active (Shuttle for T2)', horizontalalignment='center', verticalalignment='bottom', fontsize=10)
-
-
-    ax.set_xlabel('Episode')
-    ax.set_ylabel('Shuttle Rate (%)')
-    ax.set_title(f'Shuttle Response Probability (Running Avg Window={smooth_window_size})')
-    ax.set_ylim(-5, 105)
-    ax.legend(loc='best')
-    ax.grid(True, which='both', linestyle='--', linewidth=0.5)
-
-    plt.tight_layout(rect=[0, 0, 1, 0.97]) 
-
-    if save_path:
-        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        if save_dir:
+            os.makedirs(save_dir, exist_ok=True)
         plt.savefig(save_path)
         print(f"Dual task performance plot saved to {save_path}")
         plt.close(fig)

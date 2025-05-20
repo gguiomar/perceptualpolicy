@@ -83,7 +83,7 @@ config = {
     'adaptive_temp_window': 60,      # Window size for averaging reward
 
     # Training params
-    'num_episodes': 21000,
+    'num_episodes': 18000,
     'task_switch_episode': 7000,
     'extinction_episode': 14000,
     'log_interval': 20, # How often to print progress
@@ -529,6 +529,7 @@ plot_loss_components(
 plot_dual_task_performance(
     history=history,
     task_switch_episode=config.get('task_switch_episode'),
+    extinction_episode=config.get('extinction_episode'),
     save_path=f"plots/{config['agent_name']}_dual_task_performance.png"
 )
 
