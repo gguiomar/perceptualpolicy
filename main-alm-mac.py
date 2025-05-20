@@ -133,7 +133,6 @@ class ALM_Helper:
 
             next_state, reward, done, info, new_distance, prev_distance = self.train_env.step(action)
             self._train_step += 1
-            self.train_env.render()
 
             self.agent.env_buffer.push((state, action, reward, next_state, False if info.get("TimeLimit.truncated", False) else done))
 

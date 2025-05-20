@@ -27,6 +27,9 @@ class AlmAgent(object):
         self.device = device 
         self.action_low = action_low
         self.action_high = action_high
+
+        print('action_low:', action_low)
+        print('action_high:', action_high)
         
         #learning
         self.gamma = gamma 
