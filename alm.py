@@ -64,7 +64,7 @@ class AlmAgent(object):
         with torch.no_grad():
             state = torch.FloatTensor(state).unsqueeze(0).to(self.device)
             z = self.encoder(state).sample()   
-            action_dist = self.actor(z, std)    
+            action_dist = self.actor(z,std)    
             action = action_dist.sample(clip=None)
             
             if eval:
@@ -91,7 +91,6 @@ class AlmAgent(object):
             q_values = torch.min(q_values_1, q_values_2) 
 
             returns = torch.cat([reward + self.lambda_cost * kl_reward, q_values.unsqueeze(0)])
-            returns = torch.cat([reward, q_values.unsqueeze(0)])
             discount = torch.cat([torch.ones_like(discount[:1]), discount])
             discount = torch.cumprod(discount, 0)
 
@@ -155,7 +154,7 @@ class AlmAgent(object):
 
     def alm_loss(self, state_seq, action_seq, next_state_seq, std, step, log, metrics):
         z_dist = self.encoder(state_seq[0])
-        z_batch = z_dist.rsample()
+        z_batch = z_dist.sample()
         alm_loss = 0
         log_q = log 
         for t in range(self.seq_len):
@@ -183,8 +182,6 @@ class AlmAgent(object):
             metrics['kl'] = kl.mean().item()
             metrics['prior_entropy'] = z_next_prior_dist.entropy().mean()
             metrics['posterior_entropy'] = z_next_dist.entropy().mean()
-            print(metrics['prior_entropy'])
-            print(metrics['posterior_entropy'])
 
         return kl, z_next_prior_dist.rsample()
 
@@ -278,6 +275,7 @@ class AlmAgent(object):
         return classifier_loss
 
     def update_critic(self, z_batch, action_batch, reward_batch, z_next_batch, discount_batch, std, log, metrics):
+
         with torch.no_grad():    
             next_action_dist = self.actor(z_next_batch, std)
             next_action_batch = next_action_dist.sample(clip=self.stddev_clip)
@@ -328,6 +326,7 @@ class AlmAgent(object):
         z_seq, action_seq = self._rollout_imagination(z_batch, std)
 
         with torch_utils.FreezeParameters([self.model, self.reward, self.classifier, self.critic]):
+            
             reward = self.reward(z_seq[:-1], action_seq[:-1])
             kl_reward = self.classifier.get_reward(z_seq[:-1], action_seq[:-1], z_seq[1:].detach())
             discount = self.gamma * torch.ones_like(reward)
@@ -335,7 +334,6 @@ class AlmAgent(object):
             q_values = torch.min(q_values_1, q_values_2) 
             
             returns = lambda_returns(reward+self.lambda_cost*kl_reward, discount, q_values[:-1], q_values[-1], self.seq_len)
-            returns = lambda_returns(reward, discount, q_values[:-1], q_values[-1], self.seq_len)
             discount = torch.cat([torch.ones_like(discount[:1]), discount])
             discount = torch.cumprod(discount[:-1], 0)
             actor_loss = -torch.mean(discount * returns)
@@ -392,7 +390,6 @@ class AlmAgent(object):
 
         self.world_model_list = [self.model, self.encoder]
         self.reward_list = [self.reward, self.classifier]
-        self.reward_list = [self.reward]
         self.actor_list = [self.actor]
         self.critic_list = [self.critic]
 

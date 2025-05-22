@@ -20,12 +20,12 @@ wandb.login()
 
 wandb.init("kmor-perceptualpolicy-initial")
 
-device = 'cuda'
+device = 'cpu'
 seed = 1
 
 # Keeping base configuration intact
 num_train_steps = 500000
-explore_steps = 5000
+explore_steps = 20000
 
 # Longest route without revisiting a cell is 99 steps.
 max_episode_steps = 100
@@ -38,16 +38,16 @@ gamma = 0.99
 tau = 0.005
 
 # Update the target ideally every 1000 steps
-target_update_interval = 10
+target_update_interval = 1
 lambda_cost = 0.1
 lr = {'model' : 0.0001, 'reward' : 0.0001, 'critic' : 0.0001, 'actor' : 0.0001} #originally 0.0001
 max_grad_norm =  100.0
 
 #exploration
 expl_start = 1.0
-expl_end = 0.25
+expl_end = 0.1
 expl_duration = 100000
-stddev_clip = 0.25
+stddev_clip = 0.3
 
 #hidden_dims and layers. We don't need latent dimensions more than 8 since each state is only (x,y)
 latent_dims = 8
@@ -59,7 +59,7 @@ eval_bias = False
 eval_bias_interval = 500
 
 #evaluation
-eval_episode_interval = 5000
+eval_episode_interval = 500
 num_eval_episodes = 5
 
 #saving

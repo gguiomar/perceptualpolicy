@@ -28,7 +28,7 @@ class GridWorld:
 
     
     def __init__(self, grid_size=10, start=(0, 0), goal=(9, 9), max_steps=100, 
-                 stochastic=False, noise=0.1, add_obstacles=False, random_start=True,  custom_obstacles=None):
+                 stochastic=False, noise=0.1, add_obstacles=False, custom_obstacles=None):
         """
         Initialize GridWorld environment
         
@@ -41,7 +41,6 @@ class GridWorld:
             noise: Probability of random action being taken
             add_obstacles: Whether to add default obstacles
             custom_obstacles: List of custom obstacle positions, overrides default if provided
-            random_start: If True, starts agent from a random (non-goal, non-obstacle) position
         """
         self.grid_size = grid_size
         self.start = start
@@ -50,7 +49,6 @@ class GridWorld:
         self.stochastic = stochastic
         self.noise = noise
         self.add_obstacles = add_obstacles
-        self.random_start = random_start
 
         self.visit_counts = np.zeros((self.grid_size, self.grid_size), dtype=np.int32)
         
@@ -100,22 +98,10 @@ class GridWorld:
     
     def reset(self):
         """Reset the environment to initial state"""
+        
         self.steps = 0
         self.visit_counts.fill(0)
-
-        if self.random_start:
-            while True:
-                # Random (x, y) within grid
-                self.agent_pos = [
-                    np.random.randint(0, self.grid_size),
-                    np.random.randint(0, self.grid_size)
-                ]
-                # Ensure it's not the goal or an obstacle
-                if tuple(self.agent_pos) != self.goal and tuple(self.agent_pos) not in self.obstacles:
-                    break
-        else:
-            self.agent_pos = list(self.start)
-
+        self.agent_pos = list(self.start)
         self.visit_counts[self.agent_pos[0], self.agent_pos[1]] += 1
         return self._get_state()
 
@@ -171,25 +157,17 @@ class GridWorld:
         max_distance = np.linalg.norm(np.array(self.goal) - np.array(self.start))
         
         # Reward logic
-        # Reward logic
         if tuple(self.agent_pos) == self.goal:
             reward = 100.0
             done = True
+
         else:
-            x, y = self.agent_pos
-            if x in range(0,2) and y in range (self.grid_size-2, self.grid_size):
-                reward = -5.0
-            elif y in range (0,2) and x in range (self.grid_size-2, self.grid_size):
-                reward = -5.0
-            elif x in range(0,2) and y in range (0, 2):
-                reward = -5.0
-            else:
-                # Gaussian reward centered at the goal
-                sigma = 3.0  # smoothness parameter
-                dx = x - self.goal[0]
-                dy = y - self.goal[1]
-                dist_sq = dx ** 2 + dy ** 2
-                reward = 100.0 * np.exp(-dist_sq / (2 * sigma ** 2))
+            # Gaussian reward centered at the goal
+            sigma = 3.0  # smoothness parameter
+            dx = x - self.goal[0]
+            dy = y - self.goal[1]
+            dist_sq = dx ** 2 + dy ** 2
+            reward = 100.0 * np.exp(-dist_sq / (2 * sigma ** 2))
             
             done = False
 
