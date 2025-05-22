@@ -162,6 +162,7 @@ class GridWorld:
             done = True
 
         else:
+            x, y = self.agent_pos
             # Gaussian reward centered at the goal
             sigma = 3.0  # smoothness parameter
             dx = x - self.goal[0]
