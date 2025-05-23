@@ -61,16 +61,28 @@ class AlmAgent(object):
 
     def get_action(self, state, step, eval=False):
         std = torch_utils.linear_schedule(self.expl_start, self.expl_end, self.expl_duration, step)
+        num_actions = 4
+        
         with torch.no_grad():
             state = torch.FloatTensor(state).unsqueeze(0).to(self.device)
             z = self.encoder(state).sample()   
             action_dist = self.actor(z,std)    
-            action = action_dist.sample(clip=None)
-            
-            if eval:
-                action = action_dist.mean
 
-        return action.cpu().numpy()[0]
+            if eval:
+                # Greedy: take the most probable action
+                action = torch.argmax(action_dist.probs, dim=-1)
+            else:
+                # Sample a discrete action index: returns tensor of shape [1]
+                action = action_dist.sample()
+
+        return action.item()  # returns Python int like 0, 1, 2, or 3
+            
+            #if eval:
+            #    action = action_dist.mean
+
+            #return action.cpu().numpy()[0]
+
+
     
     def get_representation(self, state):
         with torch.no_grad():
@@ -195,9 +207,12 @@ class AlmAgent(object):
         return reward
 
     def _alm_value_loss(self, z_batch, std, log, metrics):
+        num_actions = 4
+
         with torch.no_grad():  
             action_dist = self.actor(z_batch, std)
-            action_batch = action_dist.sample(clip=self.stddev_clip)
+            #action_batch = action_dist.sample()
+            action_batch = action_dist.probs
 
         with torch_utils.FreezeParameters(self.critic_list):
             Q1, Q2 = self.critic(z_batch, action_batch)
@@ -276,9 +291,11 @@ class AlmAgent(object):
 
     def update_critic(self, z_batch, action_batch, reward_batch, z_next_batch, discount_batch, std, log, metrics):
 
+        num_actions = 4
         with torch.no_grad():    
             next_action_dist = self.actor(z_next_batch, std)
-            next_action_batch = next_action_dist.sample(clip=self.stddev_clip)
+            #next_action_batch = next_action_dist.sample()
+            next_action_batch = next_action_dist.probs
 
             target_Q1, target_Q2 = self.critic_target(z_next_batch, next_action_batch)
             target_V = torch.min(target_Q1, target_Q2)
@@ -357,16 +374,21 @@ class AlmAgent(object):
     def _rollout_imagination(self, z_batch, std):
         z_seq = [z_batch]
         action_seq = []
+        num_actions = 4
         with torch_utils.FreezeParameters([self.model]):
             for t in range(self.seq_len):
                 action_dist = self.actor(z_batch.detach(), std)
-                action_batch = action_dist.sample(self.stddev_clip)
+                #action_batch = action_dist.sample()
+                action_batch = action_dist.probs
+
                 z_batch = self.model(z_batch, action_batch).rsample()
                 action_seq.append(action_batch)
                 z_seq.append(z_batch)
 
             action_dist = self.actor(z_batch.detach(), std)
-            action_batch = action_dist.sample(self.stddev_clip)
+            #action_batch = action_dist.sample()
+            action_batch = action_dist.probs
+
             action_seq.append(action_batch)
 
         z_seq = torch.stack(z_seq, dim=0)

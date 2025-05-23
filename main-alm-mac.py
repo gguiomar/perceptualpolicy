@@ -129,7 +129,9 @@ class ALM_Helper:
 
             action = self.agent.get_action(state, self._train_step)
 
-            action = int(np.argmax(action))
+            #print('action from agent:', action)
+
+            #action = int(np.argmax(action))
 
             next_state, reward, done, info, new_distance, prev_distance = self.train_env.step(action)
             self._train_step += 1
@@ -173,7 +175,7 @@ class ALM_Helper:
             while not done:
                 action = self.agent.get_action(state, self._train_step, True)
 
-                action = int(np.argmax(action))
+                #action = int(np.argmax(action))
 
                 next_state, _, done ,info, _, _ = self.eval_env.step(action)
                 state = next_state

@@ -124,9 +124,18 @@ class Actor(nn.Module):
     def forward(self, x, std):
         x = F.elu(self.fc1(x))
         x = F.elu(self.fc2(x))
-        mean = torch.tanh(self.mean(x))
-        std = torch.ones_like(mean) * std
-        dist = torch_utils.TruncatedNormal(mean, std, self.low, self.high)
+
+        logits = self.mean(x)  # shape: [batch_size, num_actions]
+        dist = td.Categorical(logits=logits)
+
+        #print(dist)
+
+        #mean = torch.tanh(self.mean(x))
+        #std = torch.ones_like(mean) * std
+        
+        #dist = torch_utils.TruncatedNormal(mean, std, self.low, self.high)
+        #print(dist.sample().shape)
+        
         return  dist
         
 class StochasticActor(nn.Module):
