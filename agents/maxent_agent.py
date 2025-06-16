@@ -3,7 +3,111 @@ import numpy as np
 from agents.base_agent import BaseAgent
 from agents.policy_networks import create_policy_network
 
+# Import gradient clipping utility
+from torch.nn.utils import clip_grad_norm_
+
 class MaxEntAgent(BaseAgent):
+    """
+    Maximum Entropy Reinforcement Learning Agent
+    """
+    def __init__(self, policy_type, state_dim, action_dim, hidden_dim=64,
+                 lr=0.01, temperature=0.1, gamma=0.99,
+                 gradient_clip_norm=1.0, **kwargs):
+        super().__init__(policy_type, state_dim, action_dim, hidden_dim, lr, gamma, **kwargs)
+        # Store initial temperature, but allow it to be changed
+        self.temperature = temperature
+        self.gradient_clip_norm = gradient_clip_norm
+
+    # --- Add this method ---
+    def set_temperature(self, new_temperature):
+        """Allows updating the temperature parameter externally."""
+        self.temperature = new_temperature
+    # -----------------------
+
+    def update(self, states, actions, rewards, log_probs_old, hidden_states=None):
+        # ... (rest of the update method remains the same) ...
+        # It will use the current value of self.temperature
+
+        # Convert lists to tensors
+        if isinstance(states[0], (list, np.ndarray)):
+            states = torch.FloatTensor(np.array(states)).to(self.device)
+        elif not isinstance(states, torch.Tensor):
+             states = torch.FloatTensor(states).to(self.device)
+        else:
+             states = states.float().to(self.device) # Ensure float type
+
+        actions = torch.LongTensor(actions).to(self.device)
+        returns = self.compute_returns(rewards)
+
+        total_policy_loss = 0
+        total_pg_loss_component = 0
+        total_entropy_loss_component = 0
+        total_entropy = 0
+        num_steps = len(states)
+
+        if self.policy_type == "rnn":
+            for i in range(num_steps):
+                state = states[i].unsqueeze(0)
+                action = actions[i].unsqueeze(0)
+                G = returns[i]
+                hidden_state = None
+                if hidden_states and i < len(hidden_states):
+                     if isinstance(hidden_states[i], tuple):
+                         hidden_state = tuple(h.to(self.device) for h in hidden_states[i])
+                     else:
+                         hidden_state = hidden_states[i].to(self.device)
+
+                logits, _ = self.policy_net(state, hidden_state)
+                dist = torch.distributions.Categorical(logits=logits)
+                log_prob = dist.log_prob(action)
+                entropy = dist.entropy()
+
+                step_pg_loss = -(log_prob * G)
+                # Use the current self.temperature here
+                step_entropy_loss = -(self.temperature * entropy)
+                step_total_loss = step_pg_loss + step_entropy_loss
+
+                total_policy_loss += step_total_loss
+                total_pg_loss_component += step_pg_loss
+                total_entropy_loss_component += step_entropy_loss
+                total_entropy += entropy.item()
+
+            avg_policy_loss = total_policy_loss / num_steps
+            avg_pg_loss = total_pg_loss_component / num_steps
+            avg_entropy_loss = total_entropy_loss_component / num_steps
+            avg_entropy = total_entropy / num_steps
+
+        else: # MLP / Transformer
+            if len(states.shape) == 1: states = states.unsqueeze(0)
+            logits = self.policy_net(states)
+            dist = torch.distributions.Categorical(logits=logits)
+            log_probs = dist.log_prob(actions)
+            entropies = dist.entropy()
+
+            pg_loss_terms = -(log_probs * returns)
+             # Use the current self.temperature here
+            entropy_loss_terms = -(self.temperature * entropies)
+            total_loss_terms = pg_loss_terms + entropy_loss_terms
+
+            avg_policy_loss = torch.mean(total_loss_terms)
+            avg_pg_loss = torch.mean(pg_loss_terms)
+            avg_entropy_loss = torch.mean(entropy_loss_terms)
+            avg_entropy = entropies.mean().item()
+
+        self.optimizer.zero_grad()
+        avg_policy_loss.backward()
+
+        if self.gradient_clip_norm is not None:
+            clip_grad_norm_(self.policy_net.parameters(), max_norm=self.gradient_clip_norm)
+
+        self.optimizer.step()
+
+        return {
+            'policy_loss': avg_policy_loss.item(),
+            'pg_loss': avg_pg_loss.item(),
+            'entropy_loss': avg_entropy_loss.item(),
+            'entropy': avg_entropy
+        }
     """
     Maximum Entropy Reinforcement Learning Agent
     
@@ -12,7 +116,8 @@ class MaxEntAgent(BaseAgent):
     """
     
     def __init__(self, policy_type, state_dim, action_dim, hidden_dim=64, 
-                 lr=0.01, temperature=0.1, gamma=0.99, **kwargs):
+                 lr=0.01, temperature=0.1, gamma=0.99, 
+                 gradient_clip_norm=1.0, **kwargs): # Added gradient_clip_norm
         """
         Initialize the MaxEnt agent
         
@@ -24,9 +129,11 @@ class MaxEntAgent(BaseAgent):
             lr: Learning rate
             temperature: Temperature parameter for entropy regularization
             gamma: Discount factor
+            gradient_clip_norm: Value for gradient clipping (set to None to disable)
         """
         super().__init__(policy_type, state_dim, action_dim, hidden_dim, lr, gamma, **kwargs)
         self.temperature = temperature
+        self.gradient_clip_norm = gradient_clip_norm # Store clipping value
     
     def update(self, states, actions, rewards, log_probs_old, hidden_states=None):
         """
@@ -40,65 +147,104 @@ class MaxEntAgent(BaseAgent):
             hidden_states: List of hidden states (for RNN policies)
             
         Returns:
-            Dictionary with update statistics
+            Dictionary with update statistics including loss components
         """
         # Convert lists to tensors
-        if isinstance(states[0], list) or isinstance(states[0], np.ndarray):
+        # Ensure states are float tensors
+        if isinstance(states[0], (list, np.ndarray)):
             states = torch.FloatTensor(np.array(states)).to(self.device)
+        elif not isinstance(states, torch.Tensor):
+             states = torch.FloatTensor(states).to(self.device)
         else:
-            states = torch.FloatTensor(states).to(self.device)
-            
+             states = states.float().to(self.device) # Ensure float type
+
         actions = torch.LongTensor(actions).to(self.device)
-        returns = self.compute_returns(rewards)
+        # Use compute_returns which includes normalization
+        returns = self.compute_returns(rewards) 
         
+        # Initialize accumulators for loss components
+        total_policy_loss = 0
+        total_pg_loss_component = 0
+        total_entropy_loss_component = 0
+        total_entropy = 0
+        num_steps = len(states)
+
         # Recompute log probabilities and entropies for gradient flow
         if self.policy_type == "rnn":
-            # Create sequences for RNN processing
-            policy_loss = 0
-            entropy_sum = 0
-            
-            for i in range(len(states)):
-                state = states[i]
-                action = actions[i]
-                G = returns[i]
-                hidden_state = hidden_states[i] if i < len(hidden_states) else None
-                
-                # Get logits from the policy network
-                if isinstance(state, torch.Tensor) and len(state.shape) == 1:
-                    state = state.unsqueeze(0)
-                
+            for i in range(num_steps):
+                state = states[i].unsqueeze(0) # Add batch dim for RNN
+                action = actions[i].unsqueeze(0) # Add batch dim
+                G = returns[i] # Return for this step
+                # Ensure hidden_state is correctly formatted and on device
+                hidden_state = None
+                if hidden_states and i < len(hidden_states):
+                     # Assuming hidden_states[i] is already a tuple (h, c) or single tensor h
+                     # Ensure it's on the correct device
+                     if isinstance(hidden_states[i], tuple):
+                         hidden_state = tuple(h.to(self.device) for h in hidden_states[i])
+                     else:
+                         hidden_state = hidden_states[i].to(self.device)
+
                 logits, _ = self.policy_net(state, hidden_state)
                 dist = torch.distributions.Categorical(logits=logits)
                 log_prob = dist.log_prob(action)
                 entropy = dist.entropy()
-                
-                # Add to policy loss with entropy bonus
-                policy_loss += -(log_prob * G + self.temperature * entropy)
-                entropy_sum += entropy.item()
-            
-            policy_loss = policy_loss / len(states)
-            avg_entropy = entropy_sum / len(states)
-        else:
-            # Standard forward pass for MLP and Transformer
+
+                # Calculate components for this step
+                step_pg_loss = -(log_prob * G)
+                step_entropy_loss = -(self.temperature * entropy)
+                step_total_loss = step_pg_loss + step_entropy_loss
+
+                # Accumulate
+                total_policy_loss += step_total_loss
+                total_pg_loss_component += step_pg_loss
+                total_entropy_loss_component += step_entropy_loss
+                total_entropy += entropy.item() # Accumulate raw entropy
+
+            # Average over sequence length
+            avg_policy_loss = total_policy_loss / num_steps
+            avg_pg_loss = total_pg_loss_component / num_steps
+            avg_entropy_loss = total_entropy_loss_component / num_steps
+            avg_entropy = total_entropy / num_steps
+
+        else: # MLP / Transformer
+            # Ensure states has batch dimension if needed by network
+            if len(states.shape) == 1:
+                 states = states.unsqueeze(0) # Add batch dim if single state passed
+
             logits = self.policy_net(states)
             dist = torch.distributions.Categorical(logits=logits)
             log_probs = dist.log_prob(actions)
             entropies = dist.entropy()
-            
-            # Compute policy loss with entropy bonus
-            policy_loss = -torch.mean(log_probs * returns + self.temperature * entropies)
-            avg_entropy = entropies.mean().item()
-        
+
+            # Calculate components over the batch
+            pg_loss_terms = -(log_probs * returns)
+            entropy_loss_terms = -(self.temperature * entropies)
+            total_loss_terms = pg_loss_terms + entropy_loss_terms
+
+            # Average over batch size
+            avg_policy_loss = torch.mean(total_loss_terms)
+            avg_pg_loss = torch.mean(pg_loss_terms)
+            avg_entropy_loss = torch.mean(entropy_loss_terms)
+            avg_entropy = entropies.mean().item() # Average raw entropy
+
         # Optimize
         self.optimizer.zero_grad()
-        policy_loss.backward()
+        # Use the calculated average total loss for backpropagation
+        avg_policy_loss.backward() 
+
+        # Apply gradient clipping (if enabled)
+        if self.gradient_clip_norm is not None:
+            clip_grad_norm_(self.policy_net.parameters(), max_norm=self.gradient_clip_norm)
+
         self.optimizer.step()
         
         return {
-            'policy_loss': policy_loss.item(),
-            'entropy': avg_entropy
+            'policy_loss': avg_policy_loss.item(),
+            'pg_loss': avg_pg_loss.item(),           # Avg Policy Gradient Loss Component
+            'entropy_loss': avg_entropy_loss.item(), # Avg Entropy Bonus Loss Component
+            'entropy': avg_entropy                   # Avg Raw Entropy
         }
-
 
 class FisherMaxEntAgent(MaxEntAgent):
     """
@@ -315,6 +461,7 @@ class FisherMaxEntAgent(MaxEntAgent):
             # Natural gradient update
             self.optimizer.zero_grad()
             policy_loss.backward(retain_graph=True)
+            #torch.nn.utils.clip_grad_norm_(self.policy_net.parameters(), max_norm=1.0)
             flat_grad = self.get_flat_grad()
             
             # Compute natural gradient direction
