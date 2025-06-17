@@ -10,7 +10,6 @@ import torch.distributions as td
 import torch.nn.functional as F
 import numpy as np
 import wandb
-import utils
 from alm_model import Encoder, ModelPrior, RewardPrior, Discriminator, Critic, Actor
 from replay_buffer import ReplayMemory
 import torch_utils

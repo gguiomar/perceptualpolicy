@@ -4,7 +4,7 @@ import os
 # Add the parent directory to the sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from envs.gridworld import GridWorld
+from gridworld import GridWorld
 from alm import AlmAgent
 from visualization import plot_metrics, visualize_policy, plot_trajectories, plot_state_visitation_heatmap
 
