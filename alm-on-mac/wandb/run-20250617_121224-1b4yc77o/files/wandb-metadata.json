@@ -1,0 +1,22 @@
+{
+    "os": "macOS-15.5-arm64-arm-64bit",
+    "python": "3.10.16",
+    "heartbeatAt": "2025-06-17T10:12:25.502120",
+    "startedAt": "2025-06-17T10:12:24.532120",
+    "docker": null,
+    "cpu_count": 14,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/Users/keyshavmor/ETH/Master-Thesis/perceptualpolicy/alm-on-mac/main-alm-mac.py",
+    "codePath": "alm-on-mac/main-alm-mac.py",
+    "git": {
+        "remote": "https://github.com/gguiomar/perceptualpolicy.git",
+        "commit": "33cc445c4e8b71bb04f5e632721d561e2a9145af"
+    },
+    "email": null,
+    "root": "/Users/keyshavmor/ETH/Master-Thesis/perceptualpolicy",
+    "host": "Keyshavs-MacBook-Pro.local",
+    "username": "root",
+    "executable": "/opt/anaconda3/envs/alm/bin/python"
+}
