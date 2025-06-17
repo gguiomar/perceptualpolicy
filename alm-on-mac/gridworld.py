@@ -158,13 +158,13 @@ class GridWorld:
         
         # Reward logic
         if tuple(self.agent_pos) == self.goal:
-            reward = 100.0
+            reward = 1000.0
             done = True
 
         else:
             x, y = self.agent_pos
             # Gaussian reward centered at the goal
-            sigma = 5.0  # smoothness parameter
+            sigma = 3.0  # smoothness parameter
             dx = x - self.goal[0]
             dy = y - self.goal[1]
             dist_sq = dx ** 2 + dy ** 2
