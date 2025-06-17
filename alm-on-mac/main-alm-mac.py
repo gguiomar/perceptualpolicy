@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from envs.gridworld import GridWorld
 from alm import AlmAgent
-from utils.visualization import plot_metrics, visualize_policy, plot_trajectories, plot_state_visitation_heatmap
+from visualization import plot_metrics, visualize_policy, plot_trajectories, plot_state_visitation_heatmap
 
 import random
 import torch
@@ -18,6 +18,7 @@ from pathlib import Path
 
 wandb.login()
 
+# Change name to your own WandB project
 wandb.init("kmor-perceptualpolicy-initial")
 
 device = 'cpu'
@@ -129,10 +130,6 @@ class ALM_Helper:
 
             action = self.agent.get_action(state, self._train_step)
 
-            #print('action from agent:', action)
-
-            #action = int(np.argmax(action))
-
             next_state, reward, done, info, new_distance, prev_distance = self.train_env.step(action)
             self._train_step += 1
 
@@ -174,8 +171,6 @@ class ALM_Helper:
             state = self.eval_env.reset()
             while not done:
                 action = self.agent.get_action(state, self._train_step, True)
-
-                #action = int(np.argmax(action))
 
                 next_state, _, done ,info, _, _ = self.eval_env.step(action)
                 state = next_state
@@ -268,8 +263,3 @@ if __name__ == "__main__":
     
     alm_helper = ALM_Helper(env)
     alm_helper.train()
-
-    #plot_metrics(rewards, losses, entropies)
-    #visualize_policy(env, agent)
-    #plot_trajectories(env, agent, num_trajectories=10, max_steps=100)
-    #plot_state_visitation_heatmap(env, agent, max_steps=100)

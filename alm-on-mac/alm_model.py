@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.distributions as td
 import numpy as np
-from utils import torch_utils
+import torch_utils
 
 class Encoder(nn.Module):
     def __init__(self, input_shape, hidden_dims, latent_dims):
@@ -127,14 +127,6 @@ class Actor(nn.Module):
 
         logits = self.mean(x)  # shape: [batch_size, num_actions]
         dist = td.Categorical(logits=logits)
-
-        #print(dist)
-
-        #mean = torch.tanh(self.mean(x))
-        #std = torch.ones_like(mean) * std
-        
-        #dist = torch_utils.TruncatedNormal(mean, std, self.low, self.high)
-        #print(dist.sample().shape)
         
         return  dist
         

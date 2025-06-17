@@ -12,8 +12,8 @@ import numpy as np
 import wandb
 import utils
 from alm_model import Encoder, ModelPrior, RewardPrior, Discriminator, Critic, Actor
-from utils.replay_buffer import ReplayMemory
-from utils import torch_utils
+from replay_buffer import ReplayMemory
+import torch_utils
 
 class AlmAgent(object):
     def __init__(self, device, action_low, action_high, num_states, num_actions,
@@ -75,12 +75,7 @@ class AlmAgent(object):
                 # Sample a discrete action index: returns tensor of shape [1]
                 action = action_dist.sample()
 
-        return action.item()  # returns Python int like 0, 1, 2, or 3
-            
-            #if eval:
-            #    action = action_dist.mean
-
-            #return action.cpu().numpy()[0]
+        return action.item()  # returns ints
 
 
     
