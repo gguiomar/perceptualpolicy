@@ -2,6 +2,8 @@ import numpy as np
 import random
 import torch
 import matplotlib.pyplot as plt
+import os
+import seaborn as sns
 
 # Simple space definitions to replace gym.spaces
 class DiscreteSpace:
@@ -27,7 +29,7 @@ class GridWorld:
     UP, DOWN, LEFT, RIGHT = 0, 1, 2, 3
 
     
-    def __init__(self, grid_size=10, start=(0, 0), goal=(9, 9), max_steps=100, 
+    def __init__(self, grid_size=10, start=(0, 0), goal=(9,9), max_steps=100, 
                  stochastic=False, noise=0.1, add_obstacles=False, custom_obstacles=None):
         """
         Initialize GridWorld environment
@@ -49,8 +51,10 @@ class GridWorld:
         self.stochastic = stochastic
         self.noise = noise
         self.add_obstacles = add_obstacles
+        self.success = False
 
-        self.visit_counts = np.zeros((self.grid_size, self.grid_size), dtype=np.int32)
+        self.visit_counts = np.zeros((grid_size, grid_size), dtype=np.int32)
+        self.final_goal = (9,9)
         
         # Define action and observation spaces for compatibility with agents
         self.action_space = DiscreteSpace(4)  # UP, DOWN, LEFT, RIGHT
@@ -69,7 +73,7 @@ class GridWorld:
         # Initialize agent position
         self.agent_pos = None
         self.steps = 0
-        self.reset()
+        self.reset(train_episodes=0,eval=True)
 
         # Enable plotting
         plt.ion()
@@ -96,13 +100,23 @@ class GridWorld:
         
         return obstacles
     
-    def reset(self):
+    def reset(self, train_episodes, eval):
         """Reset the environment to initial state"""
         
         self.steps = 0
-        self.visit_counts.fill(0)
+        #max_random_start_episodes = 100000
+        #if not eval:
+        #    if (train_episodes <= max_random_start_episodes):
+        #        while True:
+        #            self.agent_pos = [np.random.randint(self.grid_size), np.random.randint(self.grid_size)]
+        #            if self.agent_pos != list(self.goal):
+        #                break
+        #    else:
+        #       self.agent_pos = list(self.start) 
+        #elif eval:
+        #    self.agent_pos = list(self.start)
         self.agent_pos = list(self.start)
-        self.visit_counts[self.agent_pos[0], self.agent_pos[1]] += 1
+        self.success = False
         return self._get_state()
 
     
@@ -156,34 +170,72 @@ class GridWorld:
         new_distance = np.linalg.norm(np.array(self.agent_pos) - np.array(self.goal))
         max_distance = np.linalg.norm(np.array(self.goal) - np.array(self.start))
         
+        x, y = self.agent_pos
+
         # Reward logic
         if tuple(self.agent_pos) == self.goal:
-            reward = 1000.0
+            reward = 50.0
             done = True
+            self.success = True
 
         else:
-            x, y = self.agent_pos
-            # Gaussian reward centered at the goal
-            sigma = 3.0  # smoothness parameter
+
+            # Gaussian reward centered at the final goal
+            sigma = 6.0  # smoothness parameter
             dx = x - self.goal[0]
             dy = y - self.goal[1]
             dist_sq = dx ** 2 + dy ** 2
-            reward = 100.0 * np.exp(-dist_sq / (2 * sigma ** 2))
-            
+            reward = 50.0 * np.exp(-dist_sq / (2 * sigma ** 2))
+            self.success = False
             done = False
 
         # Check if max steps reached
         if self.steps >= self.max_steps:
             done = True
 
-        return state, reward, done, {"episode": {"r": reward, "l": self.steps}}, new_distance, prev_distance
+
+        return state, reward, done, {"episode": {"r": reward, "l": self.steps}}, new_distance, prev_distance, self.success
     
     def render(self, mode='human'):
         visit_display = self.visit_counts.T  # Transpose so (0,0) is bottom-left
         plt.clf()
         plt.imshow(visit_display, origin='lower', cmap='viridis')
         plt.colorbar(label='Visit Count')
-        plt.title(f"Agent Visit Heatmap - Step {self.steps}")
+        plt.title(f"Agent Visit Heatmap - Step {step}")
         plt.xlabel('X')
         plt.ylabel('Y')
         plt.pause(0.001)
+    
+    def plot_visit_heatmap(self, step):
+        save_dir="visit_maps"
+        os.makedirs(save_dir, exist_ok=True)
+        visit_display = self.visit_counts.T  # Transpose so (0,0) is bottom-left
+        plt.clf()
+        plt.figure(figsize=(8, 6))
+        plt.imshow(visit_display, origin='lower', cmap='viridis')
+        plt.colorbar(label='Visit Count')
+        plt.title(f"Agent Visit Heatmap - Step {step}")
+        plt.xlabel('X')
+        plt.ylabel('Y')
+        plt.savefig(os.path.join(save_dir, f"visit_map_step_{step}.png"))
+        plt.close()
+
+    
+    def save_trajectory_plot(self, trajectory, episode_num, save_dir="trajectories"):
+        os.makedirs(save_dir, exist_ok=True)
+
+        xs, ys = zip(*trajectory)
+        plt.figure(figsize=(6, 6))
+        plt.plot(xs, ys, marker='o', linestyle='-', color='blue', label='Trajectory')
+        plt.scatter(xs[0], ys[0], color='green', s=100, label='Start')
+        plt.scatter(xs[-1], ys[-1], color='red', s=100, label='Goal')
+        plt.title(f"Episode {episode_num} - Trajectory")
+        plt.grid(True)
+        plt.xlim(0, self.grid_size - 1)
+        plt.ylim(0, self.grid_size - 1)
+        plt.xticks(range(self.grid_size))
+        plt.yticks(range(self.grid_size))
+        plt.legend()
+        plt.gca().set_aspect('equal', adjustable='box')
+        plt.savefig(os.path.join(save_dir, f"trajectory_episode_{episode_num}.png"))
+        plt.close()

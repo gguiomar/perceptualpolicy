@@ -26,12 +26,12 @@ seed = 1
 
 # Keeping base configuration intact
 num_train_steps = 500000
-explore_steps = 20000
+explore_steps = 250000
 
-# Longest route without revisiting a cell is 99 steps.
+# Longest route without revisiting a cell is 99 steps for 10x10 grid
 max_episode_steps = 100
-env_buffer_size = 100000
-batch_size = 512
+env_buffer_size = 250000
+batch_size = 128
 seq_len = 3
 
 #learning
@@ -47,7 +47,7 @@ max_grad_norm =  100.0
 #exploration
 expl_start = 1.0
 expl_end = 0.1
-expl_duration = 100000
+expl_duration = 250000
 stddev_clip = 0.3
 
 #hidden_dims and layers. We don't need latent dimensions more than 8 since each state is only (x,y)
@@ -99,6 +99,8 @@ class ALM_Helper:
         self._train_step = 0
         self._train_episode = 0
         self._best_eval_returns = -np.inf
+        self.success_count = 0
+        self.eval_success_count = 0
 
     def set_seed(self):
         random.seed(seed)
@@ -107,30 +109,32 @@ class ALM_Helper:
         torch.cuda.manual_seed_all(seed)
 
     def _explore(self):
-        state, done = self.train_env.reset(), False
+        self.random_start_episodes = 0
+        state, done = self.train_env.reset(self.random_start_episodes,eval=False), False
         
         for _ in range(1, explore_steps):
             action = self.train_env.action_space.sample()
-            next_state, reward, done, info, _, _ = self.train_env.step(action)
+            next_state, reward, done, info, _, _, _ = self.train_env.step(action)
             self.agent.env_buffer.push((state, action, reward, next_state, False if info.get("TimeLimit.truncated", False) else done))
 
             if done:
-                state, done = self.train_env.reset(), False
+                state, done = self.train_env.reset(self.random_start_episodes,eval=False), False
             else:
                 state = next_state
             
     def train(self):
         self._explore()
         self._eval()
-
-        state, done, episode_start_time = self.train_env.reset(), False, time.time()
+        self.random_start_episodes = 0
+        state, done, episode_start_time = self.train_env.reset(self.random_start_episodes,eval=False), False, time.time()
         returns = 0
+        success = False
         
         for _ in range(1, num_train_steps-explore_steps+1):
 
             action = self.agent.get_action(state, self._train_step)
 
-            next_state, reward, done, info, new_distance, prev_distance = self.train_env.step(action)
+            next_state, reward, done, info, new_distance, prev_distance, success = self.train_env.step(action)
             self._train_step += 1
 
             self.agent.env_buffer.push((state, action, reward, next_state, False if info.get("TimeLimit.truncated", False) else done))
@@ -143,8 +147,17 @@ class ALM_Helper:
             if save_snapshot and (self._train_step)%save_snapshot_interval==0:
                 self.save_snapshot()
 
+            if _ % 400 == 0:
+                self.train_env.plot_visit_heatmap(_)
+
             if done:
+                if success:
+                    self.success_count += 1
+                
                 self._train_episode += 1
+
+                success_rate = self.success_count / self._train_episode
+
                 returns += info["episode"]["r"]
                 print("Episode: {}, total numsteps: {}, return: {}".format(self._train_episode, self._train_step, round(info["episode"]["r"], 2)))
                 print("Cumulative Returns:", returns)
@@ -156,8 +169,10 @@ class ALM_Helper:
                     episode_metrics['env_buffer_length'] = len(self.agent.env_buffer)
                     episode_metrics['new_distance'] = new_distance
                     episode_metrics['prev_distance'] = prev_distance
+                    episode_metrics['train success rate'] = success_rate
+
                     wandb.log(episode_metrics, step=self._train_step)
-                state, done, episode_start_time = self.train_env.reset(), False, time.time()
+                state, done, episode_start_time = self.train_env.reset(self._train_episode,eval=False), False, time.time()
             else:
                 state = next_state
 
@@ -166,23 +181,32 @@ class ALM_Helper:
     def _eval(self):
         returns = 0 
         steps = 0
+        self.eval_success_count = 0
+        self.random_start_episodes = 0
         for _ in range(num_eval_episodes):
             done = False 
-            state = self.eval_env.reset()
+            state = self.eval_env.reset(self.random_start_episodes,eval=True)
             while not done:
                 action = self.agent.get_action(state, self._train_step, True)
 
-                next_state, _, done ,info, _, _ = self.eval_env.step(action)
+                next_state, _, done ,info, _, _, success = self.eval_env.step(action)
                 state = next_state
                 
             returns += info["episode"]["r"]
             steps += info["episode"]["l"]
+
+            if done:
+                if success:
+                    self.eval_success_count += 1
             
             print("Episode: {}, total numsteps: {}, return: {}".format(self._train_episode, self._train_step, round(info["episode"]["r"], 2)))
 
         eval_metrics = dict()
         eval_metrics['eval_episodic_return'] = returns/num_eval_episodes
         eval_metrics['eval_episodic_length'] = steps/num_eval_episodes
+        eval_metrics['eval success rate'] = self.eval_success_count/num_eval_episodes
+
+
 
         if save_snapshot and returns/num_eval_episodes >= self._best_eval_returns:
             self.save_snapshot(best=True)
@@ -217,9 +241,9 @@ class ALM_Helper:
         final_act_list = [] 
         n_mc_eval = 1000
         n_mc_cutoff = 350
-
+        self.random_start_episodes = 0
         while final_mc_list.shape[0] < n_mc_eval:
-            o = self.eval_env.reset()       
+            o = self.eval_env.reset(self.random_start_episodes,eval=False)       
             reward_list, obs_list, act_list = [], [], []
             r, d, ep_ret, ep_len = 0, False, 0, 0
 

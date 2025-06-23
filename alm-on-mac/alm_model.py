@@ -11,8 +11,10 @@ class Encoder(nn.Module):
         self.latent_dims = latent_dims
         self.encoder = nn.Sequential(
             nn.Linear(input_shape, hidden_dims),
-            nn.ELU(), nn.Linear(hidden_dims, hidden_dims),
-            nn.ELU(), nn.Linear(hidden_dims, 2*latent_dims))
+            nn.ELU(), 
+            nn.Linear(hidden_dims, hidden_dims),
+            nn.ELU(), 
+            nn.Linear(hidden_dims, 2*latent_dims))
 
         self.std_min = 0.1
         self.std_max = 10.0
@@ -21,7 +23,7 @@ class Encoder(nn.Module):
     def forward(self, x):
         x = self.encoder(x)
         mean, std = torch.chunk(x, 2, -1)
-        mean = 30 * torch.tanh(mean / 30)
+        #mean = 30 * torch.tanh(mean / 30)
         std = self.std_max - F.softplus(self.std_max-std)
         std = self.std_min  + F.softplus(std-self.std_min) 
         return td.independent.Independent(td.Normal(mean, std), 1)
@@ -51,7 +53,7 @@ class ModelPrior(nn.Module):
         x = torch.cat([z, action], axis=-1)
         x = self.model(x)
         mean, std = torch.chunk(x, 2, -1)
-        mean = 30 * torch.tanh(mean / 30)
+        #mean = 30 * torch.tanh(mean / 30)
         std = self.std_max - F.softplus(self.std_max-std)
         std = self.std_min  + F.softplus(std-self.std_min) 
         return td.independent.Independent(td.Normal(mean, std), 1)
@@ -60,9 +62,12 @@ class RewardPrior(nn.Module):
     def __init__(self, latent_dims, hidden_dims, action_dims):
         super().__init__()
         self.reward = nn.Sequential(
-            nn.Linear(latent_dims + action_dims, hidden_dims), nn.LayerNorm(hidden_dims), 
-            nn.Tanh(), nn.Linear(hidden_dims, hidden_dims),
-            nn.ELU(), nn.Linear(hidden_dims, 1))
+            nn.Linear(latent_dims + action_dims, hidden_dims), 
+            nn.LayerNorm(hidden_dims), 
+            nn.Tanh(),
+            nn.Linear(hidden_dims, hidden_dims),
+            nn.ELU(), 
+            nn.Linear(hidden_dims, 1))
         self.apply(torch_utils.weight_init)
         
     def forward(self, z, a):
@@ -74,9 +79,13 @@ class Discriminator(nn.Module):
     def __init__(self, latent_dims, hidden_dims, action_dims):
         super().__init__()
         self.classifier = nn.Sequential(
-            nn.Linear(2 * latent_dims + action_dims, hidden_dims), nn.LayerNorm(hidden_dims), 
-            nn.Tanh(), nn.Linear(hidden_dims, hidden_dims),
-            nn.ELU(), nn.Linear(hidden_dims, 2))
+            nn.Linear(2 * latent_dims + action_dims, hidden_dims), 
+            nn.LayerNorm(hidden_dims), 
+            nn.Tanh(), 
+            #nn.ELU(), 
+            nn.Linear(hidden_dims, hidden_dims),
+            nn.ELU(), 
+            nn.Linear(hidden_dims, 2))
         self.apply(torch_utils.weight_init)
 
     def forward(self, z, a, z_next):
@@ -94,14 +103,22 @@ class Critic(nn.Module):
     def __init__(self, latent_dims, hidden_dims, action_shape):
         super().__init__()
         self.Q1 = nn.Sequential(
-            nn.Linear(latent_dims + action_shape, hidden_dims), nn.LayerNorm(hidden_dims), 
-            nn.Tanh(), nn.Linear(hidden_dims, hidden_dims),
-            nn.ELU(), nn.Linear(hidden_dims, 1))
+            nn.Linear(latent_dims + action_shape, hidden_dims), 
+            nn.LayerNorm(hidden_dims), 
+            nn.Tanh(),
+            #nn.ELU(), 
+            nn.Linear(hidden_dims, hidden_dims),
+            nn.ELU(), 
+            nn.Linear(hidden_dims, 1))
 
         self.Q2 = nn.Sequential(
-            nn.Linear(latent_dims + action_shape, hidden_dims), nn.LayerNorm(hidden_dims), 
-            nn.Tanh(), nn.Linear(hidden_dims, hidden_dims),
-            nn.ELU(), nn.Linear(hidden_dims, 1))
+            nn.Linear(latent_dims + action_shape, hidden_dims), 
+            nn.LayerNorm(hidden_dims), 
+            nn.Tanh(),
+            #nn.ELU(), 
+            nn.Linear(hidden_dims, hidden_dims),
+            nn.ELU(), 
+            nn.Linear(hidden_dims, 1))
             
         self.apply(torch_utils.weight_init)
 

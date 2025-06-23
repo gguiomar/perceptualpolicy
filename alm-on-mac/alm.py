@@ -67,12 +67,12 @@ class AlmAgent(object):
             z = self.encoder(state).sample()   
             action_dist = self.actor(z,std)    
 
-            if eval:
-                # Greedy: take the most probable action
-                action = torch.argmax(action_dist.probs, dim=-1)
-            else:
+            #if eval:
+            #    # Greedy: take the most probable action
+            #    action = torch.argmax(action_dist.probs, dim=-1)
+            #else:
                 # Sample a discrete action index: returns tensor of shape [1]
-                action = action_dist.sample()
+            action = action_dist.sample()
 
         return action.item()  # returns ints
 
@@ -174,6 +174,11 @@ class AlmAgent(object):
             z_batch = z_next_prior_batch
 
         Q = self._alm_value_loss(z_batch, std, log_q, metrics)
+        log = True
+
+        if log:
+            metrics['ALM Value Loss'] = Q
+        
         alm_loss += (-Q)
         
         return alm_loss.mean()
@@ -184,10 +189,12 @@ class AlmAgent(object):
             z_next_dist = self.encoder_target(next_state_batch)
         kl = td.kl_divergence(z_next_prior_dist, z_next_dist).unsqueeze(-1)
 
+        log = True
+
         if log:
-            metrics['kl'] = kl.mean().item()
-            metrics['prior_entropy'] = z_next_prior_dist.entropy().mean()
-            metrics['posterior_entropy'] = z_next_dist.entropy().mean()
+            metrics['kl diverge model-encoder'] = kl.mean().item()
+            metrics['prior_entropy model'] = z_next_prior_dist.entropy().mean()
+            metrics['posterior_entropy encoder'] = z_next_dist.entropy().mean()
 
         return kl, z_next_prior_dist.rsample()
 
@@ -256,7 +263,8 @@ class AlmAgent(object):
             
     def _extrinsic_reward_loss(self, z_batch, action_batch, reward_batch, log, metrics):
         reward_pred = self.reward(z_batch, action_batch)
-        reward_loss = F.mse_loss(reward_pred, reward_batch)
+        #reward_loss = F.mse_loss(reward_pred, reward_batch)
+        reward_loss = F.smooth_l1_loss(reward_pred, reward_batch)
 
         if log:
             metrics['reward_loss'] = reward_loss.item()
@@ -296,7 +304,8 @@ class AlmAgent(object):
             target_Q = reward_batch.unsqueeze(-1) + discount_batch.unsqueeze(-1)*(target_V)
             
         Q1, Q2 = self.critic(z_batch, action_batch)
-        critic_loss = (F.mse_loss(Q1, target_Q) + F.mse_loss(Q2, target_Q))/2   
+        #critic_loss = (F.mse_loss(Q1, target_Q) + F.mse_loss(Q2, target_Q))/2
+        critic_loss = (F.smooth_l1_loss(Q1, target_Q) + F.smooth_l1_loss(Q2, target_Q))/2   
 
         self.critic_opt.zero_grad()
         critic_loss.backward()
